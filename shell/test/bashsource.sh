@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+DIR=`pwd`
+echo -e "pwd: $DIR"
+echo -e "\$0: $0"
+echo -e "BASH_SOURCE: $BASH_SOURCE"
+echo -e "BASH_SOURCE[0]: $BASH_SOURCE[0]"
+echo -e "BASH_SOURCE[*]: $BASH_SOURCE[*]"
+echo -e "BASH_SOURCE[@]: $BASH_SOURCE[@]"
+echo -e "BASH_SOURCE[#]: $BASH_SOURCE[#]"
+echo -e "\${BASH_SOURCE[0]}: ${BASH_SOURCE[0]}"
+echo -e "\${BASH_SOURCE[1]}: ${BASH_SOURCE[1]}"
+echo -e "\${BASH_SOURCE[*]}: ${BASH_SOURCE[*]}"
+echo -e "\${BASH_SOURCE[@]}: ${BASH_SOURCE[@]}"
+echo -e "\${#BASH_SOURCE}: ${#BASH_SOURCE}"
+echo -e "\${#BASH_SOURCE[@]}: ${#BASH_SOURCE[@]}"
+echo -e "\${#BASH_SOURCE[*]}: ${#BASH_SOURCE[*]}\n"
+
+echo -e "\$*: $*"
+echo -e "\$@: $@"
+echo -e "\$#: $#\n"
+
+echo -e "\$1: $1"
+echo -e "\$$: $$"
+echo -e "\$!: $!"
+echo -e "\$?: $?"
