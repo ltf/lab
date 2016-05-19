@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+#DEVICE SHELL COMMAND: 
+am force-stop io.test.live
+#Launching application: 
+io.test.live/io.test.live.player.PlayerActivity.
+#DEVICE SHELL COMMAND: 
+am start -D -n "io.test.live/io.test.live.player.PlayerActivity" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER
+#Starting: Intent { act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] cmp=io.test.live/.player.PlayerActivity }
+
+#Waiting for process: io.test.live
+#DEVICE SHELL COMMAND: 
+run-as io.test.live mkdir /data/data/io.test.live/lldb
+#DEVICE SHELL COMMAND: 
+run-as io.test.live mkdir /data/data/io.test.live/lldb/bin
+#DEVICE SHELL COMMAND: 
+cat /data/local/tmp/lldb-server | run-as io.test.live sh -c 'cat > /data/data/io.test.live/lldb/bin/lldb-server; chmod 700 /data/data/io.test.live/lldb/bin/lldb-server'
+#DEVICE SHELL COMMAND: 
+cat /data/local/tmp/start_lldb_server.sh | run-as io.test.live sh -c 'cat > /data/data/io.test.live/lldb/bin/start_lldb_server.sh; chmod 700 /data/data/io.test.live/lldb/bin/start_lldb_server.sh'
+#Starting LLDB server: 
+run-as io.test.live /data/data/io.test.live/lldb/bin/start_lldb_server.sh /data/data/io.test.live/lldb /data/data/io.test.live/lldb/tmp/platform-1463562277482.sock "lldb process:gdb-remote packets"
+#Now Launching Native Debug Session
+#Debugger attached to process 8373
+
