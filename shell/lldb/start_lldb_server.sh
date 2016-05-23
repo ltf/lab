@@ -4,6 +4,11 @@
 # Native run configuration is expected to push this script along with lldb-server to the device prior to its execution.
 # Following command arguments are expected to be passed - lldb package directory and lldb-server listen port.
 
+## run-as io.test.live /data/data/io.test.live/lldb/bin/start_lldb_server.sh 
+# $1:	/data/data/io.test.live/lldb 
+# $2:	/data/data/io.test.live/lldb/tmp/platform-1463562277482.sock 
+# $3:	"lldb process:gdb-remote packets"
+
 LLDB_DIR=$1
 BIN_DIR=$LLDB_DIR/bin
 
