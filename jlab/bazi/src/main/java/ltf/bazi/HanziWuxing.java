@@ -22,9 +22,10 @@ public class HanziWuxing implements Runnable {
             try {
                 String content = getContent(i);
                 String fn = getDefaultPath() + i + ".html";
-                System.out.println(content);
+                System.out.println("success: "+ i);
                 saveToFile(fn, content);
             } catch (IOException e) {
+                System.out.println("failed: "+ i);
                 e.printStackTrace();
             }
         }
