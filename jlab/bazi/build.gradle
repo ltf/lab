@@ -5,4 +5,20 @@ repositories {
 }
 
 dependencies {
+//    compile 'org.slf4j:slf4j-api:1.7.7'
+    compile 'commons-io:commons-io:2.4'
+    compile 'org.apache.httpcomponents:httpclient:4.4.1'
+}
+
+task exejar(type: Jar, dependsOn: build) {
+    from files(sourceSets.main.output.classesDir)
+    from files(sourceSets.main.resources)
+    from configurations.runtime.asFileTree.files.collect {
+        exclude 'META-INF/BCKEY.*'
+        zipTree(it)
+    }
+
+    manifest {
+        attributes 'Main-Class': 'ltf.bazi.Runner'
+    }
 }
