@@ -10,6 +10,7 @@ dependencies {
     compile 'org.apache.httpcomponents:httpclient:4.4.1'
     compile 'org.hsqldb:hsqldb:2.3.4'
     compile 'com.h2database:h2:1.4.191'
+    compile 'org.apache.derby:derby:10.12.1.1'
 }
 
 task exejar(type: Jar, dependsOn: build) {

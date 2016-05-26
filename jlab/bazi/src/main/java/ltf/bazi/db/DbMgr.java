@@ -62,8 +62,9 @@ public class DbMgr {
         String dir = "/Users/f/plab/jlab/bazi/db/benchmark/";
         new File(dir).delete();
 
-        benchmark("h2", "jdbc:h2:" + dir + "h2/h2db");
-        benchmark("hs", "jdbc:hsqldb:file:" + dir + "hsql/hdb");
+//        benchmark("h2", "jdbc:h2:" + dir + "h2/h2db");
+//        benchmark("hs", "jdbc:hsqldb:file:" + dir + "hsql/hdb");
+        benchmark("db", "jdbc:derby:" + dir + "db/derby;create=true");
     }
 
     private interface BenchRunnable {
@@ -80,7 +81,7 @@ public class DbMgr {
             public void run() throws SQLException {
                 st.execute("CREATE TABLE TEST(" +
                         "ID VARCHAR(255) PRIMARY KEY, " +
-                        "NAME VARCHAR(255));");
+                        "NAME VARCHAR(255))");
             }
         });
 
@@ -88,7 +89,7 @@ public class DbMgr {
             @Override
             public void run() throws SQLException {
                 for (int i = 0; i < 500000; i++) {
-                    st.execute("INSERT INTO TEST(ID,NAME) VALUES('" + i + "','" + i + "');");
+                    st.execute("INSERT INTO TEST(ID,NAME) VALUES('" + i + "','" + i + "')");
                 }
             }
         });
@@ -96,8 +97,8 @@ public class DbMgr {
         step(dbType, "selectKey", new BenchRunnable() {
             @Override
             public void run() throws SQLException {
-                for (int i = 0; i < 50000; i++) {
-                    st.execute("select ID,NAME from TEST where ID like ('%" + i + "%');");
+                for (int i = 0; i < 50; i++) {
+                    st.execute("select ID,NAME from TEST where ID like '%" + i + "%'");
                 }
             }
         });
@@ -105,8 +106,8 @@ public class DbMgr {
         step(dbType, "selectNotKey", new BenchRunnable() {
             @Override
             public void run() throws SQLException {
-                for (int i = 0; i < 50000; i++) {
-                    st.execute("select ID,NAME from TEST where NAME like ('%" + i + "%');");
+                for (int i = 0; i < 50; i++) {
+                    st.execute("select ID,NAME from TEST where NAME like '%" + i + "%';");
                 }
             }
         });
