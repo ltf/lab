@@ -60,11 +60,11 @@ public class DbMgr {
 
     public void benchmarkTest() throws SQLException {
         String dir = "/Users/f/plab/jlab/bazi/db/benchmark/";
-        new File(dir).delete();
+        //new File(dir).delete();
 
-//        benchmark("h2", "jdbc:h2:" + dir + "h2/h2db");
+        benchmark("h2", "jdbc:h2:" + dir + "h2/h2db");
 //        benchmark("hs", "jdbc:hsqldb:file:" + dir + "hsql/hdb");
-        benchmark("db", "jdbc:derby:" + dir + "db/derby;create=true");
+//        benchmark("db", "jdbc:derby:" + dir + "db/derby;create=true");
     }
 
     private interface BenchRunnable {
