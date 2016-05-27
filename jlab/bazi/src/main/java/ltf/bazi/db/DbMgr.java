@@ -1,9 +1,6 @@
 package ltf.bazi.db;
 
-import java.io.File;
 import java.sql.*;
-import java.util.Observable;
-import java.util.StringTokenizer;
 
 /**
  * @author ltf
@@ -11,13 +8,12 @@ import java.util.StringTokenizer;
  */
 public class DbMgr {
 
-    Connection connH2;
+    Connection conn;
     Connection connHsql;
 
     private DbMgr() {
         try {
-            connHsql = DriverManager.getConnection("jdbc:hsqldb:file:/Users/f/plab/jlab/bazi/db/hsql/hdb");
-            connH2 = DriverManager.getConnection("jdbc:h2:/Users/f/plab/jlab/bazi/db/h2/h2db");
+            conn = DriverManager.getConnection("jdbc:h2:/Users/f/plab/jlab/bazi/db/h2/h2db");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -26,7 +22,7 @@ public class DbMgr {
 
     public void init() throws SQLException {
         Statement stHsql = connHsql.createStatement();
-        Statement stH2 = connH2.createStatement();
+        Statement stH2 = conn.createStatement();
         String sql = "create table dict_bm8 (" +
                 "kword nvarchar(12) primary key," +
                 "htmid nvarchar(12)," +
@@ -56,76 +52,6 @@ public class DbMgr {
 
         stHsql.close();
         stH2.close();
-    }
-
-    public void benchmarkTest() throws SQLException {
-        String dir = "/Users/f/plab/jlab/bazi/db/benchmark/";
-        //new File(dir).delete();
-
-        benchmark("h2", "jdbc:h2:" + dir + "h2/h2db");
-//        benchmark("hs", "jdbc:hsqldb:file:" + dir + "hsql/hdb");
-//        benchmark("db", "jdbc:derby:" + dir + "db/derby;create=true");
-    }
-
-    private interface BenchRunnable {
-        void run() throws SQLException;
-    }
-
-    private void benchmark(final String dbType, final String connStr) throws SQLException {
-        Connection conn;
-        conn = DriverManager.getConnection(connStr);
-        final Statement st = conn.createStatement();
-
-        step(dbType, "createTable", new BenchRunnable() {
-            @Override
-            public void run() throws SQLException {
-                st.execute("CREATE TABLE TEST(" +
-                        "ID VARCHAR(255) PRIMARY KEY, " +
-                        "NAME VARCHAR(255))");
-            }
-        });
-
-        step(dbType, "insertItems", new BenchRunnable() {
-            @Override
-            public void run() throws SQLException {
-                for (int i = 0; i < 500000; i++) {
-                    st.execute("INSERT INTO TEST(ID,NAME) VALUES('" + i + "','" + i + "')");
-                }
-            }
-        });
-
-        step(dbType, "selectKey", new BenchRunnable() {
-            @Override
-            public void run() throws SQLException {
-                for (int i = 0; i < 50; i++) {
-                    st.execute("select ID,NAME from TEST where ID like '%" + i + "%'");
-                }
-            }
-        });
-
-        step(dbType, "selectNotKey", new BenchRunnable() {
-            @Override
-            public void run() throws SQLException {
-                for (int i = 0; i < 50; i++) {
-                    st.execute("select ID,NAME from TEST where NAME like '%" + i + "%';");
-                }
-            }
-        });
-
-        st.close();
-        conn.close();
-    }
-
-    private void step(final String dbType, final String stepName, BenchRunnable step) {
-        try {
-            long start, end;
-            start = System.currentTimeMillis();
-            step.run();
-            end = System.currentTimeMillis();
-            System.out.println(String.format("%s - %s: %d", dbType, stepName, end - start));
-        } catch (SQLException e) {
-            System.out.println(String.format("%s - %s: failed, %s", dbType, stepName, e.getMessage()));
-        }
     }
 
     public static DbMgr instance() {
