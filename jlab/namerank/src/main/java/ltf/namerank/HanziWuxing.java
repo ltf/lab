@@ -21,8 +21,8 @@ public class HanziWuxing implements Runnable {
 
     @Override
     public void run() {
-        fetchFromWeb();
-        //processLocalFiles();
+        //fetchFromWeb();
+        processLocalFiles();
     }
 
     private void processLocalFiles() {
@@ -35,13 +35,13 @@ public class HanziWuxing implements Runnable {
             }
         };
 
-        try {
-            parser.handle("/f/flab/jlab/namerank/build/libs/wuxhtm/bazi.jar77.html", file2Str("/f/flab/jlab/namerank/build/libs/wuxhtm/bazi.jar77.html"));
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        //ParseUtils.processFilesInDir(PathUtils.getProjectPath() + "build/libs/wuxhtm/", parser);
+//        try {
+//            parser.handle("/f/flab/jlab/namerank/build/libs/wuxhtm/bazi.jar77.html", file2Str("/f/flab/jlab/namerank/build/libs/wuxhtm/bazi.jar77.html"));
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        ParseUtils.processFilesInDir(PathUtils.getProjectPath() + "build/libs/wuxhtm/", parser);
     }
 
     private void fetchFromWeb() {
