@@ -51,7 +51,7 @@ public class HanziWuxing implements Runnable {
                 int t = 1;
                 while (true) {
                     try {
-                        System.out.println("wait " + t + " s");
+                        System.out.println("wait " + t * 5 + " s");
                         Thread.sleep(t * 5 * 1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
