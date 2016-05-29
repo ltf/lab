@@ -1,15 +1,14 @@
-package ltf.bazi;
+package ltf.namerank;
 
-import ltf.bazi.db.Hanzi;
+import ltf.namerank.db.Hanzi;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.io.*;
-import java.util.List;
 
-import static ltf.bazi.PathUtils.getDefaultPath;
+import static ltf.namerank.PathUtils.getDefaultPath;
 
 /**
  * @author ltf

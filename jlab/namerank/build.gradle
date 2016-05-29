@@ -22,6 +22,6 @@ task exejar(type: Jar, dependsOn: build) {
     }
 
     manifest {
-        attributes 'Main-Class': 'ltf.bazi.Runner'
+        attributes 'Main-Class': 'ltf.namerank.Runner'
     }
 }

@@ -1,4 +1,4 @@
-package ltf.bazi;
+package ltf.namerank;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

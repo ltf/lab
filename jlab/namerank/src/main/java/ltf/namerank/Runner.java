@@ -1,6 +1,6 @@
-package ltf.bazi;
+package ltf.namerank;
 
-import ltf.bazi.db.DbMgr;
+import ltf.namerank.db.DbMgr;
 
 import java.sql.SQLException;
 

@@ -1,4 +1,4 @@
-package ltf.bazi;
+package ltf.namerank;
 
 /**
  * @author ltf

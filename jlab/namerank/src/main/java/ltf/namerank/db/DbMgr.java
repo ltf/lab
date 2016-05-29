@@ -1,7 +1,6 @@
-package ltf.bazi.db;
+package ltf.namerank.db;
 
-import ltf.bazi.OsUtils;
-import ltf.bazi.PathUtils;
+import ltf.namerank.PathUtils;
 
 import java.sql.*;
 
