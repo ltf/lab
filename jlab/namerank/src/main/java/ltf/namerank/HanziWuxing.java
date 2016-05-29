@@ -50,15 +50,16 @@ public class HanziWuxing implements Runnable {
                 String content = "";
                 int t = 1;
                 while (true) {
-                    content = getContent(i);
-                    if (!content.contains("404.safedog.cn/sitedog_stat.html")) break;
-                    t++;
                     try {
                         System.out.println("wait " + t + " s");
-                        Thread.sleep(t * 1000);
+                        Thread.sleep(t * 5 * 1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                    content = getContent(i);
+                    if (!content.contains("404.safedog.cn/sitedog_stat.html") &&
+                            !content.contains("setTimeout(\"JumpSelf()\",700)")) break;
+                    t++;
                 }
 
                 String fn = getDefaultPath() + i + ".html";
