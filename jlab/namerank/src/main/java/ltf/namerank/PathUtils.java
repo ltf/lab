@@ -19,7 +19,7 @@ public class PathUtils {
     public static String getDbPath() {
         String macPrefix = "";
         if (OsUtils.isOsMac()) macPrefix = "/Users";
-        return macPrefix + "/f/plab/zdata/namerank/db/";
+        return macPrefix + "/f/xdata/namerank/db/";
     }
 
 }
