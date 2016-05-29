@@ -4,6 +4,8 @@ import ltf.namerank.PathUtils;
 
 import java.sql.*;
 
+import static ltf.namerank.PathUtils.getDbPath;
+
 /**
  * @author ltf
  * @since 16/5/26, 上午10:03
@@ -11,10 +13,6 @@ import java.sql.*;
 public class DbMgr {
 
     Connection conn;
-
-    public static String getDbPath() {
-        return PathUtils.getProjectPath() + "db/";
-    }
 
     private DbMgr() {
         try {

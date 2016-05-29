@@ -8,11 +8,18 @@ public class PathUtils {
     public static String getProjectPath() {
         String macPrefix = "";
         if (OsUtils.isOsMac()) macPrefix = "/Users";
-        return macPrefix + "/f/plab/jlab/namerank/";
+        return macPrefix + "/f/flab/jlab/namerank/";
     }
 
     public static String getDefaultPath() {
         return Runner.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+    }
+
+
+    public static String getDbPath() {
+        String macPrefix = "";
+        if (OsUtils.isOsMac()) macPrefix = "/Users";
+        return macPrefix + "/f/plab/zdata/namerank/db/";
     }
 
 }

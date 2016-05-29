@@ -1,6 +1,8 @@
 package ltf.namerank;
 
 import ltf.namerank.db.Hanzi;
+import ltf.namerank.parser.IParser;
+import ltf.namerank.parser.ParseUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -9,6 +11,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import java.io.*;
 
 import static ltf.namerank.PathUtils.getDefaultPath;
+import static ltf.namerank.parser.ParseUtils.file2Str;
 
 /**
  * @author ltf
@@ -16,41 +19,48 @@ import static ltf.namerank.PathUtils.getDefaultPath;
  */
 public class HanziWuxing implements Runnable {
 
-    HttpClient http = HttpClientBuilder.create().build();
-
     @Override
     public void run() {
-
+        fetchFromWeb();
+        //processLocalFiles();
     }
 
     private void processLocalFiles() {
-        File dir = new File(PathUtils.getProjectPath() + "build/libs/wuxhtm/");
-        if (dir.isDirectory() && dir.exists()) {
-            for (File f : dir.listFiles()) {
-                try {
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f), "utf8"));
-                    String s = "", line;
-                    while ((line = reader.readLine()) != null) s += line + "\n";
-
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        IParser parser = new IParser() {
+            @Override
+            public boolean handle(String url, String content) {
+                System.out.println(url);
+                System.out.println(content);
+                return false;
             }
+        };
+
+        try {
+            parser.handle("/f/flab/jlab/namerank/build/libs/wuxhtm/bazi.jar77.html", file2Str("/f/flab/jlab/namerank/build/libs/wuxhtm/bazi.jar77.html"));
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-    }
-
-    private Hanzi parseHtml(String html){
-
+        //ParseUtils.processFilesInDir(PathUtils.getProjectPath() + "build/libs/wuxhtm/", parser);
     }
 
     private void fetchFromWeb() {
         for (int i = 7777; i > 0; i--) {
             try {
-                String content = getContent(i);
+                String content = "";
+                int t = 1;
+                while (true) {
+                    content = getContent(i);
+                    if (!content.contains("404.safedog.cn/sitedog_stat.html")) break;
+                    t++;
+                    try {
+                        System.out.println("wait " + t + " s");
+                        Thread.sleep(t * 1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
                 String fn = getDefaultPath() + i + ".html";
                 System.out.println("success: " + i);
                 saveToFile(fn, content);
@@ -69,6 +79,7 @@ public class HanziWuxing implements Runnable {
     }
 
     private String getContent(int id) throws IOException {
+        HttpClient http = HttpClientBuilder.create().build();
         HttpGet get = new HttpGet("http://wuxing.bm8.com.cn/wuxing/" + id + ".html");
         HttpResponse response = http.execute(get);
         InputStream content = response.getEntity().getContent();
