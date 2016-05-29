@@ -13,7 +13,7 @@ import java.sql.Statement;
 public class DbBenchmark {
 
     public void benchmarkTest() throws SQLException {
-        String dir = "/Users/f/plab/jlab/bazi/db/benchmark/";
+        String dir = DbMgr.getDbPath() + "benchmark/";
         new File(dir).delete();
 
         benchmark("h2", "jdbc:h2:" + dir + "h2/h2db");
