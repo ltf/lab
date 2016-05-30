@@ -21,7 +21,7 @@ import static ltf.namerank.parser.ParseUtils.file2Str;
  */
 public class HanziWuxing implements Runnable {
 
-    private static final String patternStr = "<tr><td><table[\\s\\S]{1,999}?\"><b>(.{1,9}?)</b>[\\s\\S]{1,99}?<td>拼音：(.{1,99}?)</td>[\\s\\S]{1,99}?<td>繁体：(.{1,9}?)</td>[\\s\\S]{1,99}?<td>笔画：(.{1,9}?)</td>[\\s\\S]{1,99}?</strong>：(.{1,9}?)</td>[\\s\\S]{1,99}?<td>吉凶：(.{1,9}?)</td>[\\s\\S]{1,399}?</div><div class=\"r\">(.{1,9999}?)</div></div></td>";
+    private static final String patternStr = "<tr><td><table[\\s\\S]{1,999}?\"><b>(.{1,9}?)</b>[\\s\\S]{1,99}?<td>拼音：(.{1,99}?)</td>[\\s\\S]{1,99}?<td>繁体：(.{1,9}?)</td>[\\s\\S]{1,99}?<td>笔画：(.{1,9}?)</td>[\\s\\S]{1,99}?</strong>：(.{1,9}?)</td>[\\s\\S]{1,99}?<td>吉凶：(.{1,9}?)</td>[\\s\\S]{1,999}?</div><div class=\"r\">([\\s\\S]{1,9999}?)</div></div></td>";
     private final Pattern pattern = Pattern.compile(patternStr);
     private static final String optPatternStr = "\"#FFFFFF\">(.{1,99}?),<a href=\"http://www\\.bm8\\.com\\.cn/Tool/qiming/";
     private final Pattern optPattern = Pattern.compile(optPatternStr);
@@ -80,7 +80,7 @@ public class HanziWuxing implements Runnable {
     }
 
     private void fetchFromWeb() {
-        for (int i = 7777; i > 0; i--) {
+        for (int i = 7055; i > 0; i--) {
             try {
                 String content = "";
                 int t = 1;
