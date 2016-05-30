@@ -30,8 +30,8 @@ public class HanziWuxing implements Runnable {
 
     @Override
     public void run() {
-        //fetchFromWeb();
-        processLocalFiles();
+        fetchFromWeb();
+        //processLocalFiles();
     }
 
     private Hanzi parse(final String url, final String content) {
@@ -81,6 +81,9 @@ public class HanziWuxing implements Runnable {
 
     private void fetchFromWeb() {
         for (int i = 7055; i > 0; i--) {
+            File fe = new File(getDefaultPath() + i + ".html");
+            if (fe.exists()) continue;
+
             try {
                 String content = "";
                 int t = 1;
@@ -88,12 +91,15 @@ public class HanziWuxing implements Runnable {
                     try {
                         System.out.println("wait " + t * 5 + " s");
                         Thread.sleep(t * 5 * 1000);
+                        content = getContent(i);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                    content = getContent(i);
                     if (!content.contains("404.safedog.cn/sitedog_stat.html") &&
-                            !content.contains("setTimeout(\"JumpSelf()\",700)")) break;
+                            !content.contains("setTimeout(\"JumpSelf()\",700)")
+                            && content != null && content.length() > 1) break;
                     t++;
                 }
 
