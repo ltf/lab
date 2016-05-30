@@ -31,7 +31,8 @@ public class DbMgr {
                 "traditional nvarchar(12)," +
                 "strokes nvarchar(12)," +
                 "wuxing nvarchar(12)," +
-                "gorb nvarchar(12)," +
+                "luckyornot nvarchar(12)," +
+                "comment nvarchar(12)," +
                 "info nvarchar(65535)" +
                 ");";
 

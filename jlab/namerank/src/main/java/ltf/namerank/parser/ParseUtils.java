@@ -21,7 +21,6 @@ public class ParseUtils {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                break;
             }
         }
     }

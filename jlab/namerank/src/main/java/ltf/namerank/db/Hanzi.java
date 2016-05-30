@@ -37,14 +37,6 @@ public class Hanzi {
         this.wuxing = wuxing;
     }
 
-    public String getGorb() {
-        return gorb;
-    }
-
-    public void setGorb(String gorb) {
-        this.gorb = gorb;
-    }
-
     public String getInfo() {
         return info;
     }
@@ -53,10 +45,58 @@ public class Hanzi {
         this.info = info;
     }
 
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public String getKword() {
+        return kword;
+    }
+
+    public void setKword(String kword) {
+        this.kword = kword;
+    }
+
+    public String getHtmid() {
+        return htmid;
+    }
+
+    public void setHtmid(String htmid) {
+        this.htmid = htmid;
+    }
+
+    public String getLuckyornot() {
+        return luckyornot;
+    }
+
+    public void setLuckyornot(String luckyornot) {
+        this.luckyornot = luckyornot;
+    }
+
+    private String kword;
+    private String htmid;
     private String spell;
     private String traditional;
     private String strokes;
     private String wuxing;
-    private String gorb;
+    private String luckyornot;
+    private String comment;
     private String info;
+
+    @Override
+    public String toString() {
+        return kword + "\t" +
+                htmid + "\t" +
+                spell + "\t" +
+                traditional + "\t" +
+                strokes + "\t" +
+                wuxing + "\t" +
+                luckyornot + "\t" +
+                comment + "\t" +
+                info + "\t";
+    }
 }
