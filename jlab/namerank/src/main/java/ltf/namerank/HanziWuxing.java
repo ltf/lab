@@ -1,5 +1,6 @@
 package ltf.namerank;
 
+import com.alibaba.fastjson.JSON;
 import ltf.namerank.db.Hanzi;
 import ltf.namerank.parser.IParser;
 import ltf.namerank.parser.ParseUtils;
@@ -12,8 +13,8 @@ import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static ltf.namerank.FileUtils.str2File;
 import static ltf.namerank.PathUtils.getDefaultPath;
-import static ltf.namerank.parser.ParseUtils.file2Str;
 
 /**
  * @author ltf
@@ -63,7 +64,7 @@ public class HanziWuxing implements Runnable {
             public boolean handle(String url, String content) {
                 Hanzi zi = parse(url, content);
                 if (zi != null)
-                    System.out.println(zi.toString());
+                    System.out.println(JSON.toJSONString(zi));
                 else
                     System.out.println("error : " + url);
                 return false;
@@ -105,19 +106,12 @@ public class HanziWuxing implements Runnable {
 
                 String fn = getDefaultPath() + i + ".html";
                 System.out.println("success: " + i);
-                saveToFile(fn, content);
+                str2File(fn, content);
             } catch (IOException e) {
                 System.out.println("failed: " + i);
                 e.printStackTrace();
             }
         }
-    }
-
-    private void saveToFile(String fn, String content) throws IOException {
-        Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(fn)), "utf8"));
-        writer.write(content);
-        writer.flush();
-        writer.close();
     }
 
     private String getContent(int id) throws IOException {
