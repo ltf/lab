@@ -30,8 +30,8 @@ public class HanziWuxing implements Runnable {
 
     @Override
     public void run() {
-        fetchFromWeb();
-        //processLocalFiles();
+        //fetchFromWeb();
+        processLocalFiles();
     }
 
     private Hanzi parse(final String url, final String content) {
