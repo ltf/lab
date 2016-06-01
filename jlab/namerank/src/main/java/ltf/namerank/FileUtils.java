@@ -31,9 +31,13 @@ public class FileUtils {
      * file content to string
      */
     public static String file2Str(final File f) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(f), "utf8"));
-        String content = "", line;
-        while ((line = reader.readLine()) != null) content += line + "\n";
-        return content;
+        char[] buf = new char[1024 * 8];
+        FileReader fr = new FileReader(f);
+        StringBuilder sb = new StringBuilder();
+        int len = 0;
+        while ((len =fr.read(buf, 0, buf.length))>0) {
+            sb.append(buf, 0, len);
+        }
+        return sb.toString();
     }
 }

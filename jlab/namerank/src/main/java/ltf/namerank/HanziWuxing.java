@@ -14,6 +14,7 @@ import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static ltf.namerank.FileUtils.file2Str;
 import static ltf.namerank.FileUtils.str2File;
 import static ltf.namerank.PathUtils.getDefaultPath;
 import static ltf.namerank.PathUtils.getJsonPath;
@@ -34,7 +35,18 @@ public class HanziWuxing implements Runnable {
     @Override
     public void run() {
         //fetchFromWeb();
-        processLocalFiles();
+        //processLocalFiles();
+        testLoadDict();
+    }
+
+    private void testLoadDict(){
+
+        try {
+            Dict dict = JSON.parseObject(file2Str(getJsonPath()+"dict_bm8.json"), Dict.class);
+            System.out.println(dict.getCount());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private Hanzi parse(final String url, final String content) {
