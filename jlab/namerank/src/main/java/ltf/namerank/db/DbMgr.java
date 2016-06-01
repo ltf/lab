@@ -25,7 +25,7 @@ public class DbMgr {
     public void init() throws SQLException {
         Statement st = conn.createStatement();
         String sql = "create table if not exists dict_bm8 (" +
-                "kword nvarchar(12) primary key," +
+                "kword nvarchar(12)," +
                 "htmid nvarchar(12)," +
                 "spell nvarchar(36)," +
                 "traditional nvarchar(12)," +
@@ -35,6 +35,10 @@ public class DbMgr {
                 "comment nvarchar(12)," +
                 "info nvarchar(65535)" +
                 ");";
+
+        st.execute(sql);
+
+        sql = "create index if not exists dict_bm8_kword on dict_bm8 (kword);";
 
         st.execute(sql);
 

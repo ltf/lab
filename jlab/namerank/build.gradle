@@ -9,7 +9,8 @@ dependencies {
     compile 'commons-io:commons-io:2.4'
     compile 'org.apache.httpcomponents:httpclient:4.4.1'
     compile 'com.alibaba:fastjson:1.2.12'
-    //compile 'com.h2database:h2:1.3.176'
+    compile 'org.mybatis:mybatis:3.4.0'
+    compile 'com.h2database:h2:1.3.176'
     //compile 'org.hsqldb:hsqldb:2.3.4'
     //compile 'org.apache.derby:derby:10.12.1.1'
 }

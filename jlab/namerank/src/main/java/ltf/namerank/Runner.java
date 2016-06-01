@@ -10,11 +10,11 @@ import java.sql.SQLException;
  */
 public class Runner {
     public static void main(String[] args) {
-        new HanziWuxing().run();
-//        try {
-//            DbMgr.instance().init();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
+        //new HanziWuxing().run();
+        try {
+            DbMgr.instance().init();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
