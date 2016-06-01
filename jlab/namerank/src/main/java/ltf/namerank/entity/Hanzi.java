@@ -1,4 +1,4 @@
-package ltf.namerank.db;
+package ltf.namerank.entity;
 
 /**
  * @author ltf

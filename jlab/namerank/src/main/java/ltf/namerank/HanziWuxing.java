@@ -1,7 +1,8 @@
 package ltf.namerank;
 
 import com.alibaba.fastjson.JSON;
-import ltf.namerank.db.Hanzi;
+import ltf.namerank.entity.Dict;
+import ltf.namerank.entity.Hanzi;
 import ltf.namerank.parser.IParser;
 import ltf.namerank.parser.ParseUtils;
 import org.apache.http.HttpResponse;
@@ -15,6 +16,7 @@ import java.util.regex.Pattern;
 
 import static ltf.namerank.FileUtils.str2File;
 import static ltf.namerank.PathUtils.getDefaultPath;
+import static ltf.namerank.PathUtils.getJsonPath;
 
 /**
  * @author ltf
@@ -40,13 +42,18 @@ public class HanziWuxing implements Runnable {
         Matcher matcher = pattern.matcher(content);
         if (matcher.find()) {
             result = new Hanzi();
+            String s;
             result.setKword(matcher.group(1));
-            result.setSpell(matcher.group(2));
+            s = matcher.group(2) == null ? "" : matcher.group(2);
+            result.setSpell(s.replace("<font color=\"#CCCCCC\" style=\"font-size:12px;\">","").replace("</font>",""));
             result.setTraditional(matcher.group(3));
             result.setStrokes(matcher.group(4));
             result.setWuxing(matcher.group(5));
             result.setLuckyornot(matcher.group(6));
-            result.setInfo(matcher.group(7));
+
+
+            s = matcher.group(7) == null ? "" : matcher.group(7);
+            result.setInfo(s.trim());
 
             matcher = idPattern.matcher(url);
             if (matcher.find()) result.setHtmid(matcher.group(1));
@@ -59,12 +66,13 @@ public class HanziWuxing implements Runnable {
     }
 
     private void processLocalFiles() {
+        final Dict dict = new Dict();
         IParser parser = new IParser() {
             @Override
             public boolean handle(String url, String content) {
                 Hanzi zi = parse(url, content);
                 if (zi != null)
-                    System.out.println(JSON.toJSONString(zi));
+                    dict.add(zi);
                 else
                     System.out.println("error : " + url);
                 return false;
@@ -78,6 +86,12 @@ public class HanziWuxing implements Runnable {
 //            e.printStackTrace();
 //        }
         ParseUtils.processFilesInDir(PathUtils.getProjectPath() + "build/libs/wuxhtm/", parser);
+
+        try {
+            str2File(getJsonPath()+"dict_bm8.json", JSON.toJSONString(dict, true));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void fetchFromWeb() {

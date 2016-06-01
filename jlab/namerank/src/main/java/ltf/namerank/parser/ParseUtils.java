@@ -1,8 +1,5 @@
 package ltf.namerank.parser;
 
-import ltf.namerank.PathUtils;
-import ltf.namerank.db.Hanzi;
-
 import java.io.*;
 
 import static ltf.namerank.FileUtils.file2Str;

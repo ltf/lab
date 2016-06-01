@@ -22,4 +22,10 @@ public class PathUtils {
         return macPrefix + "/f/xdata/namerank/db/";
     }
 
+    public static String getJsonPath() {
+        String macPrefix = "";
+        if (OsUtils.isOsMac()) macPrefix = "/Users";
+        return macPrefix + "/f/xdata/namerank/json/";
+    }
+
 }
