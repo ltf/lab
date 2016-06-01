@@ -12,6 +12,10 @@ import static ltf.namerank.PathUtils.getDbPath;
  */
 public class DbMgr {
 
+    public Connection getConn() {
+        return conn;
+    }
+
     Connection conn;
 
     private DbMgr() {

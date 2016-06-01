@@ -1,6 +1,7 @@
 package ltf.namerank;
 
 import com.alibaba.fastjson.JSON;
+import ltf.namerank.db.DbMgr;
 import ltf.namerank.entity.Dict;
 import ltf.namerank.entity.Hanzi;
 import ltf.namerank.parser.IParser;
@@ -11,6 +12,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.io.*;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,8 +38,12 @@ public class HanziWuxing implements Runnable {
     @Override
     public void run() {
         //fetchFromWeb();
-        //processLocalFiles();
-        testLoadDict();
+        try {
+            processLocalFiles();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        //testLoadDict();
     }
 
     private void testLoadDict(){
@@ -77,14 +84,32 @@ public class HanziWuxing implements Runnable {
         return result;
     }
 
-    private void processLocalFiles() {
-        final Dict dict = new Dict();
+    private void processLocalFiles() throws SQLException {
+        //final Dict dict = new Dict();
+        final PreparedStatement stmt = DbMgr.instance().getConn().prepareStatement(
+            "INSERT INTO dict_bm8(kword,htmid,spell,traditional,strokes,wuxing,luckyornot,comment,info) " +
+                    "VALUES(?,?,?,?,?,?,?,?,?)");
         IParser parser = new IParser() {
             @Override
             public boolean handle(String url, String content) {
                 Hanzi zi = parse(url, content);
-                if (zi != null)
-                    dict.add(zi);
+                if (zi != null) {
+                    try {
+                        stmt.setNString(1, zi.getKword());
+                        stmt.setNString(2, zi.getHtmid());
+                        stmt.setNString(3, zi.getSpell());
+                        stmt.setNString(4, zi.getTraditional());
+                        stmt.setNString(5, zi.getStrokes());
+                        stmt.setNString(6, zi.getWuxing());
+                        stmt.setNString(7, zi.getLuckyornot());
+                        stmt.setNString(8, zi.getComment());
+                        stmt.setNString(9, zi.getInfo());
+                        stmt.execute();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    //dict.add(zi);
+                }
                 else
                     System.out.println("error : " + url);
                 return false;
@@ -99,11 +124,11 @@ public class HanziWuxing implements Runnable {
 //        }
         ParseUtils.processFilesInDir(PathUtils.getProjectPath() + "build/libs/wuxhtm/", parser);
 
-        try {
-            str2File(getJsonPath()+"dict_bm8.json", JSON.toJSONString(dict, true));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            str2File(getJsonPath()+"dict_bm8.json", JSON.toJSONString(dict, true));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     private void fetchFromWeb() {
