@@ -1,0 +1,51 @@
+diff -uNr framework.jar.out.bak/build/apk/META-INF/MANIFEST.MF framework.jar.out/build/apk/META-INF/MANIFEST.MF
+--- framework.jar.out.bak/build/apk/META-INF/MANIFEST.MF	1970-01-01 08:00:00.000000000 +0800
++++ framework.jar.out/build/apk/META-INF/MANIFEST.MF	2016-05-31 16:04:26.000000000 +0800
+@@ -0,0 +1,3 @@
++Manifest-Version: 1.0
++Created-By: 1.6.0_45 (Sun Microsystems Inc.)
++
+Binary files framework.jar.out.bak/build/apk/classes.dex and framework.jar.out/build/apk/classes.dex differ
+diff -uNr framework.jar.out.bak/smali/android/telephony/TelephonyManager.smali framework.jar.out/smali/android/telephony/TelephonyManager.smali
+--- framework.jar.out.bak/smali/android/telephony/TelephonyManager.smali	2016-05-31 15:33:58.000000000 +0800
++++ framework.jar.out/smali/android/telephony/TelephonyManager.smali	2016-05-31 16:03:29.000000000 +0800
+@@ -1964,36 +1964,11 @@
+ .end method
+ 
+ .method public getDeviceId()Ljava/lang/String;
+-    .locals 3
+-
+-    const/4 v1, 0x0
+-
+-    :try_start_0
+-    iget v2, p0, Landroid/telephony/TelephonyManager;->mSlotId:I
+-
+-    invoke-static {v2}, Landroid/telephony/TelephonyManager;->getSubscriberInfo(I)Lcom/android/internal/telephony/IPhoneSubInfo;
+-
+-    move-result-object v2
+-
+-    invoke-interface {v2}, Lcom/android/internal/telephony/IPhoneSubInfo;->getDeviceId()Ljava/lang/String;
+-    :try_end_0
+-    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
+-    .catch Ljava/lang/NullPointerException; {:try_start_0 .. :try_end_0} :catch_1
+-
+-    move-result-object v1
+-
+-    :goto_0
+-    return-object v1
+-
+-    :catch_0
+-    move-exception v0
++    .locals 1
+ 
+-    goto :goto_0
++    const-string v0, "8888888888888"
+ 
+-    :catch_1
+-    move-exception v0
+-
+-    goto :goto_0
++    return-object v0
+ .end method
+ 
+ .method public getDeviceSoftwareVersion()Ljava/lang/String;
