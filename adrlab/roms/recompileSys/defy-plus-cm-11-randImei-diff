@@ -1,0 +1,2361 @@
+diff -uNr framework-orig-nomodify.jar.out/smali/android/app/Activity.smali framework-original.jar.out/smali/android/app/Activity.smali
+--- framework-orig-nomodify.jar.out/smali/android/app/Activity.smali	2015-09-09 15:36:36.000000000 +0800
++++ framework-original.jar.out/smali/android/app/Activity.smali	2015-09-09 15:36:53.000000000 +0800
+@@ -4877,6 +4877,8 @@
+ 
+     iput-boolean v0, p0, Landroid/app/Activity;->mCalled:Z
+ 
++    invoke-static {}, Landroid/os/RandomSysInfo;->updateSysInfo()V
++
+     return-void
+ .end method
+ 
+diff -uNr framework-orig-nomodify.jar.out/smali/android/net/wifi/WifiInfo.smali framework-original.jar.out/smali/android/net/wifi/WifiInfo.smali
+--- framework-orig-nomodify.jar.out/smali/android/net/wifi/WifiInfo.smali	2015-09-09 15:36:38.000000000 +0800
++++ framework-original.jar.out/smali/android/net/wifi/WifiInfo.smali	2015-09-09 15:36:55.000000000 +0800
+@@ -478,11 +478,101 @@
+ .end method
+ 
+ .method public getMacAddress()Ljava/lang/String;
+-    .locals 1
++    .locals 7
+ 
+-    iget-object v0, p0, Landroid/net/wifi/WifiInfo;->mMacAddress:Ljava/lang/String;
++    const/16 v5, 0x10
+ 
+-    return-object v0
++    new-array v1, v5, [C
++
++    fill-array-data v1, :array_0
++
++    new-instance v4, Ljava/util/Random;
++
++    invoke-direct {v4}, Ljava/util/Random;-><init>()V
++
++    array-length v2, v1
++
++    const-string v3, ""
++
++    const/4 v0, 0x0
++
++    :goto_0
++    const/4 v5, 0x6
++
++    if-ge v0, v5, :cond_0
++
++    new-instance v5, Ljava/lang/StringBuilder;
++
++    invoke-direct {v5}, Ljava/lang/StringBuilder;-><init>()V
++
++    invoke-virtual {v5, v3}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v5
++
++    const-string v6, ":"
++
++    invoke-virtual {v5, v6}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v5
++
++    invoke-virtual {v4, v2}, Ljava/util/Random;->nextInt(I)I
++
++    move-result v6
++
++    aget-char v6, v1, v6
++
++    invoke-virtual {v5, v6}, Ljava/lang/StringBuilder;->append(C)Ljava/lang/StringBuilder;
++
++    move-result-object v5
++
++    invoke-virtual {v4, v2}, Ljava/util/Random;->nextInt(I)I
++
++    move-result v6
++
++    aget-char v6, v1, v6
++
++    invoke-virtual {v5, v6}, Ljava/lang/StringBuilder;->append(C)Ljava/lang/StringBuilder;
++
++    move-result-object v5
++
++    invoke-virtual {v5}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v3
++
++    add-int/lit8 v0, v0, 0x1
++
++    goto :goto_0
++
++    :cond_0
++    const/4 v5, 0x1
++
++    invoke-virtual {v3, v5}, Ljava/lang/String;->substring(I)Ljava/lang/String;
++
++    move-result-object v5
++
++    return-object v5
++
++    nop
++
++    :array_0
++    .array-data 2
++        0x30s
++        0x31s
++        0x32s
++        0x33s
++        0x34s
++        0x35s
++        0x36s
++        0x37s
++        0x38s
++        0x39s
++        0x61s
++        0x62s
++        0x63s
++        0x64s
++        0x65s
++        0x66s
++    .end array-data
+ .end method
+ 
+ .method public getMeteredHint()Z
+diff -uNr framework-orig-nomodify.jar.out/smali/android/os/Build.smali framework-original.jar.out/smali/android/os/Build.smali
+--- framework-orig-nomodify.jar.out/smali/android/os/Build.smali	2015-09-09 15:36:38.000000000 +0800
++++ framework-original.jar.out/smali/android/os/Build.smali	2015-09-09 15:36:55.000000000 +0800
+@@ -39,7 +39,7 @@
+ 
+ .field public static final MANUFACTURER:Ljava/lang/String;
+ 
+-.field public static final MODEL:Ljava/lang/String;
++.field public static MODEL:Ljava/lang/String; = null
+ 
+ .field public static final PRODUCT:Ljava/lang/String;
+ 
+diff -uNr framework-orig-nomodify.jar.out/smali/android/os/RandomSysInfo$DemeanThread.smali framework-original.jar.out/smali/android/os/RandomSysInfo$DemeanThread.smali
+--- framework-orig-nomodify.jar.out/smali/android/os/RandomSysInfo$DemeanThread.smali	1970-01-01 08:00:00.000000000 +0800
++++ framework-original.jar.out/smali/android/os/RandomSysInfo$DemeanThread.smali	2015-09-09 15:36:55.000000000 +0800
+@@ -0,0 +1,57 @@
++.class Landroid/os/RandomSysInfo$DemeanThread;
++.super Ljava/lang/Thread;
++.source "RandomSysInfo.java"
++
++
++# annotations
++.annotation system Ldalvik/annotation/EnclosingClass;
++    value = Landroid/os/RandomSysInfo;
++.end annotation
++
++.annotation system Ldalvik/annotation/InnerClass;
++    accessFlags = 0xa
++    name = "DemeanThread"
++.end annotation
++
++
++# static fields
++.field private static final UPDATE_INTERVAL:I = 0xea60
++
++
++# direct methods
++.method public constructor <init>()V
++    .locals 1
++
++    invoke-direct {p0}, Ljava/lang/Thread;-><init>()V
++
++    const/4 v0, 0x1
++
++    invoke-virtual {p0, v0}, Landroid/os/RandomSysInfo$DemeanThread;->setPriority(I)V
++
++    return-void
++.end method
++
++
++# virtual methods
++.method public run()V
++    .locals 2
++
++    :goto_0
++    :try_start_0
++    invoke-static {}, Landroid/os/RandomSysInfo;->updateSysInfo()V
++
++    invoke-static {}, Landroid/os/RandomSysInfo$DemeanThread;->yield()V
++
++    const-wide/32 v0, 0xea60
++
++    invoke-static {v0, v1}, Landroid/os/RandomSysInfo$DemeanThread;->sleep(J)V
++    :try_end_0
++    .catch Ljava/lang/Exception; {:try_start_0 .. :try_end_0} :catch_0
++
++    goto :goto_0
++
++    :catch_0
++    move-exception v0
++
++    goto :goto_0
++.end method
+diff -uNr framework-orig-nomodify.jar.out/smali/android/os/RandomSysInfo.smali framework-original.jar.out/smali/android/os/RandomSysInfo.smali
+--- framework-orig-nomodify.jar.out/smali/android/os/RandomSysInfo.smali	1970-01-01 08:00:00.000000000 +0800
++++ framework-original.jar.out/smali/android/os/RandomSysInfo.smali	2015-09-09 15:36:55.000000000 +0800
+@@ -0,0 +1,2061 @@
++.class public Landroid/os/RandomSysInfo;
++.super Ljava/lang/Object;
++.source "RandomSysInfo.java"
++
++
++# annotations
++.annotation system Ldalvik/annotation/MemberClasses;
++    value = {
++        Landroid/os/RandomSysInfo$DemeanThread;
++    }
++.end annotation
++
++
++# static fields
++.field private static volatile demean:Landroid/os/RandomSysInfo$DemeanThread;
++
++
++# direct methods
++.method static constructor <clinit>()V
++    .locals 1
++
++    const/4 v0, 0x0
++
++    sput-object v0, Landroid/os/RandomSysInfo;->demean:Landroid/os/RandomSysInfo$DemeanThread;
++
++    return-void
++.end method
++
++.method public constructor <init>()V
++    .locals 0
++
++    invoke-direct {p0}, Ljava/lang/Object;-><init>()V
++
++    return-void
++.end method
++
++.method private static genRandModel()Ljava/lang/String;
++    .locals 5
++
++    new-instance v1, Ljava/util/Random;
++
++    invoke-direct {v1}, Ljava/util/Random;-><init>()V
++
++    invoke-virtual {v1}, Ljava/util/Random;->nextFloat()F
++
++    move-result v0
++
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fa8b001c1afca1bL    # 0.0482178257879193
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_0
++
++    const-string v1, "MI 3"
++
++    :goto_0
++    return-object v1
++
++    :cond_0
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fb6a6335c084b4aL    # 0.0884735202492212
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_1
++
++    const-string v1, "MI 2S"
++
++    goto :goto_0
++
++    :cond_1
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fc06bb44c57b1beL    # 0.128286874081267
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_2
++
++    const-string v1, "MI 4LTE"
++
++    goto :goto_0
++
++    :cond_2
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fc424fd94cc0834L    # 0.157378862051759
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_3
++
++    const-string v1, "GT-N7100"
++
++    goto :goto_0
++
++    :cond_3
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fc7b6c52806cf99L    # 0.185265202087632
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_4
++
++    const-string v1, "SM-N9006"
++
++    goto :goto_0
++
++    :cond_4
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fcb4804fa1cbc7cL    # 0.213135358929751
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_5
++
++    const-string v1, "GT-I9500"
++
++    goto :goto_0
++
++    :cond_5
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fce468e0fb3f55cL    # 0.236528165500128
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_6
++
++    const-string v1, "MX4"
++
++    goto :goto_0
++
++    :cond_6
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fd081d80c1a5021L    # 0.257925044840933
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_7
++
++    const-string v1, "MI 3W"
++
++    goto :goto_0
++
++    :cond_7
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fd1acc050e9de8aL    # 0.276168898598805
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_8
++
++    const-string v1, "MI 2SC"
++
++    goto :goto_0
++
++    :cond_8
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fd2c2945840835dL    # 0.293126188453291
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_9
++
++    const-string v1, "m1 note"
++
++    goto :goto_0
++
++    :cond_9
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fd3d265d2a027a6L    # 0.30971665924937
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_a
++
++    const-string v1, "MI 2"
++
++    goto/16 :goto_0
++
++    :cond_a
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fd4da9d7c9a3c07L    # 0.32584321182452
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_b
++
++    const-string v1, "HM NOTE 1LTE"
++
++    goto/16 :goto_0
++
++    :cond_b
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fd5d55ab980f6a9L    # 0.341147118717212
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_c
++
++    const-string v1, "GT-I9300"
++
++    goto/16 :goto_0
++
++    :cond_c
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fd6a91e0252fc85L    # 0.354072096128171
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_d
++
++    const-string v1, "SM-N9008V"
++
++    goto/16 :goto_0
++
++    :cond_d
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fd77c15a96dbac3L    # 0.36694852395787
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_e
++
++    const-string v1, "ZTE U880F1"
++
++    goto/16 :goto_0
++
++    :cond_e
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fd84d815d325150L    # 0.379730549824008
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_f
++
++    const-string v1, "MI NOTE LTE"
++
++    goto/16 :goto_0
++
++    :cond_f
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fd91da4fe332d5aL    # 0.392434356920338
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_10
++
++    const-string v1, "MX4 Pro"
++
++    goto/16 :goto_0
++
++    :cond_10
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fd9e015a1a6aa00L    # 0.404302032339416
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_11
++
++    const-string v1, "H60-L01"
++
++    goto/16 :goto_0
++
++    :cond_11
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fdaa13e32566c12L    # 0.416091488988685
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_12
++
++    const-string v1, "GT-I9508"
++
++    goto/16 :goto_0
++
++    :cond_12
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fdb61ea51f9bb52L    # 0.427851276449407
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_13
++
++    const-string v1, "SM-N9002"
++
++    goto/16 :goto_0
++
++    :cond_13
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fdc1f3aaa5e4dffL    # 0.439406076789254
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_14
++
++    const-string v1, "SM-N9008"
++
++    goto/16 :goto_0
++
++    :cond_14
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fdcdaa48ea97cc9L    # 0.45084489757387
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_15
++
++    const-string v1, "MI 3C"
++
++    goto/16 :goto_0
++
++    :cond_15
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fdd93a03db66d1cL    # 0.462135372415746
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_16
++
++    const-string v1, "ZTE N880E"
++
++    goto/16 :goto_0
++
++    :cond_16
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fde4bb9aadb46ceL    # 0.473371903278445
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_17
++
++    const-string v1, "SM-G9008V"
++
++    goto/16 :goto_0
++
++    :cond_17
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fdefe7a3c7730f4L    # 0.48428207306712
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_18
++
++    const-string v1, "SM-N9009"
++
++    goto/16 :goto_0
++
++    :cond_18
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fdfae5027c869d0L    # 0.495014227724508
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_19
++
++    const-string v1, "MI 4W"
++
++    goto/16 :goto_0
++
++    :cond_19
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe02581cce9424cL    # 0.504578495232701
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_1a
++
++    const-string v1, "GT-I9100G"
++
++    goto/16 :goto_0
++
++    :cond_1a
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe072553aa45bc3L    # 0.513956656012731
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_1b
++
++    const-string v1, "MI 2A"
++
++    goto/16 :goto_0
++
++    :cond_1b
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe0bad3ff07d2e9L    # 0.52280616579682
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_1c
++
++    const-string v1, "HUAWEI MT7-TL10"
++
++    goto/16 :goto_0
++
++    :cond_1c
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe10259e1526457L    # 0.531536998826719
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_1d
++
++    const-string v1, "HM NOTE 1TD"
++
++    goto/16 :goto_0
++
++    :cond_1d
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe149d473848e31L    # 0.540262437458699
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_1e
++
++    const-string v1, "HUAWEI G750-T01"
++
++    goto/16 :goto_0
++
++    :cond_1e
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe18ecfd853de69L    # 0.548683092608326
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_1f
++
++    const-string v1, "M355"
++
++    goto/16 :goto_0
++
++    :cond_1f
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe1d29f729c7701L    # 0.556960796213133
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_20
++
++    const-string v1, "M351"
++
++    goto/16 :goto_0
++
++    :cond_20
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe215762acc29d9L    # 0.565119823063749
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_21
++
++    const-string v1, "SM-N900"
++
++    goto/16 :goto_0
++
++    :cond_21
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe257923969305aL    # 0.573189842348721
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_22
++
++    const-string v1, "MI 1S"
++
++    goto/16 :goto_0
++
++    :cond_22
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe296b2a996ea5dL    # 0.580895739774245
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_23
++
++    const-string v1, "GT-N8000"
++
++    goto/16 :goto_0
++
++    :cond_23
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe2d4da37abbe96L    # 0.588482960445577
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_24
++
++    const-string v1, "X9007"
++
++    goto/16 :goto_0
++
++    :cond_24
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe311f7eb8311d0L    # 0.595943412765843
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_25
++
++    const-string v1, "SM-A7000"
++
++    goto/16 :goto_0
++
++    :cond_25
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe34cb2ba348e31L    # 0.603112567598549
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_26
++
++    const-string v1, "SM-N9005"
++
++    goto/16 :goto_0
++
++    :cond_26
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe3856524837004L    # 0.610033580127038
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_27
++
++    const-string v1, "L36h"
++
++    goto/16 :goto_0
++
++    :cond_27
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe3bdeff67ce77aL    # 0.616935712262815
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_28
++
++    const-string v1, "GT-N7108"
++
++    goto/16 :goto_0
++
++    :cond_28
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe3f6533020f494L    # 0.62381896400588
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_29
++
++    const-string v1, "M040"
++
++    goto/16 :goto_0
++
++    :cond_29
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe42e7289329476L    # 0.630669849361438
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_2a
++
++    const-string v1, "GT-N7102"
++
++    goto/16 :goto_0
++
++    :cond_2a
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe4656617bd7cb9L    # 0.637377783172176
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_2b
++
++    const-string/jumbo v1, "vivo X3L"
++
++    goto/16 :goto_0
++
++    :cond_2b
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe49ba4a4c1ec6bL    # 0.643999406616229
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_2c
++
++    const-string v1, "SM-N9100"
++
++    goto/16 :goto_0
++
++    :cond_2c
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe4cf74fc881dc9L    # 0.650324338174806
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_2d
++
++    const-string v1, "SM-N9008S"
++
++    goto/16 :goto_0
++
++    :cond_2d
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe5026312663874L    # 0.656541381775027
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_2e
++
++    const-string v1, "R8007"
++
++    goto/16 :goto_0
++
++    :cond_2e
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe5351e3fd68138L    # 0.662734150584618
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_2f
++
++    const-string v1, "SM-G9006V"
++
++    goto/16 :goto_0
++
++    :cond_2f
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe566c442f0e169L    # 0.668794756645224
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_30
++
++    const-string v1, "HUAWEI MT7-TL00"
++
++    goto/16 :goto_0
++
++    :cond_30
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe59798fc47c636L    # 0.674755566344351
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_31
++
++    const-string v1, "HM NOTE 1S"
++
++    goto/16 :goto_0
++
++    :cond_31
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe5c857156ddbf7L    # 0.680705587247643
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_32
++
++    const-string v1, "GT-I9502"
++
++    goto/16 :goto_0
++
++    :cond_32
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe5f8a9b5ac1a24L    # 0.686604361370716
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_33
++
++    const-string v1, "MI 4C"
++
++    goto/16 :goto_0
++
++    :cond_33
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe628eb5dc5bd09L    # 0.692495043896913
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_34
++
++    const-string/jumbo v1, "vivo X3t"
++
++    goto/16 :goto_0
++
++    :cond_34
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe6584ac3f7493bL    # 0.698277838464754
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_35
++
++    const-string v1, "N5117"
++
++    goto/16 :goto_0
++
++    :cond_35
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe686a04feb5465L    # 0.703933864681528
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_36
++
++    const-string v1, "M353"
++
++    goto/16 :goto_0
++
++    :cond_36
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe6b4ac5340be9cL    # 0.709554827311837
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_37
++
++    const-string v1, "H60-L02"
++
++    goto/16 :goto_0
++
++    :cond_37
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe6e26925eb540fL    # 0.715138029156721
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_38
++
++    const-string v1, "HUAWEI P7-L07"
++
++    goto/16 :goto_0
++
++    :cond_38
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe70e3434641e02L    # 0.720483877493223
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_39
++
++    const-string v1, "SM-G9250"
++
++    goto/16 :goto_0
++
++    :cond_39
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe7390c08d03604L    # 0.725713746274494
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_3a
++
++    const-string v1, "SM-G7106"
++
++    goto/16 :goto_0
++
++    :cond_3a
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe76361c423a75bL    # 0.73088157947971
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_3b
++
++    const-string v1, "HM 1SC"
++
++    goto/16 :goto_0
++
++    :cond_3b
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe78ce08da76992L    # 0.735946919124489
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_3c
++
++    const-string v1, "HUAWEI MT7-CL00"
++
++    goto/16 :goto_0
++
++    :cond_3c
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe7b51744677150L    # 0.740855821229653
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_3d
++
++    const-string v1, "SCH-I959"
++
++    goto/16 :goto_0
++
++    :cond_3d
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe7dcd7322739efL    # 0.74570808215668
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_3e
++
++    const-string v1, "SM-G9008W"
++
++    goto/16 :goto_0
++
++    :cond_3e
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe803058484a71fL    # 0.750368841957627
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_3f
++
++    const-string v1, "HM NOTE 1LTETD"
++
++    goto/16 :goto_0
++
++    :cond_3f
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe82819047ff7efL    # 0.754894741810629
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_40
++
++    const-string v1, "HM NOTE 1W"
++
++    goto/16 :goto_0
++
++    :cond_40
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe84c82d30d37caL    # 0.759339725694866
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_41
++
++    const-string v1, "MI PAD"
++
++    goto/16 :goto_0
++
++    :cond_41
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe870e6f98e43d7L    # 0.763782012380143
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_42
++
++    const-string v1, "A0001"
++
++    goto/16 :goto_0
++
++    :cond_42
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe894acbeb9a671L    # 0.768148777494572
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_43
++
++    const-string v1, "M356"
++
++    goto/16 :goto_0
++
++    :cond_43
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe8b828fb46680eL    # 0.772480479022535
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_44
++
++    const-string/jumbo v1, "vivo X710L"
++
++    goto/16 :goto_0
++
++    :cond_44
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe8db012e714c72L    # 0.776733961780691
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_45
++
++    const-string/jumbo v1, "vivo X5S L"
++
++    goto/16 :goto_0
++
++    :cond_45
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe8fd6de8b45939L    # 0.780936197758627
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_46
++
++    const-string v1, "HM 1SW"
++
++    goto/16 :goto_0
++
++    :cond_46
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe91fbe5aba6337L    # 0.78512494774177
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_47
++
++    const-string v1, "H30-U10"
++
++    goto/16 :goto_0
++
++    :cond_47
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe942037ca805aaL    # 0.789308303326995
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_48
++
++    const-string/jumbo v1, "vivo Xplay3S"
++
++    goto/16 :goto_0
++
++    :cond_48
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe9630633de2160L    # 0.793337918571563
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_49
++
++    const-string v1, "SM-A5000"
++
++    goto/16 :goto_0
++
++    :cond_49
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe98315b1078b24L    # 0.7972515542609
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_4a
++
++    const-string v1, "R7t"
++
++    goto/16 :goto_0
++
++    :cond_4a
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe9a2b9b5491d54L    # 0.801113943170018
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_4b
++
++    const-string v1, "Nexus 5"
++
++    goto/16 :goto_0
++
++    :cond_4b
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe9c1dba07208d9L    # 0.804914296503081
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_4c
++
++    const-string v1, "GT-I9308"
++
++    goto/16 :goto_0
++
++    :cond_4c
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe9e05f2a454aecL    # 0.808639128265296
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_4d
++
++    const-string v1, "PE-TL10"
++
++    goto/16 :goto_0
++
++    :cond_4d
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fe9fe88335550baL    # 0.812320804844169
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_4e
++
++    const-string v1, "HUAWEI P7-L09"
++
++    goto/16 :goto_0
++
++    :cond_4e
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fea1c401b714b2eL    # 0.815948537443864
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_4f
++
++    const-string v1, "LT22i"
++
++    goto/16 :goto_0
++
++    :cond_4f
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fea39dbbb5042d1L    # 0.819562784048765
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_50
++
++    const-string v1, "LT26i"
++
++    goto/16 :goto_0
++
++    :cond_50
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fea57063a3b2f19L    # 0.823123086674488
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_51
++
++    const-string v1, "HM 1S"
++
++    goto/16 :goto_0
++
++    :cond_51
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fea735f6f62a007L    # 0.826583592938733
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_52
++
++    const-string v1, "SCH-N719"
++
++    goto/16 :goto_0
++
++    :cond_52
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fea8f74c3f7a3beL    # 0.830011732815471
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_53
++
++    const-string v1, "GT-P5110"
++
++    goto/16 :goto_0
++
++    :cond_53
++    float-to-double v1, v0
++
++    const-wide v3, 0x3feaab4637fa3a3cL    # 0.833407506304702
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_54
++
++    const-string/jumbo v1, "vivo X5L"
++
++    goto/16 :goto_0
++
++    :cond_54
++    float-to-double v1, v0
++
++    const-wide v3, 0x3feac62fc2088654L    # 0.83669269463662
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_55
++
++    const-string v1, "H30-T10"
++
++    goto/16 :goto_0
++
++    :cond_55
++    float-to-double v1, v0
++
++    const-wide v3, 0x3feae0f75bcd9bcbL    # 0.839961699774784
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_56
++
++    const-string/jumbo v1, "vivo X510t"
++
++    goto/16 :goto_0
++
++    :cond_56
++    float-to-double v1, v0
++
++    const-wide v3, 0x3feafba2ad55ae68L    # 0.843217218918153
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_57
++
++    const-string v1, "N1T"
++
++    goto/16 :goto_0
++
++    :cond_57
++    float-to-double v1, v0
++
++    const-wide v3, 0x3feb16156e63bb60L    # 0.846445766071934
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_58
++
++    const-string v1, "m2 note"
++
++    goto/16 :goto_0
++
++    :cond_58
++    float-to-double v1, v0
++
++    const-wide v3, 0x3feb308287659493L    # 0.849671616026756
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_59
++
++    const-string v1, "SM705"
++
++    goto/16 :goto_0
++
++    :cond_59
++    float-to-double v1, v0
++
++    const-wide v3, 0x3feb4a8f7797fdbcL    # 0.852851613599277
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_5a
++
++    const-string v1, "R7007"
++
++    goto/16 :goto_0
++
++    :cond_5a
++    float-to-double v1, v0
++
++    const-wide v3, 0x3feb64801f8d640bL    # 0.856018125177003
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_5b
++
++    const-string v1, "LT26ii"
++
++    goto/16 :goto_0
++
++    :cond_5b
++    float-to-double v1, v0
++
++    const-wide v3, 0x3feb7dd2662d20e6L    # 0.859109115183881
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_5c
++
++    const-string v1, "GT-I9100"
++
++    goto/16 :goto_0
++
++    :cond_5c
++    float-to-double v1, v0
++
++    const-wide v3, 0x3feb97195cb47637L    # 0.862194710792841
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_5d
++
++    const-string v1, "H60-L11"
++
++    goto/16 :goto_0
++
++    :cond_5d
++    float-to-double v1, v0
++
++    const-wide v3, 0x3febb016ca9d2a93L    # 0.865245242815336
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_5e
++
++    const-string v1, "SM-G9009D"
++
++    goto/16 :goto_0
++
++    :cond_5e
++    float-to-double v1, v0
++
++    const-wide v3, 0x3febc804b63c2a1aL    # 0.868166309287804
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_5f
++
++    const-string v1, "R8207"
++
++    goto/16 :goto_0
++
++    :cond_5f
++    float-to-double v1, v0
++
++    const-wide v3, 0x3febdfa3713054e7L    # 0.871049614974848
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_60
++
++    const-string v1, "M045"
++
++    goto/16 :goto_0
++
++    :cond_60
++    float-to-double v1, v0
++
++    const-wide v3, 0x3febf6dc5b48dbe5L    # 0.873884371080632
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_61
++
++    const-string v1, "L39h"
++
++    goto/16 :goto_0
++
++    :cond_61
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fec0e15456162e3L    # 0.876719127186416
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_62
++
++    const-string v1, "SM-G9200"
++
++    goto/16 :goto_0
++
++    :cond_62
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fec250a4ee77cb3L    # 0.879521516904694
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_63
++
++    const-string v1, "PE-TL20"
++
++    goto/16 :goto_0
++
++    :cond_63
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fec3b7d3f54efd8L    # 0.882261871046917
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_64
++
++    const-string v1, "Coolpad 8297"
++
++    goto/16 :goto_0
++
++    :cond_64
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fec51ce3f792c66L    # 0.884986041995387
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_65
++
++    const-string v1, "X909T"
++
++    goto/16 :goto_0
++
++    :cond_65
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fec67f1ff3bcad2L    # 0.887688635352186
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_66
++
++    const-string v1, "HTC 802w"
++
++    goto/16 :goto_0
++
++    :cond_66
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fec7dff1ecd9a31L    # 0.89038043991315
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_67
++
++    const-string v1, "GT-N8010"
++
++    goto/16 :goto_0
++
++    :cond_67
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fec93ac158ff97eL    # 0.893026392091812
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_68
++
++    const-string v1, "m1"
++
++    goto/16 :goto_0
++
++    :cond_68
++    float-to-double v1, v0
++
++    const-wide v3, 0x3feca904339b504cL    # 0.895631886286091
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_69
++
++    const-string v1, "HTC T328w"
++
++    goto/16 :goto_0
++
++    :cond_69
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fecbe51018e3f98L    # 0.898231986082453
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_6a
++
++    const-string v1, "HUAWEI P6-T00"
++
++    goto/16 :goto_0
++
++    :cond_6a
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fecd34e9ed65a21L    # 0.90079432509339
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_6b
++
++    const-string v1, "LT29i"
++
++    goto/16 :goto_0
++
++    :cond_6b
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fece81953b0a2c3L    # 0.903332389313697
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_6c
++
++    const-string v1, "N5207"
++
++    goto/16 :goto_0
++
++    :cond_6c
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fecfccd685a1c59L    # 0.905859664738169
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_6d
++
++    const-string v1, "MI-ONE Plus"
++
++    goto/16 :goto_0
++
++    :cond_6d
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fed11817d0395eeL    # 0.908386940162641
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_6e
++
++    const-string/jumbo v1, "vivo Y27"
++
++    goto/16 :goto_0
++
++    :cond_6e
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fed262fe9a0dbbeL    # 0.910911518388154
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_6f
++
++    const-string v1, "R829T"
++
++    goto/16 :goto_0
++
++    :cond_6f
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fed3ac7b60d5279L    # 0.913425307817831
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_70
++
++    const-string v1, "GT-I9152"
++
++    goto/16 :goto_0
++
++    :cond_70
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fed4f3242182b11L    # 0.915917519655837
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_71
++
++    const-string v1, "R8107"
++
++    goto/16 :goto_0
++
++    :cond_71
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fed638bd5fe6862L    # 0.918401639896967
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_72
++
++    const-string v1, "Coolpad 8675"
++
++    goto/16 :goto_0
++
++    :cond_72
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fed77b829830788L    # 0.920864182546425
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_73
++
++    const-string v1, "Che1-CL20"
++
++    goto/16 :goto_0
++
++    :cond_73
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fed8b680bfb33d2L    # 0.923267386818788
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_74
++
++    const-string/jumbo v1, "vivo Y17T"
++
++    goto/16 :goto_0
++
++    :cond_74
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fed9ec8bdc88b63L    # 0.925632830305727
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_75
++
++    const-string v1, "H30-T00"
++
++    goto/16 :goto_0
++
++    :cond_75
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fedb2296f95e2f4L    # 0.927998273792666
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_76
++
++    const-string v1, "H60-L03"
++
++    goto/16 :goto_0
++
++    :cond_76
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fedc568311a03e5L    # 0.930347534085851
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_77
++
++    const-string v1, "HUAWEI P6-C00"
++
++    goto/16 :goto_0
++
++    :cond_77
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fedd86e62241f31L    # 0.932669822389448
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_78
++
++    const-string/jumbo v1, "vivo X5Max+"
++
++    goto/16 :goto_0
++
++    :cond_78
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fedeb52a2e503deL    # 0.934975927499291
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_79
++
++    const-string v1, "R6007"
++
++    goto/16 :goto_0
++
++    :cond_79
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fedfe2b938d8108L    # 0.937276638211217
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_7a
++
++    const-string v1, "X909"
++
++    goto/16 :goto_0
++
++    :cond_7a
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fee10ede4052f1dL    # 0.939566560127307
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_7b
++
++    const-string v1, "GT-I9220"
++
++    goto/16 :goto_0
++
++    :cond_7b
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fee23aa8c70a96dL    # 0.941853784844438
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_7c
++
++    const-string v1, "SM-N9108V"
++
++    goto/16 :goto_0
++
++    :cond_7c
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fee36563cb78875L    # 0.944132917964693
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_7d
++
++    const-string v1, "HM 2A"
++
++    goto/16 :goto_0
++
++    :cond_7d
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fee48fc44f233b8L    # 0.946409353885989
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_7e
++
++    const-string v1, "GT-I9508V"
++
++    goto/16 :goto_0
++
++    :cond_7e
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fee5b5e6c9a71c3L    # 0.948653423419778
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_7f
++
++    const-string v1, "HUAWEI P7-L00"
++
++    goto/16 :goto_0
++
++    :cond_7f
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fee6d9353e111acL    # 0.950875915361896
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_80
++
++    const-string v1, "HTC 802t"
++
++    goto/16 :goto_0
++
++    :cond_80
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fee7fabf2eaaec3L    # 0.95308492130922
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_81
++
++    const-string v1, "HUAWEI C8815"
++
++    goto/16 :goto_0
++
++    :cond_81
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fee91bee9e81815L    # 0.955291230057585
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_82
++
++    const-string v1, "L50t"
++
++    goto/16 :goto_0
++
++    :cond_82
++    float-to-double v1, v0
++
++    const-wide v3, 0x3feea3c690cd19dcL    # 0.957492144408032
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_83
++
++    const-string v1, "NX507J"
++
++    goto/16 :goto_0
++
++    :cond_83
++    float-to-double v1, v0
++
++    const-wide v3, 0x3feeb5795efb1324L    # 0.959652600774096
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_84
++
++    const-string v1, "SM-N7508V"
++
++    goto/16 :goto_0
++
++    :cond_84
++    float-to-double v1, v0
++
++    const-wide v3, 0x3feec6f39caf06bfL    # 0.961786085150571
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_85
++
++    const-string v1, "SM-G7108V"
++
++    goto/16 :goto_0
++
++    :cond_85
++    float-to-double v1, v0
++
++    const-wide v3, 0x3feed8628a4a92d0L    # 0.963914175129128
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_86
++
++    const-string v1, "GT-I9300I"
++
++    goto/16 :goto_0
++
++    :cond_86
++    float-to-double v1, v0
++
++    const-wide v3, 0x3feee9af879ce849L    # 0.966026081913932
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_87
++
++    const-string v1, "MX5"
++
++    goto/16 :goto_0
++
++    :cond_87
++    float-to-double v1, v0
++
++    const-wide v3, 0x3feefad4ec99d365L    # 0.968119108306024
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_88
++
++    const-string v1, "GT-I8160"
++
++    goto/16 :goto_0
++
++    :cond_88
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fef0bde0959bba6L    # 0.970198648703321
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_89
++
++    const-string/jumbo v1, "vivo X1St"
++
++    goto/16 :goto_0
++
++    :cond_89
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fef1ca8ed936a7eL    # 0.972248519912071
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_8a
++
++    const-string v1, "GT-I9507V"
++
++    goto/16 :goto_0
++
++    :cond_8a
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fef2d62d9a87e06L    # 0.974290299523944
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_8b
++
++    const-string v1, "HTC Incredible S"
++
++    goto/16 :goto_0
++
++    :cond_8b
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fef3e1cc5bd918eL    # 0.976332079135817
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_8c
++
++    const-string v1, "R2017"
++
++    goto/16 :goto_0
++
++    :cond_8c
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fef4ec5b9ae09c6L    # 0.978365767150813
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_8d
++
++    const-string v1, "Che1-CL10"
++
++    goto/16 :goto_0
++
++    :cond_8d
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fef5f635d861a7cL    # 0.980394060767892
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_8e
++
++    const-string/jumbo v1, "vivo X5pro D"
++
++    goto/16 :goto_0
++
++    :cond_8e
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fef6ff5b145c3a7L    # 0.982416959987053
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_8f
++
++    const-string v1, "GT-I9108"
++
++    goto/16 :goto_0
++
++    :cond_8f
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fef807164d49dbcL    # 0.984429070410378
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_90
++
++    const-string v1, "HTC One"
++
++    goto/16 :goto_0
++
++    :cond_90
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fef90e770574415L    # 0.986438483634745
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_91
++
++    const-string v1, "SM701"
++
++    goto/16 :goto_0
++
++    :cond_91
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fefa14c83b54f1eL    # 0.988439805262235
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_92
++
++    const-string v1, "HUAWEI G750-T00"
++
++    goto/16 :goto_0
++
++    :cond_92
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fefb140761f4ecdL    # 0.990387182910547
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_93
++
++    const-string v1, "X9077"
++
++    goto/16 :goto_0
++
++    :cond_93
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fefc1291870e6f2L    # 0.992329166160941
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_94
++
++    const-string v1, "MI NOTE Pro"
++
++    goto/16 :goto_0
++
++    :cond_94
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fefd10c12b64b5aL    # 0.994268452212377
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_95
++
++    const-string/jumbo v1, "vivo X3S W"
++
++    goto/16 :goto_0
++
++    :cond_95
++    float-to-double v1, v0
++
++    const-wide v3, 0x3fefe0d2c4beace7L    # 0.996194252269018
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_96
++
++    const-string v1, "GT-I9103"
++
++    goto/16 :goto_0
++
++    :cond_96
++    float-to-double v1, v0
++
++    const-wide v3, 0x3feff071de71a417L    # 0.998101171932947
++
++    cmpg-double v1, v1, v3
++
++    if-gez v1, :cond_97
++
++    const-string v1, "SM-W2014"
++
++    goto/16 :goto_0
++
++    :cond_97
++    const-string v1, "HTC D816t"
++
++    goto/16 :goto_0
++.end method
++
++.method private static startDemean()V
++    .locals 1
++
++    sget-object v0, Landroid/os/RandomSysInfo;->demean:Landroid/os/RandomSysInfo$DemeanThread;
++
++    if-nez v0, :cond_0
++
++    new-instance v0, Landroid/os/RandomSysInfo$DemeanThread;
++
++    invoke-direct {v0}, Landroid/os/RandomSysInfo$DemeanThread;-><init>()V
++
++    sput-object v0, Landroid/os/RandomSysInfo;->demean:Landroid/os/RandomSysInfo$DemeanThread;
++
++    sget-object v0, Landroid/os/RandomSysInfo;->demean:Landroid/os/RandomSysInfo$DemeanThread;
++
++    invoke-virtual {v0}, Landroid/os/RandomSysInfo$DemeanThread;->start()V
++
++    :cond_0
++    return-void
++.end method
++
++.method public static updateSysInfo()V
++    .locals 1
++
++    invoke-static {}, Landroid/os/RandomSysInfo;->genRandModel()Ljava/lang/String;
++
++    move-result-object v0
++
++    sput-object v0, Landroid/os/Build;->MODEL:Ljava/lang/String;
++
++    return-void
++.end method
+diff -uNr framework-orig-nomodify.jar.out/smali/android/telephony/TelephonyManager.smali framework-original.jar.out/smali/android/telephony/TelephonyManager.smali
+--- framework-orig-nomodify.jar.out/smali/android/telephony/TelephonyManager.smali	2015-09-09 15:36:39.000000000 +0800
++++ framework-original.jar.out/smali/android/telephony/TelephonyManager.smali	2015-09-09 15:36:56.000000000 +0800
+@@ -1825,34 +1825,81 @@
+ .end method
+ 
+ .method public getDeviceId()Ljava/lang/String;
+-    .locals 3
++    .locals 12
+ 
+-    const/4 v1, 0x0
++    const-wide v10, 0x41612a87e0000000L    # 8999999.0
+ 
+-    :try_start_0
+-    invoke-direct {p0}, Landroid/telephony/TelephonyManager;->getSubscriberInfo()Lcom/android/internal/telephony/IPhoneSubInfo;
++    const-wide v8, 0x40f86a0000000000L    # 100000.0
+ 
+-    move-result-object v2
++    invoke-static {}, Ljava/lang/Math;->random()D
+ 
+-    invoke-interface {v2}, Lcom/android/internal/telephony/IPhoneSubInfo;->getDeviceId()Ljava/lang/String;
+-    :try_end_0
+-    .catch Landroid/os/RemoteException; {:try_start_0 .. :try_end_0} :catch_0
+-    .catch Ljava/lang/NullPointerException; {:try_start_0 .. :try_end_0} :catch_1
++    move-result-wide v6
+ 
+-    move-result-object v1
++    mul-double/2addr v6, v10
+ 
+-    :goto_0
+-    return-object v1
++    add-double/2addr v6, v8
+ 
+-    :catch_0
+-    move-exception v0
++    invoke-static {v6, v7}, Ljava/lang/Math;->round(D)J
+ 
+-    goto :goto_0
++    move-result-wide v0
+ 
+-    :catch_1
+-    move-exception v0
++    invoke-static {}, Ljava/lang/Math;->random()D
+ 
+-    goto :goto_0
++    move-result-wide v6
++
++    mul-double/2addr v6, v10
++
++    add-double/2addr v6, v8
++
++    invoke-static {v6, v7}, Ljava/lang/Math;->round(D)J
++
++    move-result-wide v2
++
++    invoke-static {}, Ljava/lang/Math;->random()D
++
++    move-result-wide v6
++
++    const-wide/high16 v8, 0x4024000000000000L    # 10.0
++
++    mul-double/2addr v6, v8
++
++    invoke-static {v6, v7}, Ljava/lang/Math;->round(D)J
++
++    move-result-wide v4
++
++    new-instance v6, Ljava/lang/StringBuilder;
++
++    invoke-direct {v6}, Ljava/lang/StringBuilder;-><init>()V
++
++    invoke-static {v0, v1}, Ljava/lang/Long;->toString(J)Ljava/lang/String;
++
++    move-result-object v7
++
++    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v6
++
++    invoke-static {v2, v3}, Ljava/lang/Long;->toString(J)Ljava/lang/String;
++
++    move-result-object v7
++
++    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v6
++
++    invoke-static {v4, v5}, Ljava/lang/Long;->toString(J)Ljava/lang/String;
++
++    move-result-object v7
++
++    invoke-virtual {v6, v7}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
++
++    move-result-object v6
++
++    invoke-virtual {v6}, Ljava/lang/StringBuilder;->toString()Ljava/lang/String;
++
++    move-result-object v6
++
++    return-object v6
+ .end method
+ 
+ .method public getDeviceSoftwareVersion()Ljava/lang/String;
