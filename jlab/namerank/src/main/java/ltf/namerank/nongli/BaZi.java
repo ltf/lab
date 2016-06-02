@@ -1,4 +1,4 @@
-package ltf.namerank;
+package ltf.namerank.nongli;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
