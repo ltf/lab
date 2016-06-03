@@ -1,10 +1,8 @@
 package ltf.namerank.db;
 
-import ltf.namerank.PathUtils;
-
 import java.sql.*;
 
-import static ltf.namerank.PathUtils.getDbPath;
+import static ltf.namerank.utils.PathUtils.getDbPath;
 
 /**
  * @author ltf

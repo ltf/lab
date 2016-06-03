@@ -2,7 +2,7 @@ package ltf.namerank.parser;
 
 import java.io.*;
 
-import static ltf.namerank.FileUtils.file2Str;
+import static ltf.namerank.utils.FileUtils.file2Str;
 
 /**
  * @author ltf

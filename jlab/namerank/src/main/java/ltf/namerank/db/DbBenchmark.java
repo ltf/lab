@@ -6,7 +6,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import static ltf.namerank.PathUtils.getDbPath;
+import static ltf.namerank.utils.PathUtils.getDbPath;
 
 /**
  * @author ltf

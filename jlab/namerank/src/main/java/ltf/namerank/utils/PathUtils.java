@@ -1,4 +1,6 @@
-package ltf.namerank;
+package ltf.namerank.utils;
+
+import ltf.namerank.Application;
 
 /**
  * @author ltf
@@ -12,7 +14,7 @@ public class PathUtils {
     }
 
     public static String getDefaultPath() {
-        return Runner.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+        return Application.class.getProtectionDomain().getCodeSource().getLocation().getPath();
     }
 
 

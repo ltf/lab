@@ -1,4 +1,4 @@
-package ltf.namerank;
+package ltf.namerank.utils;
 
 /**
  * @author ltf

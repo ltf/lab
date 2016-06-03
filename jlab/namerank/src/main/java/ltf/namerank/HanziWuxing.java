@@ -6,6 +6,7 @@ import ltf.namerank.entity.Dict;
 import ltf.namerank.entity.Hanzi;
 import ltf.namerank.parser.IParser;
 import ltf.namerank.parser.ParseUtils;
+import ltf.namerank.utils.PathUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -17,10 +18,10 @@ import java.sql.SQLException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static ltf.namerank.FileUtils.file2Str;
-import static ltf.namerank.FileUtils.str2File;
-import static ltf.namerank.PathUtils.getDefaultPath;
-import static ltf.namerank.PathUtils.getJsonPath;
+import static ltf.namerank.utils.FileUtils.file2Str;
+import static ltf.namerank.utils.FileUtils.str2File;
+import static ltf.namerank.utils.PathUtils.getDefaultPath;
+import static ltf.namerank.utils.PathUtils.getJsonPath;
 
 /**
  * @author ltf
