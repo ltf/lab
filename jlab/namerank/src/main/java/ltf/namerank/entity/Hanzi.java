@@ -1,9 +1,15 @@
 package ltf.namerank.entity;
 
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 /**
  * @author ltf
  * @since 5/27/16, 10:29 PM
  */
+@Entity
+@Table(name = "dict_bm8")
 public class Hanzi {
     public String getSpell() {
         return spell;
