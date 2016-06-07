@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 public class Application {
     public static void main(String[] args) {
 
-        ApplicationContext appContext = new AnnotationConfigApplicationContext();
+        //ApplicationContext appContext = new AnnotationConfigApplicationContext();
 
 
 //        new HanziWuxing().run();

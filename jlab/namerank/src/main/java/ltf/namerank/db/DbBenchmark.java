@@ -6,7 +6,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import static ltf.namerank.utils.PathUtils.getDbPath;
+import static ltf.namerank.utils.PathUtils.getDbHome;
 
 /**
  * @author ltf
@@ -15,7 +15,7 @@ import static ltf.namerank.utils.PathUtils.getDbPath;
 public class DbBenchmark {
 
     public void benchmarkTest() throws SQLException {
-        String dir = getDbPath() + "benchmark/";
+        String dir = getDbHome() + "/benchmark/";
         new File(dir).delete();
 
         benchmark("h2", "jdbc:h2:" + dir + "h2/h2db");

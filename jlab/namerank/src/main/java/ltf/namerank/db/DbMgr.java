@@ -2,7 +2,7 @@ package ltf.namerank.db;
 
 import java.sql.*;
 
-import static ltf.namerank.utils.PathUtils.getDbPath;
+import static ltf.namerank.utils.PathUtils.getDbHome;
 
 /**
  * @author ltf
@@ -18,7 +18,7 @@ public class DbMgr {
 
     private DbMgr() {
         try {
-            conn = DriverManager.getConnection("jdbc:h2:" + getDbPath() + "h2/h2db");
+            conn = DriverManager.getConnection("jdbc:h2:" + getDbHome() + "/h2/h2db");
         } catch (SQLException e) {
             e.printStackTrace();
         }

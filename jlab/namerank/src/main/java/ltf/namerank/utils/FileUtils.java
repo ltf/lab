@@ -8,7 +8,6 @@ import java.io.*;
  */
 public class FileUtils {
 
-
     /**
      * save string to file
      */
@@ -18,7 +17,6 @@ public class FileUtils {
         writer.flush();
         writer.close();
     }
-
 
     /**
      * file content to string

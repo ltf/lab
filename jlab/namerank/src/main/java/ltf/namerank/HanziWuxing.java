@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 import static ltf.namerank.utils.FileUtils.file2Str;
 import static ltf.namerank.utils.FileUtils.str2File;
 import static ltf.namerank.utils.PathUtils.getDefaultPath;
-import static ltf.namerank.utils.PathUtils.getJsonPath;
+import static ltf.namerank.utils.PathUtils.getJsonHome;
 
 /**
  * @author ltf
@@ -50,7 +50,7 @@ public class HanziWuxing implements Runnable {
     private void testLoadDict(){
 
         try {
-            Dict dict = JSON.parseObject(file2Str(getJsonPath()+"dict_bm8.json"), Dict.class);
+            Dict dict = JSON.parseObject(file2Str(getJsonHome()+"/dict_bm8.json"), Dict.class);
             System.out.println(dict.getCount());
         } catch (IOException e) {
             e.printStackTrace();
@@ -123,10 +123,10 @@ public class HanziWuxing implements Runnable {
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-        ParseUtils.processFilesInDir(PathUtils.getProjectPath() + "build/libs/wuxhtm/", parser);
+        ParseUtils.processFilesInDir(PathUtils.getProjectHome() + "/build/libs/wuxhtm/", parser);
 
 //        try {
-//            str2File(getJsonPath()+"dict_bm8.json", JSON.toJSONString(dict, true));
+//            str2File(getJsonHome()+"/dict_bm8.json", JSON.toJSONString(dict, true));
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }

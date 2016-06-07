@@ -7,10 +7,19 @@ import ltf.namerank.Application;
  * @since 5/27/16, 10:13 PM
  */
 public class PathUtils {
-    public static String getProjectPath() {
+
+    private static String getUserHome() {
         String macPrefix = "";
         if (OsUtils.isOsMac()) macPrefix = "/Users";
-        return macPrefix + "/f/flab/jlab/namerank/";
+        return macPrefix + "/f";
+    }
+
+    public static String getProjectHome() {
+        return getUserHome() + "flab/jlab/namerank";
+    }
+
+    private static String getDataHome() {
+        return getUserHome() + "xdata/namerank";
     }
 
     public static String getDefaultPath() {
@@ -18,16 +27,12 @@ public class PathUtils {
     }
 
 
-    public static String getDbPath() {
-        String macPrefix = "";
-        if (OsUtils.isOsMac()) macPrefix = "/Users";
-        return macPrefix + "/f/xdata/namerank/db/";
+    public static String getDbHome() {
+        return getDataHome() + "/db";
     }
 
-    public static String getJsonPath() {
-        String macPrefix = "";
-        if (OsUtils.isOsMac()) macPrefix = "/Users";
-        return macPrefix + "/f/xdata/namerank/json/";
+    public static String getJsonHome() {
+        return getDataHome() + "/json";
     }
 
 }
