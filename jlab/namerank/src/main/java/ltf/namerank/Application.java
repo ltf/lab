@@ -1,9 +1,8 @@
 package ltf.namerank;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * @author ltf
@@ -13,9 +12,7 @@ import org.springframework.context.annotation.Configuration;
 @ComponentScan
 public class Application {
     public static void main(String[] args) {
-
-        //ApplicationContext appContext = new AnnotationConfigApplicationContext();
-
+        new ClassPathXmlApplicationContext("/spring-config.xml");
 
 //        new HanziWuxing().run();
 //        try {
