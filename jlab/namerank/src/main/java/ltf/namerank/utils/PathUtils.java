@@ -15,11 +15,11 @@ public class PathUtils {
     }
 
     public static String getProjectHome() {
-        return getUserHome() + "flab/jlab/namerank";
+        return getUserHome() + "/flab/jlab/namerank";
     }
 
     private static String getDataHome() {
-        return getUserHome() + "xdata/namerank";
+        return getUserHome() + "/xdata/namerank";
     }
 
     public static String getDefaultPath() {

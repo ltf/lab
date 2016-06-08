@@ -10,5 +10,6 @@ import java.util.Collection;
  */
 public interface HanziDao {
     void saveHanzi(Collection<Hanzi> hanzi);
+    void saveHanzi(Hanzi hanzi);
     Collection loadHanzi(String kword);
 }

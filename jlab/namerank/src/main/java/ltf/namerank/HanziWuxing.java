@@ -15,6 +15,8 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import java.io.*;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,14 +49,15 @@ public class HanziWuxing implements Runnable {
         //testLoadDict();
     }
 
-    private void testLoadDict(){
-
+    public static Map<String, List<Hanzi>> testLoadDict(){
         try {
             Dict dict = JSON.parseObject(file2Str(getJsonHome()+"/dict_bm8.json"), Dict.class);
             System.out.println(dict.getCount());
+            return dict.getDict();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     private Hanzi parse(final String url, final String content) {

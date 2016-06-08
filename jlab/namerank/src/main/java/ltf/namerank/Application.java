@@ -8,11 +8,10 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * @author ltf
  * @since 5/25/16, 10:39 PM
  */
-@Configuration
-@ComponentScan
 public class Application {
     public static void main(String[] args) {
-        new ClassPathXmlApplicationContext("/spring-config.xml");
+
+        new ClassPathXmlApplicationContext("/spring-config.xml").getEnvironment().;
 
 //        new HanziWuxing().run();
 //        try {

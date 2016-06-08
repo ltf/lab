@@ -28,6 +28,13 @@ public class HanziDaoImpl implements HanziDao {
     }
 
     @Override
+    public void saveHanzi(Hanzi hanzi) {
+        Session session = sessionFactory.openSession();
+        session.save(hanzi);
+        session.close();
+    }
+
+    @Override
     public Collection loadHanzi(String kword) {
         return null;
     }

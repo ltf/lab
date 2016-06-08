@@ -23,6 +23,9 @@
                 hibernate.show_sql=true
             </value>
         </property>
+        <property name="packagesToScan">
+            <value>ltf.namerank.entity</value>
+        </property>
     </bean>
 
     <!--<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">-->

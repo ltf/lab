@@ -1,7 +1,11 @@
 package ltf.namerank.entity;
 
 
+import org.springframework.context.annotation.Configuration;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
@@ -59,6 +63,7 @@ public class Hanzi {
         this.comment = comment;
     }
 
+    @Id
     public String getKword() {
         return kword;
     }
