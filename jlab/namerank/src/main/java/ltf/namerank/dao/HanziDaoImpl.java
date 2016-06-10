@@ -30,7 +30,9 @@ public class HanziDaoImpl implements HanziDao {
     @Override
     public void saveHanzi(Hanzi hanzi) {
         Session session = sessionFactory.openSession();
+        session.beginTransaction();
         session.save(hanzi);
+        session.getTransaction().commit();
         session.close();
     }
 

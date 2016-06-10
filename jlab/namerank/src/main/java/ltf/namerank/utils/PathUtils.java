@@ -9,9 +9,7 @@ import ltf.namerank.Application;
 public class PathUtils {
 
     private static String getUserHome() {
-        String macPrefix = "";
-        if (OsUtils.isOsMac()) macPrefix = "/Users";
-        return macPrefix + "/f";
+        return System.getProperty("user.home");
     }
 
     public static String getProjectHome() {

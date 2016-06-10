@@ -63,7 +63,6 @@ public class Hanzi {
         this.comment = comment;
     }
 
-    @Id
     public String getKword() {
         return kword;
     }
@@ -88,14 +87,32 @@ public class Hanzi {
         this.luckyornot = luckyornot;
     }
 
+    @Id
+    @Column(columnDefinition = "nvarchar(12)")
     private String kword;
+
+    @Column(columnDefinition = "nvarchar(12)")
     private String htmid;
+
+    @Column(columnDefinition = "nvarchar(36)")
     private String spell;
+
+    @Column(columnDefinition = "nvarchar(12)")
     private String traditional;
+
+    @Column(columnDefinition = "nvarchar(12)")
     private String strokes;
+
+    @Column(columnDefinition = "nvarchar(12)")
     private String wuxing;
+
+    @Column(columnDefinition = "nvarchar(12)")
     private String luckyornot;
+
+    @Column(columnDefinition = "nvarchar(12)")
     private String comment;
+
+    @Column(columnDefinition = "nvarchar(65535)")
     private String info;
 
     @Override

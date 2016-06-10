@@ -4,6 +4,7 @@ import ltf.namerank.HanziWuxing;
 import ltf.namerank.dao.HanziDao;
 import ltf.namerank.entity.Hanzi;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -27,9 +28,9 @@ public class SpringAutoRunService {
         Map<String, List<Hanzi>> data = HanziWuxing.testLoadDict();
 
         data.forEach((k, l) -> {
-            if (brk) return;
+                    if (brk) return;
 
-            hanziDao.saveHanzi(l.get(0));
+                    hanziDao.saveHanzi(l.get(0));
 
 //                    if (l.size() > 1) {
 //
