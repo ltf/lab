@@ -1,10 +1,7 @@
 package ltf.namerank.service;
 
 import ltf.namerank.HanziWuxing;
-import ltf.namerank.dao.HanziDao;
 import ltf.namerank.entity.Hanzi;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -23,12 +20,15 @@ public class SpringAutoRunService {
         Map<String, List<Hanzi>> data = HanziWuxing.testLoadDict();
 
         data.forEach((k, l) -> {
-//                    if (l.size() > 1) {
-//
-//                        System.out.println(l.size());
-//                        l.forEach(z -> System.out.println(z.getHtmid()));
-//                        System.out.println(k);
-//                    }
+                    if (l.size() > 1) {
+
+                        System.out.println(k);
+                        System.out.println(l.size());
+                        l.forEach(z -> System.out.println(z.getHtmid()));
+                        for (byte b : k.getBytes()) {
+                            System.out.print("=" +b +"=");
+                        }
+                    }
                 }
         );
     }

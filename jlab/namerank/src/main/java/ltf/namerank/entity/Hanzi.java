@@ -1,8 +1,6 @@
 package ltf.namerank.entity;
 
 
-//import javax.persistence.*;
-
 /**
  * @author ltf
  * @since 5/27/16, 10:29 PM
