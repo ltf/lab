@@ -10,26 +10,4 @@
 
     <context:annotation-config/>
     <context:component-scan base-package="ltf.namerank"/>
-
-    <bean id="dataSource" class="org.h2.jdbcx.JdbcDataSource">
-        <property name="url" value="jdbc:h2:#{systemProperties['user.home']}/xdata/namerank/h2/h2db"/>
-    </bean>
-
-    <bean id="hbSessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
-        <property name="dataSource" ref="dataSource"/>
-        <property name="hibernateProperties">
-            <value>
-                hibernate.dialect=org.hibernate.dialect.H2Dialect
-                hibernate.show_sql=true
-                hibernate.hbm2ddl.auto=update
-            </value>
-        </property>
-        <property name="packagesToScan">
-            <value>ltf.namerank.entity</value>
-        </property>
-    </bean>
-
-    <!--<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">-->
-    <!--<property name="dataSource" ref="dataSource"/>-->
-    <!--</bean>-->
 </beans>

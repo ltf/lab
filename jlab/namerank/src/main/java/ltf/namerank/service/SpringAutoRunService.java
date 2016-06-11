@@ -18,23 +18,17 @@ import java.util.Map;
 @Service
 public class SpringAutoRunService {
 
-    @Autowired
-    private HanziDao hanziDao;
-
     @PostConstruct
     public void autoRun() {
         Map<String, List<Hanzi>> data = HanziWuxing.testLoadDict();
 
         data.forEach((k, l) -> {
-                    hanziDao.saveHanzi(l);
-
 //                    if (l.size() > 1) {
 //
 //                        System.out.println(l.size());
 //                        l.forEach(z -> System.out.println(z.getHtmid()));
 //                        System.out.println(k);
 //                    }
-                    //hanziDao
                 }
         );
     }

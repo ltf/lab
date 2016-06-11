@@ -1,14 +1,12 @@
 package ltf.namerank.entity;
 
 
-import javax.persistence.*;
+//import javax.persistence.*;
 
 /**
  * @author ltf
  * @since 5/27/16, 10:29 PM
  */
-@Entity
-@Table(name = "dict_bm8", indexes = {@Index(name = "idx_dict_bm8_kword",columnList = "kword")})
 public class Hanzi {
     public String getSpell() {
         return spell;
@@ -82,32 +80,14 @@ public class Hanzi {
         this.luckyornot = luckyornot;
     }
 
-    @Column(columnDefinition = "nvarchar(12)")
     private String kword;
-
-    @Id
-    @Column(columnDefinition = "nvarchar(12)")
     private String htmid;
-
-    @Column(columnDefinition = "nvarchar(36)")
     private String spell;
-
-    @Column(columnDefinition = "nvarchar(12)")
     private String traditional;
-
-    @Column(columnDefinition = "nvarchar(12)")
     private String strokes;
-
-    @Column(columnDefinition = "nvarchar(12)")
     private String wuxing;
-
-    @Column(columnDefinition = "nvarchar(12)")
     private String luckyornot;
-
-    @Column(columnDefinition = "nvarchar(12)")
     private String comment;
-
-    @Column(columnDefinition = "nvarchar(65535)")
     private String info;
 
     @Override
