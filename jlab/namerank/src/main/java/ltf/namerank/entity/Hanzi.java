@@ -1,19 +1,14 @@
 package ltf.namerank.entity;
 
 
-import org.springframework.context.annotation.Configuration;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * @author ltf
  * @since 5/27/16, 10:29 PM
  */
 @Entity
-@Table(name = "dict_bm8")
+@Table(name = "dict_bm8", indexes = {@Index(name = "idx_dict_bm8_kword",columnList = "kword")})
 public class Hanzi {
     public String getSpell() {
         return spell;
@@ -87,10 +82,10 @@ public class Hanzi {
         this.luckyornot = luckyornot;
     }
 
-    @Id
     @Column(columnDefinition = "nvarchar(12)")
     private String kword;
 
+    @Id
     @Column(columnDefinition = "nvarchar(12)")
     private String htmid;
 

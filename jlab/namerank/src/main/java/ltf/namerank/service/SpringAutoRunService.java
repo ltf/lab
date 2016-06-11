@@ -21,16 +21,12 @@ public class SpringAutoRunService {
     @Autowired
     private HanziDao hanziDao;
 
-    boolean brk = false;
-
     @PostConstruct
     public void autoRun() {
         Map<String, List<Hanzi>> data = HanziWuxing.testLoadDict();
 
         data.forEach((k, l) -> {
-                    if (brk) return;
-
-                    hanziDao.saveHanzi(l.get(0));
+                    hanziDao.saveHanzi(l);
 
 //                    if (l.size() > 1) {
 //
@@ -39,8 +35,6 @@ public class SpringAutoRunService {
 //                        System.out.println(k);
 //                    }
                     //hanziDao
-
-                    brk = true;
                 }
         );
     }
