@@ -1,5 +1,15 @@
 apply plugin: 'java'
 
+buildscript{
+    repositories {
+        jcenter();
+    }
+    dependencies {
+        classpath "com.github.jengelman.gradle.plugins:shadow:1.2.3"
+    }
+}
+apply plugin: 'com.github.johnrengelman.shadow'
+
 repositories {
     jcenter()
 }
@@ -12,6 +22,12 @@ dependencies {
     compile 'org.springframework:spring-context:4.2.6.RELEASE'
 
 }
+//
+//jar {
+//    manifest {
+//        Attributes "Main-Class": "ltf.namerank.Application"
+//    }
+//}
 
 task exejar(type: Jar, dependsOn: build) {
     from files(sourceSets.main.output.classesDir)
@@ -20,6 +36,7 @@ task exejar(type: Jar, dependsOn: build) {
         exclude 'META-INF/BCKEY.*'
         zipTree(it)
     }
+    //mergeServiceFiles('META-INF/spring.*')
 
     manifest {
         attributes 'Main-Class': 'ltf.namerank.Runner'

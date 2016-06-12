@@ -40,12 +40,27 @@ public class HanziWuxing implements Runnable {
 
     @Override
     public void run() {
-        //fetchFromWeb();
-        try {
-            processLocalFiles();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+
+//        String fn = "/Users/f/flab/jlab/namerank/build/libs/wuxhtm/622.html";
+//        try {
+//            String s = new String(file2Str(fn));
+//            System.out.println(s);
+//            Hanzi zi = parse(fn, s);
+//            System.out.println(zi);
+//            for (byte b : zi.getKword().getBytes()) {
+//                System.out.print("=" +b +"=");
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+
+        fetchFromWeb();
+//        try {
+//            processLocalFiles();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
         //testLoadDict();
     }
 
@@ -89,30 +104,30 @@ public class HanziWuxing implements Runnable {
     }
 
     private void processLocalFiles() throws SQLException {
-        //final Dict dict = new Dict();
-        final PreparedStatement stmt = DbMgr.instance().getConn().prepareStatement(
-            "INSERT INTO dict_bm8(kword,htmid,spell,traditional,strokes,wuxing,luckyornot,comment,info) " +
-                    "VALUES(?,?,?,?,?,?,?,?,?)");
+        final Dict dict = new Dict();
+//        final PreparedStatement stmt = DbMgr.instance().getConn().prepareStatement(
+//            "INSERT INTO dict_bm8(kword,htmid,spell,traditional,strokes,wuxing,luckyornot,comment,info) " +
+//                    "VALUES(?,?,?,?,?,?,?,?,?)");
         IParser parser = new IParser() {
             @Override
             public boolean handle(String url, String content) {
                 Hanzi zi = parse(url, content);
                 if (zi != null) {
-                    try {
-                        stmt.setNString(1, zi.getKword());
-                        stmt.setNString(2, zi.getHtmid());
-                        stmt.setNString(3, zi.getSpell());
-                        stmt.setNString(4, zi.getTraditional());
-                        stmt.setNString(5, zi.getStrokes());
-                        stmt.setNString(6, zi.getWuxing());
-                        stmt.setNString(7, zi.getLuckyornot());
-                        stmt.setNString(8, zi.getComment());
-                        stmt.setNString(9, zi.getInfo());
-                        stmt.execute();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                    //dict.add(zi);
+//                    try {
+//                        stmt.setNString(1, zi.getKword());
+//                        stmt.setNString(2, zi.getHtmid());
+//                        stmt.setNString(3, zi.getSpell());
+//                        stmt.setNString(4, zi.getTraditional());
+//                        stmt.setNString(5, zi.getStrokes());
+//                        stmt.setNString(6, zi.getWuxing());
+//                        stmt.setNString(7, zi.getLuckyornot());
+//                        stmt.setNString(8, zi.getComment());
+//                        stmt.setNString(9, zi.getInfo());
+//                        stmt.execute();
+//                    } catch (SQLException e) {
+//                        e.printStackTrace();
+//                    }
+                    dict.add(zi);
                 }
                 else
                     System.out.println("error : " + url);
@@ -128,11 +143,11 @@ public class HanziWuxing implements Runnable {
 //        }
         ParseUtils.processFilesInDir(PathUtils.getProjectHome() + "/build/libs/wuxhtm/", parser);
 
-//        try {
-//            str2File(getJsonHome()+"/dict_bm8.json", JSON.toJSONString(dict, true));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            str2File(getJsonHome()+"/dict_bm8.json", JSON.toJSONString(dict, true));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void fetchFromWeb() {
@@ -174,7 +189,7 @@ public class HanziWuxing implements Runnable {
         HttpGet get = new HttpGet("http://wuxing.bm8.com.cn/wuxing/" + id + ".html");
         HttpResponse response = http.execute(get);
         InputStream content = response.getEntity().getContent();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(content, "gb2312"));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(content, "GB18030"));
         String line, result = "";
         while ((line = reader.readLine()) != null) result += line + "\n";
         return result;

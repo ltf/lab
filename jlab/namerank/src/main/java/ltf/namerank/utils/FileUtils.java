@@ -9,7 +9,7 @@ import java.io.*;
 public class FileUtils {
 
     /**
-     * save string to file
+     * save string to file, use utf8 encoding
      */
     public static void str2File(String fn, String content) throws IOException {
         Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(fn)), "utf8"));
@@ -19,18 +19,19 @@ public class FileUtils {
     }
 
     /**
-     * file content to string
+     * file content to string, use utf8 encoding
      */
     public static String file2Str(final String fn) throws IOException {
         return file2Str(new File(fn));
     }
 
     /**
-     * file content to string
+     * file content to string, use utf8 encoding
      */
     public static String file2Str(final File f) throws IOException {
         char[] buf = new char[1024 * 8];
-        FileReader fr = new FileReader(f);
+        FileInputStream fis = new FileInputStream(f);
+        InputStreamReader fr = new InputStreamReader(fis, "utf8");
         StringBuilder sb = new StringBuilder();
         int len = 0;
         while ((len =fr.read(buf, 0, buf.length))>0) {

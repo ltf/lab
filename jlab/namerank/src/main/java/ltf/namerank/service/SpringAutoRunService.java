@@ -5,6 +5,7 @@ import ltf.namerank.entity.Hanzi;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -17,19 +18,27 @@ public class SpringAutoRunService {
 
     @PostConstruct
     public void autoRun() {
-        Map<String, List<Hanzi>> data = HanziWuxing.testLoadDict();
-
-        data.forEach((k, l) -> {
-                    if (l.size() > 1) {
-
-                        System.out.println(k);
-                        System.out.println(l.size());
-                        l.forEach(z -> System.out.println(z.getHtmid()));
-                        for (byte b : k.getBytes()) {
-                            System.out.print("=" +b +"=");
-                        }
-                    }
-                }
-        );
+//        new HanziWuxing().run();
+//
+//        Map<String, List<Hanzi>> data = HanziWuxing.testLoadDict();
+//
+//        data.forEach((k, l) -> {
+//                    if (l.size() > 1) {
+//
+//                        System.out.println(k);
+//                        System.out.println(l.size());
+//
+//                        for (byte b : k.getBytes()) {
+//                            System.out.print("=" +b +"=");
+//                        }
+//                        System.out.println("------------------------");
+//                        l.forEach(z -> {
+//                            System.out.println(z.getHtmid());
+//                            //File f = new File("/Users/f/flab/jlab/namerank/build/libs/wuxhtm/namerank.jar"+z.getHtmid()+".html");
+//                            //f.delete();
+//                        });
+//                    }
+//                }
+//        );
     }
 }

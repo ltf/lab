@@ -22,7 +22,7 @@ public class DictItemDaoImpl implements DictItemDao {
 
         }
 
-        FileUtils.str2File(, );
+        //FileUtils.str2File(, );
 
 
     }

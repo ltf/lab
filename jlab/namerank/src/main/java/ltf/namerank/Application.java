@@ -11,7 +11,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class Application {
     public static void main(String[] args) {
 
-        new ClassPathXmlApplicationContext("/spring-config.xml");
+
+        new ClassPathXmlApplicationContext("spring-config.xml");
 
 //        new HanziWuxing().run();
 //        try {
