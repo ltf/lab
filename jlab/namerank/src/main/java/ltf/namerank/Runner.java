@@ -6,6 +6,6 @@ package ltf.namerank;
  */
 public class Runner {
     public static void main(String[] args) {
-        new HanziWuxing().run();
+       // new HanziWuxing().run();
     }
 }

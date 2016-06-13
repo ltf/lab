@@ -100,4 +100,18 @@ public class Hanzi {
                 comment + "\t" +
                 info + "\t";
     }
+
+    public DictItem toDictItem(){
+        DictItem_Bm8 item = new DictItem_Bm8();
+        item.setZi(kword.trim());
+        item.setHtmid(Integer.parseInt(htmid.trim()));
+        item.setSpell(spell.trim());
+        item.setTraditional(traditional.trim());
+        item.setStrokes(Integer.parseInt(strokes.trim()));
+        item.setWuxing(wuxing.trim());
+        item.setLuckyornot(luckyornot.trim());
+        item.setComment(comment!=null?comment.trim():"");
+        item.setInfo(info.replaceAll("<br>","\n").trim());
+        return item;
+    }
 }

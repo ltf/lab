@@ -12,7 +12,11 @@ public class FileUtils {
      * save string to file, use utf8 encoding
      */
     public static void str2File(String fn, String content) throws IOException {
-        Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(new File(fn)), "utf8"));
+        str2File(new File(fn), content);
+    }
+
+    public static void str2File(File f, String content) throws IOException {
+        Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f), "utf8"));
         writer.write(content);
         writer.flush();
         writer.close();

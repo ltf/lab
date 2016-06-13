@@ -1,11 +1,14 @@
 package ltf.namerank.service;
 
+import com.alibaba.fastjson.JSON;
 import ltf.namerank.HanziWuxing;
+import ltf.namerank.dao.DictItemDao;
+import ltf.namerank.entity.DictItem;
 import ltf.namerank.entity.Hanzi;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +18,9 @@ import java.util.Map;
  */
 @Service
 public class SpringAutoRunService {
+
+    @Autowired
+    private DictItemDao dictItemDao;
 
     @PostConstruct
     public void autoRun() {
@@ -29,7 +35,7 @@ public class SpringAutoRunService {
                         System.out.println(l.size());
 
                         for (byte b : k.getBytes()) {
-                            System.out.print("=" +b +"=");
+                            System.out.print("=" + b + "=");
                         }
                         System.out.println("------------------------");
                         l.forEach(z -> {
@@ -37,7 +43,12 @@ public class SpringAutoRunService {
                             //File f = new File("/Users/f/flab/jlab/namerank/build/libs/wuxhtm/namerank.jar"+z.getHtmid()+".html");
                             //f.delete();
                         });
+                    } else {
+                        DictItem item = l.get(0).toDictItem();
+                        //System.out.println(JSON.toJSONString(item, true));
+                        dictItemDao.saveDictItem(item);
                     }
+
                 }
         );
     }
