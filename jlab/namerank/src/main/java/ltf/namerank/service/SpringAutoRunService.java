@@ -20,25 +20,25 @@ public class SpringAutoRunService {
     public void autoRun() {
 //        new HanziWuxing().run();
 //
-//        Map<String, List<Hanzi>> data = HanziWuxing.testLoadDict();
-//
-//        data.forEach((k, l) -> {
-//                    if (l.size() > 1) {
-//
-//                        System.out.println(k);
-//                        System.out.println(l.size());
-//
-//                        for (byte b : k.getBytes()) {
-//                            System.out.print("=" +b +"=");
-//                        }
-//                        System.out.println("------------------------");
-//                        l.forEach(z -> {
-//                            System.out.println(z.getHtmid());
-//                            //File f = new File("/Users/f/flab/jlab/namerank/build/libs/wuxhtm/namerank.jar"+z.getHtmid()+".html");
-//                            //f.delete();
-//                        });
-//                    }
-//                }
-//        );
+        Map<String, List<Hanzi>> data = HanziWuxing.testLoadDict();
+
+        data.forEach((k, l) -> {
+                    if (l.size() > 1) {
+
+                        System.out.println(k);
+                        System.out.println(l.size());
+
+                        for (byte b : k.getBytes()) {
+                            System.out.print("=" +b +"=");
+                        }
+                        System.out.println("------------------------");
+                        l.forEach(z -> {
+                            System.out.println(z.getHtmid());
+                            //File f = new File("/Users/f/flab/jlab/namerank/build/libs/wuxhtm/namerank.jar"+z.getHtmid()+".html");
+                            //f.delete();
+                        });
+                    }
+                }
+        );
     }
 }

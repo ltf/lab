@@ -55,7 +55,7 @@ public class HanziWuxing implements Runnable {
 //        }
 
 
-        fetchFromWeb();
+//        fetchFromWeb();
 //        try {
 //            processLocalFiles();
 //        } catch (SQLException e) {
@@ -105,29 +105,20 @@ public class HanziWuxing implements Runnable {
 
     private void processLocalFiles() throws SQLException {
         final Dict dict = new Dict();
-//        final PreparedStatement stmt = DbMgr.instance().getConn().prepareStatement(
-//            "INSERT INTO dict_bm8(kword,htmid,spell,traditional,strokes,wuxing,luckyornot,comment,info) " +
-//                    "VALUES(?,?,?,?,?,?,?,?,?)");
         IParser parser = new IParser() {
             @Override
             public boolean handle(String url, String content) {
                 Hanzi zi = parse(url, content);
                 if (zi != null) {
+                    dict.add(zi);
+//                    System.out.println(zi);
+//                    String jo = JSON.toJSONString(zi, true);
+//                    System.out.println(jo);
 //                    try {
-//                        stmt.setNString(1, zi.getKword());
-//                        stmt.setNString(2, zi.getHtmid());
-//                        stmt.setNString(3, zi.getSpell());
-//                        stmt.setNString(4, zi.getTraditional());
-//                        stmt.setNString(5, zi.getStrokes());
-//                        stmt.setNString(6, zi.getWuxing());
-//                        stmt.setNString(7, zi.getLuckyornot());
-//                        stmt.setNString(8, zi.getComment());
-//                        stmt.setNString(9, zi.getInfo());
-//                        stmt.execute();
-//                    } catch (SQLException e) {
+//                        str2File(getJsonHome()+"/dict_bm8.json", jo);
+//                    } catch (IOException e) {
 //                        e.printStackTrace();
 //                    }
-                    dict.add(zi);
                 }
                 else
                     System.out.println("error : " + url);
@@ -136,7 +127,7 @@ public class HanziWuxing implements Runnable {
         };
 
 //        try {
-//            parser.handle("/f/flab/jlab/namerank/build/libs/wuxhtm/bazi.jar77.html", file2Str("/f/flab/jlab/namerank/build/libs/wuxhtm/bazi.jar77.html"));
+//            parser.handle(PathUtils.getProjectHome() + "/build/libs/wuxhtm/namerank.jar6133.html", file2Str(PathUtils.getProjectHome() + "/build/libs/wuxhtm/namerank.jar6133.html"));
 //
 //        } catch (IOException e) {
 //            e.printStackTrace();

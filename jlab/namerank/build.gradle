@@ -1,6 +1,6 @@
 apply plugin: 'java'
 
-buildscript{
+buildscript {
     repositories {
         jcenter();
     }
@@ -22,23 +22,13 @@ dependencies {
     compile 'org.springframework:spring-context:4.2.6.RELEASE'
 
 }
-//
-//jar {
-//    manifest {
-//        Attributes "Main-Class": "ltf.namerank.Application"
-//    }
-//}
 
-task exejar(type: Jar, dependsOn: build) {
-    from files(sourceSets.main.output.classesDir)
-    from files(sourceSets.main.resources)
-    from configurations.runtime.asFileTree.files.collect {
-        exclude 'META-INF/BCKEY.*'
-        zipTree(it)
-    }
-    //mergeServiceFiles('META-INF/spring.*')
+shadowJar {
+    archiveName "namerank.jar";
+    append("META-INF/spring.schemas")
+    append("META-INF/spring.handlers")
 
     manifest {
-        attributes 'Main-Class': 'ltf.namerank.Runner'
+        attributes("Main-Class": "ltf.namerank.Application")
     }
 }
