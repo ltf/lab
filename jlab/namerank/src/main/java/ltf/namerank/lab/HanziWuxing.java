@@ -1,7 +1,6 @@
-package ltf.namerank;
+package ltf.namerank.lab;
 
 import com.alibaba.fastjson.JSON;
-import ltf.namerank.db.DbMgr;
 import ltf.namerank.entity.Dict;
 import ltf.namerank.entity.Hanzi;
 import ltf.namerank.parser.IParser;
@@ -13,7 +12,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.io.*;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
