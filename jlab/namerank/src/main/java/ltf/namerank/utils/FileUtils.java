@@ -1,6 +1,7 @@
 package ltf.namerank.utils;
 
 import java.io.*;
+import java.util.function.Consumer;
 
 /**
  * @author ltf
@@ -38,7 +39,7 @@ public class FileUtils {
         InputStreamReader fr = new InputStreamReader(fis, "utf8");
         StringBuilder sb = new StringBuilder();
         int len = 0;
-        while ((len =fr.read(buf, 0, buf.length))>0) {
+        while ((len = fr.read(buf, 0, buf.length)) > 0) {
             sb.append(buf, 0, len);
         }
         return sb.toString();
