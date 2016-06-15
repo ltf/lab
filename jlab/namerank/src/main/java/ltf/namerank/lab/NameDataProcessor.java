@@ -3,11 +3,9 @@ package ltf.namerank.lab;
 import ltf.namerank.utils.FileUtils;
 import ltf.namerank.utils.LinesInFile;
 
-import java.awt.*;
 import java.io.*;
 import java.text.DecimalFormat;
 import java.util.*;
-import java.util.List;
 
 /**
  * @author ltf
@@ -26,12 +24,62 @@ public class NameDataProcessor {
         //process260w();
 
         try {
-            processDoubleFamilyNames();
-
-
+            //processDoubleFamilyNames();
+            cleanNames("gbk", dfn("10w.txt"));
+            cleanNames("gbk", dfn("260w.txt"));
+            cleanNames("gbk", dfn("3k_female.txt"));
+            cleanNames("gbk", dfn("3k_male.txt"));
+            cleanNames("utf8", dfn("50w.txt"));
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void cleanNames(String encoding, String fn) throws IOException {
+        Map<String, Integer> namesCount = new HashMap<>();
+        Map<String, Integer> namesLen = new HashMap<>();
+
+        List<String> names = new LinkedList<>();
+
+        new LinesInFile(fn).each(line -> {
+            if (namesCount.containsKey(line)) {
+                namesCount.put(line, namesCount.get(line) + 1);
+            } else {
+                namesCount.put(line, 1);
+                int len = line.length();
+                namesLen.put(line, len);
+                if (len <= 3 && len >= 2) {
+                    names.add(line.replaceAll(" ", ""));
+                } else if (len == 4 && isDoubleFamilyName(line)) {
+                    names.add(line.replaceAll(" ", ""));
+                }
+//                else {
+//                    //System.out.println(line);
+//                }
+            }
+        }, encoding);
+        System.out.println(namesCount.size());
+        System.out.println(namesLen.size());
+        System.out.println(names.size());
+        lines2File(names, fn + ".cleaned");
+    }
+
+    private Set<String> doubleFamilyNames = null;
+
+    private boolean isDoubleFamilyName(String name) {
+        if (doubleFamilyNames == null) {
+            try {
+                initDoubleFamilyNames();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return doubleFamilyNames.contains(name.substring(0, name.length() < 2 ? 2 : name.length()));
+    }
+
+    private void initDoubleFamilyNames() throws IOException {
+        doubleFamilyNames = new HashSet<>();
+        new LinesInFile(dfn("doubleFamilyName.txt")).each(doubleFamilyNames::add);
     }
 
     private void processDoubleFamilyNames() throws IOException {
@@ -62,83 +110,6 @@ public class NameDataProcessor {
         }, fileEncoding);
     }
 
-    private void process260w() {
-        Map<String, Integer> namesCount = new HashMap<>();
-        Map<String, Integer> namesLen = new HashMap<>();
-
-        List<String> names = new LinkedList<>();
-        final String fn = dfn("260w.txt");
-        try {
-            new LinesInFile(fn).each(line -> {
-                if (namesCount.containsKey(line)) {
-                    namesCount.put(line, namesCount.get(line) + 1);
-                } else {
-                    namesCount.put(line, 1);
-                    namesLen.put(line, line.length());
-                    if (line.length() > 3 || line.length() < 2) {
-                        System.out.println(line);
-                    } else {
-                        names.add(line.replaceAll(" ", ""));
-                    }
-                }
-            }, "gbk");
-            System.out.println(namesCount.size());
-            System.out.println(namesLen.size());
-            System.out.println(names.size());
-            lines2File(names, fn + "_processed");
-            //orderPrint(namesLen);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void process10w() {
-        Map<String, Integer> namesCount = new HashMap<>();
-        Map<String, Integer> namesLen = new HashMap<>();
-        Set<String> familyNames = new TreeSet<>();
-        Set<String> givenNames = new TreeSet<>();
-
-        List<String> names = new LinkedList<>();
-
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(dfn("10w.txt")), "gbk"));
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-
-                if (namesCount.containsKey(line)) {
-                    namesCount.put(line, namesCount.get(line) + 1);
-                } else {
-                    namesCount.put(line, 1);
-                    namesLen.put(line, line.length());
-                    if (line.length() > 3 || line.length() < 2) {
-                        //System.out.println(line);
-                    } else {
-                        names.add(line.replaceAll(" ", ""));
-                    }
-                }
-
-            }
-
-
-            System.out.println(namesCount.size());
-
-            Collections.sort(names);
-            System.out.println(names.size());
-
-            lines2File(names, dfn("10w_cleaned.txt"));
-
-
-            //orderPrint(namesCount);
-
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void lines2File(Iterable<String> lines, String fn) throws IOException {
         StringBuilder sb = new StringBuilder();
         lines.forEach(line -> sb.append(line).append("\n"));
@@ -166,6 +137,55 @@ public class NameDataProcessor {
      */
     private String dfn(final String filename) {
         return "/Users/f/labfy/test1/data/" + filename;
+    }
+
+
+    private void process10w() {
+        Map<String, Integer> namesCount = new HashMap<>();
+        Map<String, Integer> namesLen = new HashMap<>();
+        Set<String> familyNames = new TreeSet<>();
+        Set<String> givenNames = new TreeSet<>();
+
+        List<String> names = new LinkedList<>();
+
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(dfn("10w.txt")), "gbk"));
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+
+                if (namesCount.containsKey(line)) {
+                    namesCount.put(line, namesCount.get(line) + 1);
+                } else {
+                    namesCount.put(line, 1);
+                    namesLen.put(line, line.length());
+                    if (line.length() > 3 || line.length() < 2) {
+                        //System.out.println(line);
+                    } else {
+                        names.add(line.replaceAll(" ", ""));
+                    }
+//                    else {
+//                        System.out.println(line);
+//                    }
+                }
+            }
+
+            System.out.println(namesCount.size());
+
+            Collections.sort(names);
+            System.out.println(names.size());
+
+            lines2File(names, dfn("10w_cleaned.txt"));
+
+
+            //orderPrint(namesCount);
+
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
