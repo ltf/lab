@@ -25,42 +25,77 @@ public class NameDataProcessor {
 
         try {
             //processDoubleFamilyNames();
-            cleanNames("gbk", dfn("10w.txt"));
-            cleanNames("gbk", dfn("260w.txt"));
-            cleanNames("gbk", dfn("3k_female.txt"));
-            cleanNames("gbk", dfn("3k_male.txt"));
-            cleanNames("utf8", dfn("50w.txt"));
+            cleanAllNames();
+            joinAllNames();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    private void joinAllNames() throws IOException {
+        Set<String> names = new HashSet<>();
+        Set<String> familyNames = new HashSet<>();
+        Set<String> givenNames = new HashSet<>();
+        new LinesInFile(dfn("10w.txt.cleaned")).each(names::add);
+        new LinesInFile(dfn("260w.txt.cleaned")).each(names::add);
+        new LinesInFile(dfn("3k_female.txt.cleaned")).each(names::add);
+        new LinesInFile(dfn("3k_male.txt.cleaned")).each(names::add);
+        new LinesInFile(dfn("50w.txt.cleaned")).each(names::add);
+
+        System.out.println(String.format("names count: %d", names.size()));
+
+        names.forEach(name -> {
+            String familyName, givenName;
+            if (isDoubleFamilyName(name)) {
+                familyName = name.substring(0, 2);
+                givenName = name.substring(2);
+            } else {
+                familyName = name.substring(0, 1);
+                givenName = name.substring(1);
+            }
+
+            familyNames.add(familyName);
+            givenNames.add(givenName);
+        });
+        System.out.println(String.format("familyNames count: %d", familyNames.size()));
+        System.out.println(String.format("givenNames count: %d", givenNames.size()));
+        lines2File(familyNames, dfn("familyNames.txt"));
+        lines2File(givenNames, dfn("givenNames.txt"));
+    }
+
+    private void cleanAllNames() throws IOException {
+        cleanNames("gbk", dfn("10w.txt"));
+        cleanNames("gbk", dfn("260w.txt"));
+        cleanNames("gbk", dfn("3k_female.txt"));
+        cleanNames("gbk", dfn("3k_male.txt"));
+        cleanNames("utf8", dfn("50w.txt"));
+    }
+
     private void cleanNames(String encoding, String fn) throws IOException {
         Map<String, Integer> namesCount = new HashMap<>();
-        Map<String, Integer> namesLen = new HashMap<>();
 
         List<String> names = new LinkedList<>();
 
         new LinesInFile(fn).each(line -> {
-            if (namesCount.containsKey(line)) {
-                namesCount.put(line, namesCount.get(line) + 1);
+            String name = line.trim().replaceAll("[^\\u3400-\\u9FFF]","");
+
+            if (namesCount.containsKey(name)) {
+                namesCount.put(name, namesCount.get(name) + 1);
             } else {
-                namesCount.put(line, 1);
-                int len = line.length();
-                namesLen.put(line, len);
+                namesCount.put(name, 1);
+                int len = name.length();
                 if (len <= 3 && len >= 2) {
-                    names.add(line.replaceAll(" ", ""));
-                } else if (len == 4 && isDoubleFamilyName(line)) {
-                    names.add(line.replaceAll(" ", ""));
+                    names.add(name.replaceAll(" ", ""));
+                } else if (len == 4 && isDoubleFamilyName(name)) {
+                    names.add(name);
                 }
 //                else {
 //                    //System.out.println(line);
 //                }
             }
         }, encoding);
-        System.out.println(namesCount.size());
-        System.out.println(namesLen.size());
-        System.out.println(names.size());
+        System.out.println(String.format("orig distinct count: %d", namesCount.size()));
+        System.out.println(String.format("count after cleaned: %d", names.size()));
         lines2File(names, fn + ".cleaned");
     }
 
