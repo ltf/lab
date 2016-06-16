@@ -1,7 +1,7 @@
 package ltf.namerank.utils;
 
 import java.io.*;
-import java.util.function.Consumer;
+import java.util.Collection;
 
 /**
  * @author ltf
@@ -43,5 +43,23 @@ public class FileUtils {
             sb.append(buf, 0, len);
         }
         return sb.toString();
+    }
+
+    /**
+     * save lines to file
+     */
+    public static void lines2File(Iterable<String> lines, String fn) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        lines.forEach(line -> sb.append(line).append("\n"));
+        FileUtils.str2File(fn, sb.toString());
+    }
+
+    /**
+     * save lines to file
+     */
+    public static void file2Lines(Collection<String> lines, String fn) throws IOException {
+        BufferedReader br = new BufferedReader(new StringReader(file2Str(fn)));
+        String line;
+        while ((line = br.readLine()) != null) lines.add(line);
     }
 }

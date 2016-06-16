@@ -6,6 +6,7 @@ import ltf.namerank.entity.DictItem;
 import ltf.namerank.entity.Hanzi;
 import ltf.namerank.lab.NameDataProcessor;
 import ltf.namerank.lab.PinyinTest;
+import ltf.namerank.lab.WeiPanDownload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ public class SpringAutoRunService {
 
     @PostConstruct
     public void autoRun() {
-        new PinyinTest().go();
+        new WeiPanDownload().go();
 
 //        new HanziWuxing().run();
 //

@@ -1,11 +1,13 @@
 package ltf.namerank.lab;
 
-import ltf.namerank.utils.FileUtils;
 import ltf.namerank.utils.LinesInFile;
 
 import java.io.*;
 import java.text.DecimalFormat;
 import java.util.*;
+
+import static ltf.namerank.utils.FileUtils.lines2File;
+
 
 /**
  * @author ltf
@@ -77,7 +79,7 @@ public class NameDataProcessor {
         List<String> names = new LinkedList<>();
 
         new LinesInFile(fn).each(line -> {
-            String name = line.trim().replaceAll("[^\\u3400-\\u9FFF]","");
+            String name = line.trim().replaceAll("[^\\u3400-\\u9FFF]", "");
 
             if (namesCount.containsKey(name)) {
                 namesCount.put(name, namesCount.get(name) + 1);
@@ -143,12 +145,6 @@ public class NameDataProcessor {
                 }
             }
         }, fileEncoding);
-    }
-
-    private void lines2File(Iterable<String> lines, String fn) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        lines.forEach(line -> sb.append(line).append("\n"));
-        FileUtils.str2File(fn, sb.toString());
     }
 
     private void orderPrint(Map<String, Integer> map) {
