@@ -3,6 +3,7 @@ package ltf.namerank.lab;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
 
@@ -37,7 +38,13 @@ public class WeiPanDownload {
         List<String> urls = new ArrayList<>();
         file2Lines(urls, "/Users/f/downloads/wx/vdisk/bookurls.txt");
         for (String url : urls) {
-            if (downloadBook(url, "/Users/f/downloads/wx/vdisk/books"))
+            boolean succ = false;
+            for (int i = 0; i <= 5; i++) {
+                succ = downloadBook(url, "/Users/f/downloads/wx/vdisk/books");
+                if (succ) break;
+                System.out.println(String.format("retry: %d, %s", i, url));
+            }
+            if (succ)
                 System.out.println(String.format("succ: %s", url));
             else
                 System.out.println(String.format("fail: %s", url));
@@ -47,9 +54,14 @@ public class WeiPanDownload {
     private Pattern jsonPattern = Pattern.compile("fileDown\\.init\\((.{1,9999}?)\\);");
 
     private boolean downloadBook(String bookPageUrl, String saveDir) {
-        HttpClient http = HttpClientBuilder.create().build();
         try {
+            HttpClient http = HttpClientBuilder.create().build();
+            RequestConfig config = RequestConfig.custom()
+                    .setConnectionRequestTimeout(10000).setConnectTimeout(10000)
+                    .setSocketTimeout(10000).build();
             HttpGet get = new HttpGet(bookPageUrl);
+            get.setConfig(config);
+
             HttpResponse response = null;
             response = http.execute(get);
             InputStream content = response.getEntity().getContent();
@@ -70,6 +82,7 @@ public class WeiPanDownload {
             System.out.println(String.format("downloading %s ...", info.getName()));
 
             get = new HttpGet(info.getDownload_list()[0]);
+            get.setConfig(config);
             response = http.execute(get);
 
             byte[] buf = new byte[1024 * 16];
