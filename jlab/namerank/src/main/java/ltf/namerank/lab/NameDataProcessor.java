@@ -36,8 +36,8 @@ public class NameDataProcessor {
 
     private void joinAllNames() throws IOException {
         Set<String> names = new HashSet<>();
-        Set<String> familyNames = new HashSet<>();
-        Set<String> givenNames = new HashSet<>();
+        Map<String, Integer> familyNames = new HashMap<>();
+        Map<String, Integer> givenNames = new HashMap<>();
         new LinesInFile(dfn("10w.txt.cleaned")).each(names::add);
         new LinesInFile(dfn("260w.txt.cleaned")).each(names::add);
         new LinesInFile(dfn("3k_female.txt.cleaned")).each(names::add);
@@ -56,13 +56,28 @@ public class NameDataProcessor {
                 givenName = name.substring(1);
             }
 
-            familyNames.add(familyName);
-            givenNames.add(givenName);
+            putOrInc(familyNames, familyName);
+            putOrInc(givenNames, givenName);
         });
         System.out.println(String.format("familyNames count: %d", familyNames.size()));
         System.out.println(String.format("givenNames count: %d", givenNames.size()));
-        lines2File(familyNames, dfn("familyNames.txt"));
-        lines2File(givenNames, dfn("givenNames.txt"));
+
+        List<String> list = new LinkedList<>();
+        orderPrint(familyNames, list);
+        Collections.reverse(list);
+        lines2File(list, dfn("familyNames.txt"));
+
+        orderPrint(givenNames, list);
+        Collections.reverse(list);
+        lines2File(list, dfn("givenNames.txt"));
+    }
+
+    private void putOrInc(Map<String, Integer> map, String key) {
+        if (map.containsKey(key)) {
+            map.put(key, map.get(key) + 1);
+        } else {
+            map.put(key, 1);
+        }
     }
 
     private void cleanAllNames() throws IOException {
@@ -153,7 +168,7 @@ public class NameDataProcessor {
 
     private void orderPrint(Map<String, Integer> map, Collection<String> collection) {
         List<String> numStrList = new LinkedList<>();
-        DecimalFormat df = new DecimalFormat("0000");
+        DecimalFormat df = new DecimalFormat("000000000");
         map.forEach((s, i) -> {
             //if (i > 1)
             numStrList.add(df.format(i) + " : " + s);

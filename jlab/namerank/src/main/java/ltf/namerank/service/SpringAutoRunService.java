@@ -26,7 +26,7 @@ public class SpringAutoRunService {
 
     @PostConstruct
     public void autoRun() {
-        new WeiPanDownload().go();
+        new NameDataProcessor().go();
 
 //        new HanziWuxing().run();
 //
