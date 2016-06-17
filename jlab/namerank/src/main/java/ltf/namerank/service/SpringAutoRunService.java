@@ -1,12 +1,9 @@
 package ltf.namerank.service;
 
-import ltf.namerank.lab.HanziWuxing;
+import ltf.namerank.lab.*;
 import ltf.namerank.dao.DictItemDao;
 import ltf.namerank.entity.DictItem;
 import ltf.namerank.entity.Hanzi;
-import ltf.namerank.lab.NameDataProcessor;
-import ltf.namerank.lab.PinyinTest;
-import ltf.namerank.lab.WeiPanDownload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +23,7 @@ public class SpringAutoRunService {
 
     @PostConstruct
     public void autoRun() {
-        new NameDataProcessor().go();
+        new CalendarTest().go();
 
 //        new HanziWuxing().run();
 //
