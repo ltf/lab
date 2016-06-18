@@ -678,6 +678,7 @@ if __name__ == '__main__':
             output_fname = ''.join([base, os.path.extsep, 'txt'])
             tf = open(output_fname, 'wb')
             for key, value in mdx.items():
+                #tf.write(b'\r\n\r\n\r\n[item]\r\n')
                 tf.write(key)
                 tf.write(b'\r\n')
                 tf.write(value)
