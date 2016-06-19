@@ -6,9 +6,12 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static ltf.namerank.utils.FileUtils.str2File;
 
@@ -45,11 +48,20 @@ public class UrlHtml {
     /**
      * get html with POST methods
      */
-    public UrlHtml get(Iterable<HttpEntity> entities) throws IOException {
+    public UrlHtml post(Iterable<HttpEntity> entities) throws IOException {
         HttpPost post = new HttpPost(url);
         entities.forEach(post::setEntity);
         contentHtml = getHtml(post);
         return this;
+    }
+
+    /**
+     * get html with POST methods
+     */
+    public UrlHtml post(String postData) throws IOException {
+        List<HttpEntity> entities = new ArrayList<>(2);
+        entities.add(new StringEntity(postData));
+        return post(entities);
     }
 
     /**
