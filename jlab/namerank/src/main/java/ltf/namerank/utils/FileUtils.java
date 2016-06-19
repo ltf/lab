@@ -12,11 +12,11 @@ public class FileUtils {
     /**
      * save string to file, use utf8 encoding
      */
-    public static void str2File(String fn, String content) throws IOException {
-        str2File(new File(fn), content);
+    public static void str2File(String content, String fn) throws IOException {
+        str2File(content, new File(fn));
     }
 
-    public static void str2File(File f, String content) throws IOException {
+    public static void str2File(String content, File f) throws IOException {
         Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f), "utf8"));
         writer.write(content);
         writer.flush();
@@ -51,7 +51,7 @@ public class FileUtils {
     public static void lines2File(Iterable<String> lines, String fn) throws IOException {
         StringBuilder sb = new StringBuilder();
         lines.forEach(line -> sb.append(line).append("\n"));
-        FileUtils.str2File(fn, sb.toString());
+        FileUtils.str2File(sb.toString(), fn);
     }
 
     /**

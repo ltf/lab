@@ -3,7 +3,6 @@ package ltf.namerank.dao.fs;
 import com.alibaba.fastjson.JSON;
 import ltf.namerank.dao.DictItemDao;
 import ltf.namerank.entity.DictItem;
-import ltf.namerank.utils.FileUtils;
 import ltf.namerank.utils.PathUtils;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +24,7 @@ public class DictItemDaoImpl implements DictItemDao {
 
     @Override
     public void saveDictItem(DictItem dictItem) {
-        File f = new File(PathUtils.getJsonHome()+"/dict", dictItem.getZi());
+        File f = new File(PathUtils.getJsonHome() + "/dict", dictItem.getZi());
 
         Map<String, DictItem> items = new HashMap<>();
 
@@ -40,7 +39,7 @@ public class DictItemDaoImpl implements DictItemDao {
         items.put(dictItem.getItemType(), dictItem);
 
         try {
-            str2File(f, JSON.toJSONString(items, true));
+            str2File(JSON.toJSONString(items, true), f);
         } catch (IOException e) {
             e.printStackTrace();
         }

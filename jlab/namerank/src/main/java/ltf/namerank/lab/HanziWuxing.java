@@ -62,9 +62,9 @@ public class HanziWuxing implements Runnable {
         //testLoadDict();
     }
 
-    public static Map<String, List<Hanzi>> testLoadDict(){
+    public static Map<String, List<Hanzi>> testLoadDict() {
         try {
-            Dict dict = JSON.parseObject(file2Str(getJsonHome()+"/dict_bm8.json"), Dict.class);
+            Dict dict = JSON.parseObject(file2Str(getJsonHome() + "/dict_bm8.json"), Dict.class);
             System.out.println(dict.getCount());
             return dict.getDict();
         } catch (IOException e) {
@@ -81,7 +81,7 @@ public class HanziWuxing implements Runnable {
             String s;
             result.setKword(matcher.group(1));
             s = matcher.group(2) == null ? "" : matcher.group(2);
-            result.setSpell(s.replace("<font color=\"#CCCCCC\" style=\"font-size:12px;\">","").replace("</font>",""));
+            result.setSpell(s.replace("<font color=\"#CCCCCC\" style=\"font-size:12px;\">", "").replace("</font>", ""));
             result.setTraditional(matcher.group(3));
             result.setStrokes(matcher.group(4));
             result.setWuxing(matcher.group(5));
@@ -117,8 +117,7 @@ public class HanziWuxing implements Runnable {
 //                    } catch (IOException e) {
 //                        e.printStackTrace();
 //                    }
-                }
-                else
+                } else
                     System.out.println("error : " + url);
                 return false;
             }
@@ -133,7 +132,7 @@ public class HanziWuxing implements Runnable {
         ParseUtils.processFilesInDir(PathUtils.getProjectHome() + "/build/libs/wuxhtm/", parser);
 
         try {
-            str2File(getJsonHome()+"/dict_bm8.json", JSON.toJSONString(dict, true));
+            str2File(JSON.toJSONString(dict, true), getJsonHome() + "/dict_bm8.json");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -165,7 +164,7 @@ public class HanziWuxing implements Runnable {
 
                 String fn = getDefaultPath() + i + ".html";
                 System.out.println("success: " + i);
-                str2File(fn, content);
+                str2File(content, fn);
             } catch (IOException e) {
                 System.out.println("failed: " + i);
                 e.printStackTrace();
