@@ -75,4 +75,8 @@ public class FileUtils {
 //        } else {
 //        }
     }
+
+    public static boolean exists(String fn) {
+        return new File(fn).exists();
+    }
 }

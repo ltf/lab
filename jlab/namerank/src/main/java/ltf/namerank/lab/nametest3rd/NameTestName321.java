@@ -8,7 +8,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import static ltf.namerank.utils.CharUtils.getRandomHanzi;
-import static ltf.namerank.utils.FileUtils.mkDirs;
+import static ltf.namerank.utils.CharUtils.getRandomJianHan;
+import static ltf.namerank.utils.FileUtils.*;
 import static ltf.namerank.utils.PathUtils.getNamesHome;
 import static ltf.namerank.utils.PathUtils.getRawHome;
 
@@ -29,6 +30,20 @@ public class NameTestName321 implements NameTest3rd {
         }
     }
 
+    private void testHanziRange() throws IOException {
+        String allChars = file2Str(getNamesHome() + "/givenNames.txt").replaceAll("\n", "");
+        int min = 0x9fa5;
+        int max = 0x4e00;
+
+        for (char c : allChars.toCharArray()) {
+            if (c < min) min = c;
+            if (c > max) max = c;
+        }
+
+        System.out.println(min);
+        System.out.println(max);
+    }
+
 
     private void fetchNamesRank() throws IOException {
         mkDirs(home);
@@ -36,17 +51,18 @@ public class NameTestName321 implements NameTest3rd {
     }
 
     private void fetchNameRankWithConfusion(String givenName) {
+        if (exists(home + "/李" + givenName)) return;
         if (fetchNameRank("李" + givenName, true))
             System.out.println(String.format("succ: %s", givenName));
         else
             System.out.println(String.format("fail: %s", givenName));
 
         if (Math.random() > 0.5) {
-            String gvRand = "" + getRandomHanzi() + getRandomHanzi();
+            String gvRand = "" + getRandomJianHan(2);
             fetchNameRank("李" + gvRand, false);
             System.out.println(String.format("rand: %s", gvRand));
             if (Math.random() > 0.8) {
-                gvRand = "" + getRandomHanzi() + getRandomHanzi();
+                gvRand = "" + getRandomJianHan(2);
                 fetchNameRank("李" + gvRand, false);
                 System.out.println(String.format("rand: %s", gvRand));
             }
