@@ -19,7 +19,7 @@ import static ltf.namerank.utils.PathUtils.getRawHome;
  */
 public class NameTestName321 implements NameTest3rd {
 
-    private static final String home = getRawHome() + "/name321";
+    private static final String home = getRawHome() + "/buyiju";
 
     public void go() {
 
@@ -52,18 +52,18 @@ public class NameTestName321 implements NameTest3rd {
 
     private void fetchNameRankWithConfusion(String givenName) {
         if (exists(home + "/李" + givenName)) return;
-        if (fetchNameRank("李" + givenName, true))
+        if (fetchNameRank(givenName, true))
             System.out.println(String.format("succ: %s", givenName));
         else
             System.out.println(String.format("fail: %s", givenName));
 
         if (Math.random() > 0.5) {
             String gvRand = "" + getRandomJianHan(2);
-            fetchNameRank("李" + gvRand, false);
+            fetchNameRank(gvRand, false);
             System.out.println(String.format("rand: %s", gvRand));
             if (Math.random() > 0.8) {
                 gvRand = "" + getRandomJianHan(2);
-                fetchNameRank("李" + gvRand, false);
+                fetchNameRank(gvRand, false);
                 System.out.println(String.format("rand: %s", gvRand));
             }
         }
@@ -71,10 +71,10 @@ public class NameTestName321 implements NameTest3rd {
 
     private boolean fetchNameRank(String name, boolean save) {
         try {
-            String pd = String.format("xm=%s&dxfx=1", URLEncoder.encode(name, "gbk")) + "&input=%BF%AA%CA%BC%B2%E2%CB%E3";
-            String url = "http://www.name321.net/xmdf.php";
-            UrlHtml urlHtml = new UrlHtml(url).post(pd);
-            if (save) urlHtml.toFile(home + "/" + name);
+            String pd = "xs=%E6%9D%8E&mz="+URLEncoder.encode(name, "utf8")+"&btnAdd=%E7%AB%8B%E5%88%BB%E6%B5%8B%E7%AE%97";
+            String url = "http://xmcs.buyiju.com/dafen.php";
+            UrlHtml urlHtml = new UrlHtml(url).charset("utf8").post(pd);
+            if (save) urlHtml.toFile(home + "/李" + name);
             return true;
         } catch (UnsupportedEncodingException e) {
         } catch (IOException e) {
