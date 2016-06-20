@@ -62,4 +62,17 @@ public class FileUtils {
         String line;
         while ((line = br.readLine()) != null) lines.add(line);
     }
+
+    public static boolean mkDirs(String path) {
+        return mkDirs(new File(path));
+    }
+
+    public static boolean mkDirs(File path) {
+        return path.mkdirs();
+//        if (path.exists()){
+//            if (path.isFile())
+//                throw new IllegalStateException(String.format("there is a FILE: %s already exists", path.getAbsolutePath()));
+//        } else {
+//        }
+    }
 }

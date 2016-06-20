@@ -4,6 +4,7 @@ import ltf.namerank.lab.*;
 import ltf.namerank.dao.DictItemDao;
 import ltf.namerank.entity.DictItem;
 import ltf.namerank.entity.Hanzi;
+import ltf.namerank.lab.nametest3rd.NameTestName321;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ public class SpringAutoRunService {
 
     @PostConstruct
     public void autoRun() {
-        new CalendarTest().go();
+        new NameTestName321().go();
 
 //        new HanziWuxing().run();
 //

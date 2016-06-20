@@ -35,5 +35,8 @@ public class PathUtils {
     public static String getNamesHome() {
         return getDataHome() + "/names";
     }
+    public static String getRawHome() {
+        return getDataHome() + "/raw";
+    }
 
 }
