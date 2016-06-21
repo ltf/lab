@@ -14,8 +14,7 @@ public class MdxTxtDict {
 
     private String fileName;
     private int count = 0;
-    private List<String> keys = new ArrayList<>();
-    private List<String> keyLines = new ArrayList<>();
+    private List<MdxTxtDictItem> items = new ArrayList<>();
 
 
     public MdxTxtDict(String fileName) {
@@ -26,15 +25,17 @@ public class MdxTxtDict {
         new LinesInFile(fileName).each(this::parseLine);
     }
 
-    private boolean keyLine = true;
+    private MdxTxtDictItem item = null;
     private static final String ITEM_END_LINE = "</>";
 
     private void parseLine(String line) {
-        if (keyLine) {
-            keys.add(line);
-            keyLine = false;
+        if (item == null) {
+            item = new MdxTxtDictItem(line);
+            items.add(item);
         } else if (ITEM_END_LINE.equals(line)) {
-            keyLine = true;
+            item = null;
+        } else {
+            item.addValue(line);
         }
         count++;
     }
@@ -42,11 +43,11 @@ public class MdxTxtDict {
     public void test() {
         try {
             loadKeys();
-            keys.forEach(System.out::println);
+            items.forEach(System.out::println);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(keys.size());
+        System.out.println(items.size());
         System.out.println(count);
     }
 }
