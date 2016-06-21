@@ -1,5 +1,6 @@
 package ltf.namerank.lab;
 
+import ltf.namerank.rank.pronounce.dict.MdxTxtDict;
 import ltf.namerank.utils.LinesInFile;
 import ltf.namerank.utils.PathUtils;
 import net.sourceforge.pinyin4j.PinyinHelper;
@@ -10,27 +11,34 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
+import static ltf.namerank.utils.PathUtils.getRawHome;
+
 /**
  * @author ltf
  * @since 16/6/15, 下午5:00
  */
 public class PinyinTest {
     public void go() {
-        try {
-            testToPinyin();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        testLoadMdx();
+//        try {
+//            testToPinyin();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+    }
+
+    private void testLoadMdx() {
+        new MdxTxtDict(getRawHome()+"/mdx/多功能汉语辞典.txt").test();
     }
 
     private void testToPinyin() throws IOException {
         initNames();
         HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
-        names.forEach(name->{
+        names.forEach(name -> {
             String py = null;
             try {
-                py = PinyinHelper.toHanYuPinyinString(name, format," ", true);
-                if (!py.equals(py.replaceAll("[\\u3400-\\u9FFF]",""))){
+                py = PinyinHelper.toHanYuPinyinString(name, format, " ", true);
+                if (!py.equals(py.replaceAll("[\\u3400-\\u9FFF]", ""))) {
                     System.out.println(py);
                 }
             } catch (BadHanyuPinyinOutputFormatCombination badHanyuPinyinOutputFormatCombination) {

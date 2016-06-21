@@ -21,6 +21,8 @@ dependencies {
     compile 'com.alibaba:fastjson:1.2.12'
     compile 'org.springframework:spring-context:4.2.6.RELEASE'
 
+
+    compile 'com.hankcs:hanlp:portable-1.2.9'
 }
 
 shadowJar {

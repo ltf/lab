@@ -24,7 +24,7 @@ public class SpringAutoRunService {
 
     @PostConstruct
     public void autoRun() {
-        new NameTestName321().go();
+        new PinyinTest().go();
 
 //        new HanziWuxing().run();
 //
