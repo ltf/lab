@@ -1,6 +1,6 @@
 package ltf.namerank.lab;
 
-import ltf.namerank.rank.pronounce.dict.MdxTxtDict;
+import ltf.namerank.rank.pronounce.dict.MdxtDict;
 import ltf.namerank.utils.LinesInFile;
 import ltf.namerank.utils.PathUtils;
 import net.sourceforge.pinyin4j.PinyinHelper;
@@ -28,7 +28,7 @@ public class PinyinTest {
     }
 
     private void testLoadMdx() {
-        new MdxTxtDict(getRawHome()+"/mdx/多功能汉语辞典.txt").test();
+        new MdxtDict(getRawHome()+"/mdx/多功能汉语辞典.txt").test();
     }
 
     private void testToPinyin() throws IOException {

@@ -4,11 +4,11 @@ package ltf.namerank.rank.pronounce.dict;
  * @author ltf
  * @since 6/21/16, 10:22 PM
  */
-public class MdxTxtDictItem {
+public class ItemValue {
 
     private String key;
 
-    public MdxTxtDictItem(String key) {
+    public ItemValue(String key) {
         this.key = key;
     }
 
@@ -17,7 +17,7 @@ public class MdxTxtDictItem {
         return key;
     }
 
-    public void addValue(String valueLine) {
-
+    public ItemValueParser getParser(){
+        return null;
     }
 }
