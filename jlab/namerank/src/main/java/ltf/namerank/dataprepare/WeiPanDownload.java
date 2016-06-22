@@ -1,4 +1,4 @@
-package ltf.namerank.lab;
+package ltf.namerank.dataprepare;
 
 import com.alibaba.fastjson.JSONObject;
 import org.apache.http.HttpResponse;

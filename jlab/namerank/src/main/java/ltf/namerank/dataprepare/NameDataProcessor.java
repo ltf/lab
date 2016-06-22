@@ -1,4 +1,4 @@
-package ltf.namerank.lab;
+package ltf.namerank.dataprepare;
 
 import ltf.namerank.utils.LinesInFile;
 

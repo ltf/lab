@@ -1,4 +1,4 @@
-package ltf.namerank.rank.pronounce.dict;
+package ltf.namerank.dataprepare.dict;
 
 import ltf.namerank.utils.LinesInFile;
 
@@ -10,14 +10,15 @@ import java.util.List;
  * @author ltf
  * @since 16/6/21, 下午4:40
  */
-public class MdxTxtDict {
+public class MdxtDict {
+    private static final String ITEM_END_LINE = "</>";
 
     private String fileName;
     private int count = 0;
-    private List<MdxTxtDictItem> items = new ArrayList<>();
+    private List<MdxtItem> items = new ArrayList<>();
 
 
-    public MdxTxtDict(String fileName) {
+    public MdxtDict(String fileName) {
         this.fileName = fileName;
     }
 
@@ -25,14 +26,13 @@ public class MdxTxtDict {
         new LinesInFile(fileName).each(this::parseLine);
     }
 
-    private MdxTxtDictItem item = null;
-    private static final String ITEM_END_LINE = "</>";
+    private MdxtItem item = null;
 
     private void parseLine(String line) {
         if (item == null) {
-            item = new MdxTxtDictItem(line);
-            items.add(item);
+            item = new MdxtItem(line);
         } else if (ITEM_END_LINE.equals(line)) {
+            if (item.isValid()) items.add(item);
             item = null;
         } else {
             item.addValue(line);

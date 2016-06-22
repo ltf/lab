@@ -1,4 +1,4 @@
-package ltf.namerank.lab;
+package ltf.namerank.dataprepare;
 
 import com.util.LunarCalendar;
 import ltf.namerank.nongli.ShouxingCalendar;

@@ -1,4 +1,4 @@
-package ltf.namerank.lab.nametest3rd;
+package ltf.namerank.dataprepare.nametest3rd;
 
 /**
  * @author ltf

@@ -1,4 +1,4 @@
-package ltf.namerank.lab.nametest3rd;
+package ltf.namerank.dataprepare.nametest3rd;
 
 import ltf.namerank.utils.LinesInFile;
 import ltf.namerank.utils.UrlHtml;
@@ -16,9 +16,9 @@ import static ltf.namerank.utils.PathUtils.getRawHome;
  * @author ltf
  * @since 6/19/16, 5:25 PM
  */
-public class NameTestBuyiju implements NameTest3rd {
+public class NameTestName321 implements NameTest3rd {
 
-    private static final String home = getRawHome() + "/buyiju";
+    private static final String home = getRawHome() + "/name321";
 
     public void go() {
 
@@ -51,54 +51,29 @@ public class NameTestBuyiju implements NameTest3rd {
 
     private void fetchNameRankWithConfusion(String givenName) {
         if (exists(home + "/李" + givenName)) return;
-        if (fetchNameRankWithTry(givenName, true))
+        if (fetchNameRank("李" + givenName, true))
             System.out.println(String.format("succ: %s", givenName));
         else
             System.out.println(String.format("fail: %s", givenName));
 
-        if (Math.random() > 0.8) {
+        if (Math.random() > 0.5) {
             String gvRand = "" + getRandomJianHan(2);
-            fetchNameRankWithTry(gvRand, false);
+            fetchNameRank("李" + gvRand, false);
             System.out.println(String.format("rand: %s", gvRand));
             if (Math.random() > 0.8) {
                 gvRand = "" + getRandomJianHan(2);
-                fetchNameRankWithTry(gvRand, false);
+                fetchNameRank("李" + gvRand, false);
                 System.out.println(String.format("rand: %s", gvRand));
             }
         }
     }
 
-    private boolean fetchNameRankWithTry(String name, boolean save) {
-        int t = 1;
-        while (true) {
-            try {
-                Thread.sleep(t * 5 * 1000);
-                System.out.println("wait " + t * 5 + " s");
-                if (fetchNameRank(name, save)) {
-                    return true;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            t++;
-            if (t > 10) break;
-        }
-        return false;
-    }
-
     private boolean fetchNameRank(String name, boolean save) {
         try {
-            String pd = "xs=%E6%9D%8E&mz=" + URLEncoder.encode(name, "utf8") + "&btnAdd=%E7%AB%8B%E5%88%BB%E6%B5%8B%E7%AE%97";
-            String url = "http://xmcs.buyiju.com/dafen.php";
-            UrlHtml urlHtml = new UrlHtml(url).charset("utf8").post(pd);
-
-            String s = urlHtml.toStr();
-            if (s == null || s.length() < 1 ||
-                    s.contains("404.safedog.cn/sitedog_stat.html") ||
-                    s.contains("setTimeout(\"JumpSelf()\",700)"))
-                return false;
-
-            if (save) urlHtml.toFile(home + "/李" + name);
+            String pd = String.format("xm=%s&dxfx=1", URLEncoder.encode(name, "gbk")) + "&input=%BF%AA%CA%BC%B2%E2%CB%E3";
+            String url = "http://www.name321.net/xmdf.php";
+            UrlHtml urlHtml = new UrlHtml(url).post(pd);
+            if (save) urlHtml.toFile(home + "/" + name);
             return true;
         } catch (UnsupportedEncodingException e) {
         } catch (IOException e) {
