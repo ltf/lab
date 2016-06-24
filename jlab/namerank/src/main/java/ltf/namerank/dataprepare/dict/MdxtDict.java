@@ -13,24 +13,26 @@ import java.util.List;
 public class MdxtDict {
     private static final String ITEM_END_LINE = "</>";
 
-    private String fileName;
+    protected String getFileName() {
+        return "";
+    }
+
     private int count = 0;
     private List<MdxtItem> items = new ArrayList<>();
 
-
-    public MdxtDict(String fileName) {
-        this.fileName = fileName;
+    private void loadKeys() throws IOException {
+        new LinesInFile(getFileName()).each(this::parseLine);
     }
 
-    private void loadKeys() throws IOException {
-        new LinesInFile(fileName).each(this::parseLine);
+    protected MdxtItem newItem(String key) {
+        return new MdxtItem(key);
     }
 
     private MdxtItem item = null;
 
     private void parseLine(String line) {
         if (item == null) {
-            item = new MdxtItem(line);
+            item = newItem(line);
         } else if (ITEM_END_LINE.equals(line)) {
             if (item.isValid()) items.add(item);
             item = null;
