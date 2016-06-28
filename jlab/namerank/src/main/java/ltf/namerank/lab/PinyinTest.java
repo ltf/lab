@@ -28,7 +28,7 @@ public class PinyinTest {
     }
 
     private void testLoadMdx() {
-        new MdxtDict(getRawHome()+"/mdx/多功能汉语辞典.txt").test();
+        //new MdxtDict(getRawHome()+"/mdx/多功能汉语辞典.txt").test();
     }
 
     private void testToPinyin() throws IOException {

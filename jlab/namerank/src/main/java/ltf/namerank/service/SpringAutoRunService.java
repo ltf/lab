@@ -1,5 +1,6 @@
 package ltf.namerank.service;
 
+import ltf.namerank.dataprepare.CalendarTest;
 import ltf.namerank.lab.*;
 import ltf.namerank.dao.DictItemDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class SpringAutoRunService {
 
     @PostConstruct
     public void autoRun() {
-        new PinyinTest().go();
+        new CalendarTest().go();
 
 //        new HanziWuxing().run();
 //
