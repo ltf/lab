@@ -18,9 +18,21 @@ public class MdxtDict {
     }
 
     private int count = 0;
-    private List<MdxtItem> items = new ArrayList<>();
+    private List<MdxtItem> items;
 
-    private void loadKeys() throws IOException {
+    private void init(){
+        if (items == null){
+            items = new ArrayList<>();
+            try {
+                loadItems();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void loadItems() throws IOException {
+        items = new ArrayList<>();
         new LinesInFile(getFileName()).each(this::parseLine);
     }
 
@@ -41,15 +53,6 @@ public class MdxtDict {
         }
         count++;
     }
-
-    public void test() {
-        try {
-            loadKeys();
-            items.forEach(System.out::println);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println(items.size());
-        System.out.println(count);
-    }
 }
+
+

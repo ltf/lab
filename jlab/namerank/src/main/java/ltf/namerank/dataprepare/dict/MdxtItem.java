@@ -8,12 +8,17 @@ class MdxtItem {
 
     private String key;
 
+    private String value;
+
+    private StringBuilder stringBuilder;
+
     public String getKey() {
         return key;
     }
 
     MdxtItem(String key) {
         this.key = key;
+        stringBuilder = new StringBuilder();
     }
 
     @Override
@@ -22,10 +27,12 @@ class MdxtItem {
     }
 
     void addValue(String valueLine) {
-
+        stringBuilder.append(valueLine).append("\n");
     }
 
     boolean isValid() {
+        value = stringBuilder.toString();
+        stringBuilder = null;
         return true;
     }
 }

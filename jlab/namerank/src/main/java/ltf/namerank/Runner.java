@@ -1,6 +1,7 @@
 package ltf.namerank;
 
 import ltf.namerank.dataprepare.WordFeelings;
+import ltf.namerank.lab.RankingTest;
 
 /**
  * @author ltf
@@ -9,6 +10,7 @@ import ltf.namerank.dataprepare.WordFeelings;
 public class Runner {
     public static void main(String[] args) {
         // new HanziWuxing().run();
-        new WordFeelings().go();
+        //new WordFeelings().go();
+        new RankingTest().go();
     }
 }
