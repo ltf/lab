@@ -1820,6 +1820,8 @@ public class PaipanShengSha {
         PaipanShengSha myPaipanShengSha = new PaipanShengSha();
         try {
             myPaipanShengSha.paipan("2016-6-23 22", PaipanLvhehun.sex.woman);
+            //myPaipanShengSha.paipan("1740-4-23 16", PaipanLvhehun.sex.man);
+            //myPaipanShengSha.paipan("1996-4-23 16", PaipanLvhehun.sex.man);
         } catch (ParseException ex) {
         }
 

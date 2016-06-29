@@ -20,7 +20,7 @@ public class SpringAutoRunService {
 
     @PostConstruct
     public void autoRun() {
-        new CalendarTest().go();
+        new GanzhiTest().go();
 
 //        new HanziWuxing().run();
 //

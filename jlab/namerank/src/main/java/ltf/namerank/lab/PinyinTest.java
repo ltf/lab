@@ -1,6 +1,5 @@
 package ltf.namerank.lab;
 
-import ltf.namerank.dataprepare.dict.MdxtDict;
 import ltf.namerank.utils.LinesInFile;
 import ltf.namerank.utils.PathUtils;
 import net.sourceforge.pinyin4j.PinyinHelper;
@@ -8,10 +7,9 @@ import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
-
-import static ltf.namerank.utils.PathUtils.getRawHome;
 
 /**
  * @author ltf
@@ -56,6 +54,5 @@ public class PinyinTest {
             new LinesInFile(PathUtils.getNamesHome() + "/givenNames.txt").each(names::add);
         }
     }
-
 
 }
