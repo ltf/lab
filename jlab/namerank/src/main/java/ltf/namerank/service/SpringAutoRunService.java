@@ -20,7 +20,8 @@ public class SpringAutoRunService {
 
     @PostConstruct
     public void autoRun() {
-        new GanzhiTest().go();
+        new PinyinTest().go();
+        //new GanzhiTest().go();
 
 //        new HanziWuxing().run();
 //

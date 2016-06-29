@@ -1,4 +1,4 @@
-package ltf.namerank.lab;
+package ltf.namerank.lab.paipan;
 
 import java.text.ParseException;
 import java.util.Calendar;

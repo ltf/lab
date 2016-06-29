@@ -1,10 +1,11 @@
-package ltf.namerank.lab;
+package ltf.namerank.lab.paipan;
 
 /**
+ * 八字公共类
  * @author ltf
- * @since 16/6/28, 下午4:37
+ * @since 16/6/29, 上午10:30
  */
-public class PaipanComn {
+public class PaipanCommonClass {
     /**
      * 返回甲子纳音
      *
@@ -106,12 +107,12 @@ public class PaipanComn {
     }
 
     /**
-     * 地支藏干 子藏癸 卯藏乙 午藏丁己  酉藏辛
-     * <p>
-     * 寅藏 甲丙戊  巳藏 丙庚戊  申藏 庚壬戊  亥藏 甲壬
-     * <p>
-     * 丑藏 辛癸己 辰藏 癸乙戊  未藏 乙丁己  戌藏 丁辛戊
+     *    地支藏干 子藏癸 卯藏乙 午藏丁己  酉藏辛
      *
+     *    寅藏 甲丙戊  巳藏 丙庚戊  申藏 庚壬戊  亥藏 甲壬
+     *
+     *    丑藏 辛癸己 辰藏 癸乙戊  未藏 乙丁己  戌藏 丁辛戊
+
      * @param dizhi
      * @return
      */
@@ -200,7 +201,7 @@ public class PaipanComn {
 
     /**
      * 十天干生旺死绝表
-     * <p>
+     *
      * 天干 长生 沐浴 冠带 临官 帝旺 衰 病 死 墓 绝 胎 养      *
      * 甲 亥 子 丑 寅 卯 辰 巳 午 未 申 酉 戌
      * 丙 寅 卯 辰 巳 午 未 申 酉 戌 亥 子 丑
@@ -617,3 +618,4 @@ public class PaipanComn {
 
 
 }
+

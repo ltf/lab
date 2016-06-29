@@ -1,4 +1,4 @@
-package ltf.namerank.lab;
+package ltf.namerank.lab.paipan;
 /**
  * 吕才合婚算法
  */
