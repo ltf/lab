@@ -149,7 +149,7 @@ public class PaipanShenshahehun {
 
     }
 
-    private Calendar getCalendarfromString(String year, String DateFormat) throws ParseException {
+    public Calendar getCalendarfromString(String year, String DateFormat) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat(DateFormat);
         Calendar cal = Calendar.getInstance();
         cal.setTime(sdf.parse(year));
