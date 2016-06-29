@@ -125,7 +125,7 @@ public class PaipanDayun {
 
     private String paipan(Calendar cal, PaipanLvhehun.sex isman) throws ParseException {
 
-        BaZi lunar = new BaZi(cal);
+        PaipanBazi lunar = new PaipanBazi(cal);
         System.out.println("此人农历的日期【" + lunar.toString() + "】");
         /**
          * 很多地方都是按照23：00-1：00为子时这是不对的。 
