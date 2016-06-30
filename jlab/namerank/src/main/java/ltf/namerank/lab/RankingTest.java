@@ -1,10 +1,9 @@
 package ltf.namerank.lab;
 
 import com.alibaba.fastjson.JSON;
+import ltf.namerank.entity.WordFeeling;
 import ltf.namerank.rank.dictrank.support.dict.HanYuDaCidian;
 import ltf.namerank.rank.dictrank.support.dict.MdxtDict;
-import ltf.namerank.entity.WordFeeling;
-import ltf.namerank.utils.LinesInFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,8 +11,6 @@ import java.util.List;
 
 import static ltf.namerank.utils.FileUtils.file2Str;
 import static ltf.namerank.utils.PathUtils.getJsonHome;
-import static ltf.namerank.utils.PathUtils.getNamesHome;
-import static ltf.namerank.utils.PathUtils.getRawHome;
 
 /**
  * @author ltf
@@ -35,18 +32,27 @@ public class RankingTest {
     public void go() {
 
         try {
-            doRanking();
-            initDicts();
+            //initDicts();
+            initWordFeelings();
+
+            //doRanking();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
     }
 
-    private void doRanking() throws IOException {
-        wordFeelingList = JSON.parseArray(file2Str(file2Str(getJsonHome() + "/wordfeeling")), WordFeeling.class);
+    private void initWordFeelings() throws IOException {
+        wordFeelingList = JSON.parseArray(file2Str(getJsonHome() + "/wordfeeling"), WordFeeling.class);
 
-        new LinesInFile(getNamesHome() + "givenNames.txt").each(this::nameRanking);
+        System.out.println(wordFeelingList.size());
+
+    }
+
+    private void doRanking() throws IOException {
+
+
+        //new LinesInFile(getNamesHome() + "givenNames.txt").each(this::nameRanking);
 
     }
 

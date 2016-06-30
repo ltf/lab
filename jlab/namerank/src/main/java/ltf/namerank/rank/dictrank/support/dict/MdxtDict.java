@@ -1,6 +1,7 @@
 package ltf.namerank.rank.dictrank.support.dict;
 
-import ltf.namerank.rank.RankRecord;
+import ltf.namerank.rank.RankScore;
+import ltf.namerank.rank.dictrank.support.WordFeelingRank;
 import ltf.namerank.utils.LinesInFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,8 +58,15 @@ abstract public class MdxtDict {
         count++;
     }
 
-    public void rank(String word, RankRecord record) {
 
+    public void rank(String word, RankScore record) {
+        initItems();
+
+        for (MdxtItem item : items) {
+            if (word.equals(item.getKey())) {
+                WordFeelingRank.getInstance().rank();
+            }
+        }
     }
 
     public void listKeys() {

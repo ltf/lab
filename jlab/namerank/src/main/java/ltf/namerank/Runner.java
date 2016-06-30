@@ -12,7 +12,7 @@ public class Runner {
     public static void main(String[] args) {
         // new HanziWuxing().run();
         //new WordFeelings().go();
-        //new RankingTest().go();
-        new HanYuDaCidian().listKeys();
+        new RankingTest().go();
+        //new HanYuDaCidian().listKeys();
     }
 }
