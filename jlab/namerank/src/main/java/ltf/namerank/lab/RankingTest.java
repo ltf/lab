@@ -54,7 +54,7 @@ public class RankingTest {
             System.out.println(String.format("%s: %f", record.getWord(), record.getScore()));
             sb.append(String.format("%s: %f", record.getWord(), record.getScore())).append("\n");
         }
-        str2File(sb.toString(), getRawHome()+"/ranking.txt");
+        str2File(sb.toString(), getRawHome() + "/ranking.txt");
 
     }
 
@@ -62,6 +62,19 @@ public class RankingTest {
         RankRecord record = new RankRecord(givenName);
         rankRecordList.add(record);
         for (MdxtDict dict : dictList) dict.rank(record);
+    }
+
+
+    private List<String> allCases(String word) {
+        ArrayList<String> result = new ArrayList<>();
+
+        for (int len = word.length(); len > 0; len--) {
+            for (int offset = 0; offset <= word.length() - len; offset++) {
+                result.add(word.substring(offset, offset + len));
+            }
+        }
+
+        return result;
     }
 
 }
