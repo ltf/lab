@@ -2,7 +2,7 @@ package ltf.namerank.rank.dictrank.support;
 
 import com.alibaba.fastjson.JSON;
 import ltf.namerank.entity.WordFeeling;
-import ltf.namerank.rank.RankScore;
+import ltf.namerank.rank.RankRecord;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,21 +17,30 @@ import static ltf.namerank.utils.PathUtils.getJsonHome;
  */
 public class WordFeelingRank {
 
-    private List<WordScore> wordScores = new ArrayList<>();
+    private List<WordScore> wordScores = null;
 
-    private void initWordFeelings() throws IOException {
-        List<WordFeeling> wordFeelingList = JSON.parseArray(file2Str(getJsonHome() + "/wordfeeling"), WordFeeling.class);
+    private void initWordFeelings() {
+        if (wordScores == null) {
+            wordScores = new ArrayList<>();
+            List<WordFeeling> wordFeelingList = null;
+            try {
+                wordFeelingList = JSON.parseArray(file2Str(getJsonHome() + "/wordfeeling"), WordFeeling.class);
+            } catch (IOException e) {
+            }
 
-        for (WordFeeling feeling : wordFeelingList) {
-            if (feeling.getPolar() == 1) {
-                wordScores.add(new WordScore(feeling.getWord(), feeling.getLevel()));
-            } else if (feeling.getPolar() == 2) {
-                wordScores.add(new WordScore(feeling.getWord(), -feeling.getLevel()));
+            for (WordFeeling feeling : wordFeelingList) {
+                if (feeling.getPolar() == 1) {
+                    wordScores.add(new WordScore(feeling.getWord(), feeling.getLevel()));
+                } else if (feeling.getPolar() == 2) {
+                    wordScores.add(new WordScore(feeling.getWord(), -feeling.getLevel()));
+                }
             }
         }
     }
 
-    public void rank(final String content, final RankScore record) {
+    public void rank(final String content, final RankRecord record) {
+        initWordFeelings();
+
         for (WordScore wordScore : wordScores) {
             int count = existsCount(content, wordScore.getWord());
             record.add(wordScore.getScore() * Math.sqrt(count));

@@ -11,4 +11,9 @@ public class HanYuDaCidian extends MdxtDict {
     protected String getFileName() {
         return getRawHome() + "/mdx/汉语大词典简体精排.txt";
     }
+
+
+
+
+
 }

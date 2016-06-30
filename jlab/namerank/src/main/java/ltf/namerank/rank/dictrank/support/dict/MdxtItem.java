@@ -16,6 +16,10 @@ class MdxtItem {
         return key;
     }
 
+    public String getValue() {
+        return value;
+    }
+
     MdxtItem(String key) {
         this.key = key;
         stringBuilder = new StringBuilder();

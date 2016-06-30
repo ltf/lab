@@ -1,6 +1,6 @@
 package ltf.namerank.rank.dictrank.support.dict;
 
-import ltf.namerank.rank.RankScore;
+import ltf.namerank.rank.RankRecord;
 import ltf.namerank.rank.dictrank.support.WordFeelingRank;
 import ltf.namerank.utils.LinesInFile;
 import org.slf4j.Logger;
@@ -8,7 +8,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author ltf
@@ -22,11 +24,11 @@ abstract public class MdxtDict {
     abstract protected String getFileName();
 
     private int count = 0;
-    private List<MdxtItem> items;
+    private Map<String, List<MdxtItem>> itemsMap;
 
     private void initItems() {
-        if (items == null) {
-            items = new ArrayList<>();
+        if (itemsMap == null) {
+            itemsMap = new HashMap<>();
             try {
                 loadItems();
             } catch (IOException e) {
@@ -36,7 +38,6 @@ abstract public class MdxtDict {
     }
 
     private void loadItems() throws IOException {
-        items = new ArrayList<>();
         new LinesInFile(getFileName()).each(this::parseLine);
     }
 
@@ -50,7 +51,14 @@ abstract public class MdxtDict {
         if (item == null) {
             item = newItem(line);
         } else if (ITEM_END_LINE.equals(line)) {
-            if (item.isValid()) items.add(item);
+            if (item.isValid()) {
+                List<MdxtItem> items = itemsMap.get(item.getKey());
+                if (items == null) {
+                    items = new ArrayList<>(5);
+                    itemsMap.put(item.getKey(), items);
+                }
+                items.add(item);
+            }
             item = null;
         } else {
             item.addValue(line);
@@ -59,20 +67,22 @@ abstract public class MdxtDict {
     }
 
 
-    public void rank(String word, RankScore record) {
+    public void rank(RankRecord record) {
         initItems();
 
-        for (MdxtItem item : items) {
-            if (word.equals(item.getKey())) {
-                WordFeelingRank.getInstance().rank();
+        List<MdxtItem> items = itemsMap.get(record.getWord());
+        if (items != null) {
+            for (MdxtItem item : items) {
+                WordFeelingRank.getInstance().rank(item.getValue(), record);
             }
         }
+
     }
 
     public void listKeys() {
         initItems();
-        for (MdxtItem item : items)
-            System.out.println(item.getKey());
+        for (String itemKey : itemsMap.keySet())
+            System.out.println(itemKey);
     }
 }
 
