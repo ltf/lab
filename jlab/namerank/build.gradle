@@ -21,6 +21,12 @@ dependencies {
     compile 'com.alibaba:fastjson:1.2.12'
     compile 'org.springframework:spring-context:4.2.6.RELEASE'
 
+    //logging
+    compile 'org.slf4j:slf4j-parent:1.7.21'
+    compile 'org.slf4j:jcl-over-slf4j:1.7.21'
+    compile 'ch.qos.logback:logback-classic:1.1.7'
+
+
 
     compile 'com.hankcs:hanlp:portable-1.2.9'
 }

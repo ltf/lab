@@ -1,4 +1,4 @@
-package ltf.namerank.dataprepare.dict;
+package ltf.namerank.rank.dictrank.support.dict;
 
 /**
  * @author ltf

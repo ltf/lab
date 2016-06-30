@@ -1,7 +1,8 @@
 package ltf.namerank.lab;
 
 import com.alibaba.fastjson.JSON;
-import ltf.namerank.dataprepare.dict.MdxtDict;
+import ltf.namerank.rank.dictrank.support.dict.HanYuDaCidian;
+import ltf.namerank.rank.dictrank.support.dict.MdxtDict;
 import ltf.namerank.entity.WordFeeling;
 import ltf.namerank.utils.LinesInFile;
 
@@ -12,6 +13,7 @@ import java.util.List;
 import static ltf.namerank.utils.FileUtils.file2Str;
 import static ltf.namerank.utils.PathUtils.getJsonHome;
 import static ltf.namerank.utils.PathUtils.getNamesHome;
+import static ltf.namerank.utils.PathUtils.getRawHome;
 
 /**
  * @author ltf
@@ -23,10 +25,18 @@ public class RankingTest {
 
     private List<MdxtDict> dictList = new ArrayList<>();
 
+    private void initDicts() {
+        if (dictList == null) {
+            dictList = new ArrayList<>();
+            dictList.add(new HanYuDaCidian());
+        }
+    }
+
     public void go() {
 
         try {
             doRanking();
+            initDicts();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -41,8 +51,6 @@ public class RankingTest {
     }
 
     private void nameRanking(String givenName) {
-
-
 
     }
 

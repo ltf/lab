@@ -1,6 +1,9 @@
-package ltf.namerank.dataprepare.dict;
+package ltf.namerank.rank.dictrank.support.dict;
 
+import ltf.namerank.rank.RankRecord;
 import ltf.namerank.utils.LinesInFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,23 +13,23 @@ import java.util.List;
  * @author ltf
  * @since 16/6/21, 下午4:40
  */
-public class MdxtDict {
+abstract public class MdxtDict {
+
+    private final Logger logger = LoggerFactory.getLogger(MdxtDict.class);
     private static final String ITEM_END_LINE = "</>";
 
-    protected String getFileName() {
-        return "";
-    }
+    abstract protected String getFileName();
 
     private int count = 0;
     private List<MdxtItem> items;
 
-    private void init(){
-        if (items == null){
+    private void initItems() {
+        if (items == null) {
             items = new ArrayList<>();
             try {
                 loadItems();
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.warn("load dictionary failed: " + getFileName(), e);
             }
         }
     }
@@ -52,6 +55,16 @@ public class MdxtDict {
             item.addValue(line);
         }
         count++;
+    }
+
+    public void rank(String word, RankRecord record) {
+
+    }
+
+    public void listKeys() {
+        initItems();
+        for (MdxtItem item : items)
+            System.out.println(item.getKey());
     }
 }
 
