@@ -1,6 +1,8 @@
 package ltf.namerank.lab;
 
+import ltf.namerank.rank.AllCasesRanker;
 import ltf.namerank.rank.RankRecord;
+import ltf.namerank.rank.Ranker;
 import ltf.namerank.rank.dictrank.support.dict.HanYuDaCidian;
 import ltf.namerank.rank.dictrank.support.dict.MdxtDict;
 import ltf.namerank.utils.LinesInFile;
@@ -25,6 +27,8 @@ public class RankingTest {
 
     private List<RankRecord> rankRecordList = new LinkedList<>();
 
+    private Ranker ranker;
+
     private void initDicts() {
         if (dictList == null) {
             dictList = new ArrayList<>();
@@ -35,13 +39,12 @@ public class RankingTest {
     public void go() {
 
         try {
-            initDicts();
-
+            ranker = new AllCasesRanker().addRanker(new HanYuDaCidian());
+            //initDicts();
             doRanking();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     private void doRanking() throws IOException {
@@ -60,21 +63,8 @@ public class RankingTest {
 
     private void nameRanking(String givenName) {
         RankRecord record = new RankRecord(givenName);
+        record.setScore(ranker.rank(givenName, null));
         rankRecordList.add(record);
-        for (MdxtDict dict : dictList) dict.rank(record);
+        //for (MdxtDict dict : dictList) dict.rank(record);
     }
-
-
-    private List<String> allCases(String word) {
-        ArrayList<String> result = new ArrayList<>();
-
-        for (int len = word.length(); len > 0; len--) {
-            for (int offset = 0; offset <= word.length() - len; offset++) {
-                result.add(word.substring(offset, offset + len));
-            }
-        }
-
-        return result;
-    }
-
 }

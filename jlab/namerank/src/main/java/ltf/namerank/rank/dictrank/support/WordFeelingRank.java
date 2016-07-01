@@ -2,7 +2,8 @@ package ltf.namerank.rank.dictrank.support;
 
 import com.alibaba.fastjson.JSON;
 import ltf.namerank.entity.WordFeeling;
-import ltf.namerank.rank.RankRecord;
+import ltf.namerank.rank.CachedRanker;
+import ltf.namerank.rank.RankConfig;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ import static ltf.namerank.utils.PathUtils.getJsonHome;
  * @author ltf
  * @since 16/6/30, 下午4:57
  */
-public class WordFeelingRank {
+public class WordFeelingRank extends CachedRanker {
 
     private List<WordScore> wordScores = null;
 
@@ -38,13 +39,16 @@ public class WordFeelingRank {
         }
     }
 
-    public void rank(final String content, final RankRecord record) {
-        initWordFeelings();
 
+    @Override
+    protected double doRank(String target, RankConfig config) {
+        initWordFeelings();
+        double rk = 0;
         for (WordScore wordScore : wordScores) {
-            int count = existsCount(content, wordScore.getWord());
-            record.add(wordScore.getScore() * Math.sqrt(count));
+            int count = existsCount(target, wordScore.getWord());
+            rk += wordScore.getScore() * Math.sqrt(count);
         }
+        return rk;
     }
 
     private int existsCount(final String content, final String keyword) {
@@ -57,6 +61,7 @@ public class WordFeelingRank {
     public static WordFeelingRank getInstance() {
         return Holder.getInstance();
     }
+
 
     private static class Holder {
         private static final WordFeelingRank rank = new WordFeelingRank();
