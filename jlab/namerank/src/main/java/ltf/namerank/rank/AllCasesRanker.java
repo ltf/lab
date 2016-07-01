@@ -25,7 +25,7 @@ public class AllCasesRanker extends SumRankers {
     protected double doRank(String target, RankConfig config) {
         double rk = 0;
         for (String word : allCases(target))
-            rk += super.rank(target, config);
+            rk += super.doRank(target, config);
         return rk;
     }
 }

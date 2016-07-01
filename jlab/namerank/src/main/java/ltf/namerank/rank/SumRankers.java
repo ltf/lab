@@ -19,7 +19,7 @@ public class SumRankers extends CachedRanker {
         return rk;
     }
 
-    public SumRankers addRanker(Ranker ranker) {
+    public SumRankers add(Ranker ranker) {
         rankerList.add(ranker);
         return this;
     }

@@ -39,7 +39,7 @@ public class RankingTest {
     public void go() {
 
         try {
-            ranker = new AllCasesRanker().addRanker(new HanYuDaCidian());
+            ranker = new AllCasesRanker().add(new HanYuDaCidian());
             //initDicts();
             doRanking();
         } catch (IOException e) {
