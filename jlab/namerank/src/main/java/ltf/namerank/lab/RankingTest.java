@@ -4,6 +4,7 @@ import ltf.namerank.rank.AllCasesRanker;
 import ltf.namerank.rank.CachedRanker;
 import ltf.namerank.rank.RankRecord;
 import ltf.namerank.rank.Ranker;
+import ltf.namerank.rank.dictrank.support.WordFeelingRank;
 import ltf.namerank.rank.dictrank.support.dict.HanYuDaCidian;
 import ltf.namerank.rank.dictrank.support.dict.MdxtDict;
 import ltf.namerank.utils.LinesInFile;
@@ -39,6 +40,7 @@ public class RankingTest {
 
     public void go() {
 
+        //WordFeelingRank.getInstance().listItems();
         try {
             ranker = new CachedRanker(new AllCasesRanker(new CachedRanker(new HanYuDaCidian())));
             //initDicts();
@@ -63,9 +65,11 @@ public class RankingTest {
     }
 
     private void nameRanking(String givenName) {
-        RankRecord record = new RankRecord(givenName);
-        record.setScore(ranker.rank(givenName, null));
-        rankRecordList.add(record);
-        //for (MdxtDict dict : dictList) dict.rank(record);
+        if (givenName.length() == 2 && givenName.substring(0,1).equals(givenName.substring(1))){
+            RankRecord record = new RankRecord(givenName);
+            record.setScore(ranker.rank(givenName, null));
+            rankRecordList.add(record);
+            //for (MdxtDict dict : dictList) dict.rank(record);
+        }
     }
 }

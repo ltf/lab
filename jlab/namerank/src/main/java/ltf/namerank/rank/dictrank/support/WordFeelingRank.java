@@ -31,6 +31,14 @@ public class WordFeelingRank implements Ranker {
             }
 
             for (WordFeeling feeling : wordFeelingList) {
+
+                if (!( //"noun".equals(feeling.getProperty()) ||
+                       // "verb".equals(feeling.getProperty()) ||
+                        "adj".equals(feeling.getProperty()) ||
+                        "adv".equals(feeling.getProperty())))
+                    continue;
+
+
                 if (feeling.getPolar() == 1) {
                     wordScores.add(new WordScore(feeling.getWord(), feeling.getLevel()));
                 } else if (feeling.getPolar() == 2) {
@@ -68,6 +76,13 @@ public class WordFeelingRank implements Ranker {
 
         private static WordFeelingRank getInstance() {
             return rank;
+        }
+    }
+
+    public void listItems(){
+        initWordFeelings();
+        for (WordScore wordScore : wordScores) {
+            System.out.println(String.format("%s : %f", wordScore.getWord(), wordScore.getScore()));
         }
     }
 }
