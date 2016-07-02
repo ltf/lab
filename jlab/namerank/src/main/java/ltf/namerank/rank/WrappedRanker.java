@@ -16,4 +16,9 @@ public abstract class WrappedRanker implements Ranker {
     public double rank(String target, RankConfig config) {
         return innerRanker.rank(target, config);
     }
+
+    public Ranker getInnerRanker() {
+        return innerRanker;
+    }
+
 }

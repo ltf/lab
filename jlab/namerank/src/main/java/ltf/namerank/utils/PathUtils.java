@@ -38,5 +38,8 @@ public class PathUtils {
     public static String getRawHome() {
         return getDataHome() + "/raw";
     }
+    public static String getCacheHome() {
+        return getDataHome() + "/cache";
+    }
 
 }

@@ -1,6 +1,7 @@
 package ltf.namerank.lab;
 
 import ltf.namerank.rank.AllCasesRanker;
+import ltf.namerank.rank.CachedRanker;
 import ltf.namerank.rank.RankRecord;
 import ltf.namerank.rank.Ranker;
 import ltf.namerank.rank.dictrank.support.dict.HanYuDaCidian;
@@ -39,7 +40,7 @@ public class RankingTest {
     public void go() {
 
         try {
-            ranker = new AllCasesRanker().add(new HanYuDaCidian());
+            ranker = new CachedRanker(new AllCasesRanker(new CachedRanker(new HanYuDaCidian())));
             //initDicts();
             doRanking();
         } catch (IOException e) {
