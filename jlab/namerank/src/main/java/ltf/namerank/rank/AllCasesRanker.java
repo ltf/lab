@@ -7,7 +7,11 @@ import java.util.List;
  * @author ltf
  * @since 16/7/1, 下午5:14
  */
-public class AllCasesRanker extends SumRankers {
+public class AllCasesRanker extends WrappedRanker {
+
+    public AllCasesRanker(Ranker ranker) {
+        super(ranker);
+    }
 
     private List<String> allCases(String word) {
         ArrayList<String> result = new ArrayList<>();
@@ -22,10 +26,10 @@ public class AllCasesRanker extends SumRankers {
     }
 
     @Override
-    protected double doRank(String target, RankConfig config) {
+    public double rank(String target, RankConfig config) {
         double rk = 0;
         for (String word : allCases(target))
-            rk += super.doRank(target, config);
+            rk += super.rank(target, config);
         return rk;
     }
 }

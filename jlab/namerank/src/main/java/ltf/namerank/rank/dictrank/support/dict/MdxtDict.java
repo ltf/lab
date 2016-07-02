@@ -1,8 +1,7 @@
 package ltf.namerank.rank.dictrank.support.dict;
 
-import ltf.namerank.rank.CachedRanker;
 import ltf.namerank.rank.RankConfig;
-import ltf.namerank.rank.SumRankers;
+import ltf.namerank.rank.Ranker;
 import ltf.namerank.rank.dictrank.support.WordFeelingRank;
 import ltf.namerank.utils.LinesInFile;
 import org.slf4j.Logger;
@@ -18,7 +17,7 @@ import java.util.Map;
  * @author ltf
  * @since 16/6/21, 下午4:40
  */
-abstract public class MdxtDict extends CachedRanker {
+abstract public class MdxtDict implements Ranker {
 
     private final Logger logger = LoggerFactory.getLogger(MdxtDict.class);
     private static final String ITEM_END_LINE = "</>";
@@ -69,7 +68,7 @@ abstract public class MdxtDict extends CachedRanker {
     }
 
     @Override
-    public double doRank(String target, RankConfig config) {
+    public double rank(String target, RankConfig config) {
         initItems();
         double rk = 0;
         List<MdxtItem> items = itemsMap.get(target);

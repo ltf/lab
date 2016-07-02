@@ -7,18 +7,20 @@ import java.util.Map;
  * @author ltf
  * @since 16/7/1, 下午5:01
  */
-public abstract class CachedRanker implements Ranker {
+public class CachedRanker extends WrappedRanker {
 
     private Map<String, Double> rankCache = new HashMap<>();
 
-    abstract protected double doRank(String target, RankConfig config);
+    public CachedRanker(Ranker ranker) {
+        super(ranker);
+    }
 
     @Override
     public double rank(String target, RankConfig config) {
         if (rankCache.containsKey(target))
             return rankCache.get(target);
 
-        double rk = doRank(target, config);
+        double rk = super.rank(target, config);
         rankCache.put(target, rk);
         return rk;
     }

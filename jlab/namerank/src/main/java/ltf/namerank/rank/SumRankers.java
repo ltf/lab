@@ -1,26 +1,22 @@
 package ltf.namerank.rank;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author ltf
  * @since 16/7/1, 下午5:25
  */
-public class SumRankers extends CachedRanker {
+public class SumRankers implements Ranker {
 
-    private List<Ranker> rankerList = new ArrayList<>();
+    private Ranker[] rankers;
 
-    @Override
-    protected double doRank(String target, RankConfig config) {
-        double rk = 0;
-        for (Ranker ranker : rankerList)
-            rk += ranker.rank(target, config);
-        return rk;
+    public SumRankers(Ranker... rankers) {
+        this.rankers = rankers;
     }
 
-    public SumRankers add(Ranker ranker) {
-        rankerList.add(ranker);
-        return this;
+    @Override
+    public double rank(String target, RankConfig config) {
+        double rk = 0;
+        for (Ranker ranker : rankers)
+            rk += ranker.rank(target, config);
+        return rk;
     }
 }

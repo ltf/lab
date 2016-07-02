@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import ltf.namerank.entity.WordFeeling;
 import ltf.namerank.rank.CachedRanker;
 import ltf.namerank.rank.RankConfig;
+import ltf.namerank.rank.Ranker;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import static ltf.namerank.utils.PathUtils.getJsonHome;
  * @author ltf
  * @since 16/6/30, 下午4:57
  */
-public class WordFeelingRank extends CachedRanker {
+public class WordFeelingRank implements Ranker {
 
     private List<WordScore> wordScores = null;
 
@@ -41,7 +42,7 @@ public class WordFeelingRank extends CachedRanker {
 
 
     @Override
-    protected double doRank(String target, RankConfig config) {
+    public double rank(String target, RankConfig config) {
         initWordFeelings();
         double rk = 0;
         for (WordScore wordScore : wordScores) {
@@ -61,7 +62,6 @@ public class WordFeelingRank extends CachedRanker {
     public static WordFeelingRank getInstance() {
         return Holder.getInstance();
     }
-
 
     private static class Holder {
         private static final WordFeelingRank rank = new WordFeelingRank();
