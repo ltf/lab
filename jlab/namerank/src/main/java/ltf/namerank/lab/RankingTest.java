@@ -40,14 +40,14 @@ public class RankingTest {
 
     public void go() {
 
-        //WordFeelingRank.getInstance().listItems();
-        try {
-            ranker = new CachedRanker(new AllCasesRanker(new CachedRanker(new HanYuDaCidian())));
-            //initDicts();
-            doRanking();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        WordFeelingRank.getInstance().listItems();
+//        try {
+//            ranker = new CachedRanker(new AllCasesRanker(new CachedRanker(new HanYuDaCidian())));
+//            //initDicts();
+//            doRanking();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     private void doRanking() throws IOException {
