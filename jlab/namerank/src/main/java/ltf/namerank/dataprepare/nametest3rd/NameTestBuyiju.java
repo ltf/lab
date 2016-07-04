@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-import static ltf.namerank.utils.CharUtils.getRandomJianHan;
+import static ltf.namerank.utils.StrUtils.getRandomJianHan;
 import static ltf.namerank.utils.FileUtils.*;
 import static ltf.namerank.utils.PathUtils.getNamesHome;
 import static ltf.namerank.utils.PathUtils.getRawHome;

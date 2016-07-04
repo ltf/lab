@@ -1,20 +1,16 @@
 package ltf.namerank.lab;
 
-import ltf.namerank.rank.AllCasesRanker;
-import ltf.namerank.rank.CachedRanker;
 import ltf.namerank.rank.RankRecord;
 import ltf.namerank.rank.Ranker;
-import ltf.namerank.rank.dictrank.support.WordFeelingRank;
 import ltf.namerank.rank.dictrank.support.dict.HanYuDaCidian;
+import ltf.namerank.rank.dictrank.support.dict.HanyuXgXfCidian;
 import ltf.namerank.rank.dictrank.support.dict.MdxtDict;
 import ltf.namerank.utils.LinesInFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
+import static ltf.namerank.utils.FileUtils.lines2File;
 import static ltf.namerank.utils.FileUtils.str2File;
 import static ltf.namerank.utils.PathUtils.getNamesHome;
 import static ltf.namerank.utils.PathUtils.getRawHome;
@@ -40,7 +36,17 @@ public class RankingTest {
 
     public void go() {
 
-        WordFeelingRank.getInstance().listItems();
+
+
+
+        HanyuXgXfCidian dict = new HanyuXgXfCidian();
+        //dict.listKeys();
+        dict.debug();
+
+
+        //System.out.println(dict.getItemsMap().size());
+
+        //WordFeelingRank.getInstance().listItems();
 //        try {
 //            ranker = new CachedRanker(new AllCasesRanker(new CachedRanker(new HanYuDaCidian())));
 //            //initDicts();
@@ -65,7 +71,7 @@ public class RankingTest {
     }
 
     private void nameRanking(String givenName) {
-        if (givenName.length() == 2 && givenName.substring(0,1).equals(givenName.substring(1))){
+        if (givenName.length() == 2 && givenName.substring(0, 1).equals(givenName.substring(1))) {
             RankRecord record = new RankRecord(givenName);
             record.setScore(ranker.rank(givenName, null));
             rankRecordList.add(record);

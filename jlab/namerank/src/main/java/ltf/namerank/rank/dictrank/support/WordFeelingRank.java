@@ -2,7 +2,6 @@ package ltf.namerank.rank.dictrank.support;
 
 import com.alibaba.fastjson.JSON;
 import ltf.namerank.entity.WordFeeling;
-import ltf.namerank.rank.CachedRanker;
 import ltf.namerank.rank.RankConfig;
 import ltf.namerank.rank.Ranker;
 
@@ -12,6 +11,7 @@ import java.util.List;
 
 import static ltf.namerank.utils.FileUtils.file2Str;
 import static ltf.namerank.utils.PathUtils.getJsonHome;
+import static ltf.namerank.utils.StrUtils.existsCount;
 
 /**
  * @author ltf
@@ -33,9 +33,9 @@ public class WordFeelingRank implements Ranker {
             for (WordFeeling feeling : wordFeelingList) {
 
                 if (!( //"noun".equals(feeling.getProperty()) ||
-                       // "verb".equals(feeling.getProperty()) ||
+                        // "verb".equals(feeling.getProperty()) ||
                         "adj".equals(feeling.getProperty()) ||
-                        "adv".equals(feeling.getProperty())))
+                                "adv".equals(feeling.getProperty())))
                     continue;
 
 
@@ -60,12 +60,6 @@ public class WordFeelingRank implements Ranker {
         return rk;
     }
 
-    private int existsCount(final String content, final String keyword) {
-        int count = 0;
-        int offset = 0;
-        while ((offset = content.indexOf(keyword, offset) + 1) > 0) count++;
-        return count;
-    }
 
     public static WordFeelingRank getInstance() {
         return Holder.getInstance();
@@ -79,7 +73,7 @@ public class WordFeelingRank implements Ranker {
         }
     }
 
-    public void listItems(){
+    public void listItems() {
         initWordFeelings();
         for (WordScore wordScore : wordScores) {
             System.out.println(String.format("%s : %f", wordScore.getWord(), wordScore.getScore()));

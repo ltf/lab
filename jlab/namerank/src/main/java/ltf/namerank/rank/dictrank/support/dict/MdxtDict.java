@@ -2,7 +2,6 @@ package ltf.namerank.rank.dictrank.support.dict;
 
 import ltf.namerank.rank.RankConfig;
 import ltf.namerank.rank.Ranker;
-import ltf.namerank.rank.dictrank.support.WordFeelingRank;
 import ltf.namerank.utils.LinesInFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,9 +24,10 @@ abstract public class MdxtDict implements Ranker {
     abstract protected String getFileName();
 
     private int count = 0;
-    private Map<String, List<MdxtItem>> itemsMap;
 
-    private void initItems() {
+    protected Map<String, List<MdxtItem>> itemsMap;
+
+    protected void initItems() {
         if (itemsMap == null) {
             itemsMap = new HashMap<>();
             try {
@@ -69,21 +69,17 @@ abstract public class MdxtDict implements Ranker {
 
     @Override
     public double rank(String target, RankConfig config) {
-        initItems();
-        double rk = 0;
-        List<MdxtItem> items = itemsMap.get(target);
-        if (items != null) {
-            for (MdxtItem item : items) {
-                rk += WordFeelingRank.getInstance().rank(item.getValue(), config);
-            }
-        }
-        return rk;
+        return 0;
     }
 
     public void listKeys() {
         initItems();
         for (String itemKey : itemsMap.keySet())
             System.out.println(itemKey);
+    }
+
+    public Map<String, List<MdxtItem>> getItemsMap() {
+        return itemsMap;
     }
 }
 

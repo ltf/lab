@@ -4,7 +4,7 @@ package ltf.namerank.rank.dictrank.support.dict;
  * @author ltf
  * @since 6/21/16, 10:22 PM
  */
-class MdxtItem {
+public class MdxtItem {
 
     private String key;
 
@@ -22,7 +22,6 @@ class MdxtItem {
 
     MdxtItem(String key) {
         this.key = key;
-        stringBuilder = new StringBuilder();
     }
 
     @Override
@@ -30,11 +29,13 @@ class MdxtItem {
         return key;
     }
 
-    void addValue(String valueLine) {
+    protected void addValue(String valueLine) {
+        if (stringBuilder == null)
+            stringBuilder = new StringBuilder();
         stringBuilder.append(valueLine).append("\n");
     }
 
-    boolean isValid() {
+    protected boolean isValid() {
         value = stringBuilder.toString();
         stringBuilder = null;
         return true;
