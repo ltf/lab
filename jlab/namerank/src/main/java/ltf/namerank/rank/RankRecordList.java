@@ -8,7 +8,7 @@ import java.util.*;
  */
 public class RankRecordList implements Iterable<RankRecord> {
 
-    private List<RankRecord> list = new LinkedList<>();
+    protected List<RankRecord> list = new LinkedList<>();
 
     public RankRecord add(String word, double score) {
         RankRecord record = new RankRecord(word);

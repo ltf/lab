@@ -1,6 +1,7 @@
 package ltf.namerank.rank.dictrank.support.dict;
 
 import ltf.namerank.rank.RankRecordList;
+import ltf.namerank.rank.RankRecordSet;
 import ltf.namerank.utils.LinesInFile;
 
 import java.io.IOException;
@@ -44,6 +45,7 @@ public class HanyuXgXfCidian extends MdxtDict {
         initItems();
 
         RankRecordList selected = new RankRecordList();
+        RankRecordSet usedKeywords = new RankRecordSet();
         for (List<MdxtItem> list : getItemsMap().values()) {
             for (MdxtItem item : list) {
                 double score = 0;
@@ -52,23 +54,29 @@ public class HanyuXgXfCidian extends MdxtDict {
                     int count = existsCount(((XgXfItem) item).tongyi, key);
                     if (count > 0) {
                         score += count;
+                        usedKeywords.add(key, count);
                         sb.append(String.format("%s%d; ", key, count));
                     }
                 }
-                if (score>0){
+                if (score > 0) {
                     selected.add(item.getKey(), score).setLog(sb.toString());
                 }
             }
         }
 
         selected.sort();
+        usedKeywords.sort();
 
-        selected.forEach(r->{
-            System.out.println(String.format("%f\t%-10s%s",  r.getScore(),r.getWord(), r.getLog()));
+        selected.forEach(r -> {
+            System.out.println(String.format("%f\t%-10s%s", r.getScore(), r.getWord(), r.getLog()));
+        });
+        usedKeywords.forEach(r -> {
+            System.out.println(String.format("%f\t%-10s%s", r.getScore(), r.getWord(), r.getLog()));
         });
 
         try {
             lines2File(selected.getWordList(), getRawHome() + "/selected.txt");
+            lines2File(usedKeywords.getWordList(), getRawHome() + "/usedKeywords.txt");
         } catch (IOException e) {
             e.printStackTrace();
         }
