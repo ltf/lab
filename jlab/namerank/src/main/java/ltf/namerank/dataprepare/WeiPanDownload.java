@@ -36,7 +36,7 @@ public class WeiPanDownload {
 
     private void downloadAllBooks() throws IOException {
         List<String> urls = new ArrayList<>();
-        file2Lines(urls, "/Users/f/downloads/wx/vdisk/bookurls.txt");
+        file2Lines("/Users/f/downloads/wx/vdisk/bookurls.txt",urls);
         for (String url : urls) {
             boolean succ = false;
             for (int i = 0; i <= 5; i++) {

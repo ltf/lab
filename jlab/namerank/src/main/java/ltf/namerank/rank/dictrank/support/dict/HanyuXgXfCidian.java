@@ -48,6 +48,7 @@ public class HanyuXgXfCidian extends MdxtDict {
         RankRecordSet usedKeywords = new RankRecordSet();
         for (List<MdxtItem> list : getItemsMap().values()) {
             for (MdxtItem item : list) {
+                if (item.getKey().length()<1) continue;
                 double score = 0;
                 StringBuilder sb = new StringBuilder();
                 for (String key : words) {

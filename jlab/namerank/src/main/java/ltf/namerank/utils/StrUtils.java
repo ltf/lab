@@ -1,6 +1,8 @@
 package ltf.namerank.utils;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Random;
 
 /**
@@ -52,5 +54,18 @@ public class StrUtils {
         int offset = 0;
         while ((offset = content.indexOf(keyword, offset) + 1) > 0) count++;
         return count;
+    }
+
+    /**
+     * distinct lines, not break the order
+     */
+    public static void distinct(final Iterable<String> in, Collection<String> out) {
+        HashSet<String> set = new HashSet<>();
+        in.forEach(s -> {
+            if (!set.contains(s)) {
+                set.add(s);
+                out.add(s);
+            }
+        });
     }
 }

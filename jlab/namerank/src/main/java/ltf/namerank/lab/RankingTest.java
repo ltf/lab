@@ -5,6 +5,7 @@ import ltf.namerank.rank.Ranker;
 import ltf.namerank.rank.dictrank.support.dict.HanYuDaCidian;
 import ltf.namerank.rank.dictrank.support.dict.HanyuXgXfCidian;
 import ltf.namerank.rank.dictrank.support.dict.MdxtDict;
+import ltf.namerank.utils.FileUtils;
 import ltf.namerank.utils.LinesInFile;
 
 import java.io.IOException;
@@ -37,11 +38,15 @@ public class RankingTest {
     public void go() {
 
 
+        try {
+            FileUtils.distinct(getRawHome() + "/usedKeywords-bak.txt");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-
-        HanyuXgXfCidian dict = new HanyuXgXfCidian();
+        //HanyuXgXfCidian dict = new HanyuXgXfCidian();
         //dict.listKeys();
-        dict.debug();
+        //dict.debug();
 
 
         //System.out.println(dict.getItemsMap().size());

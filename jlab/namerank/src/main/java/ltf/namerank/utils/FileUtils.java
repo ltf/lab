@@ -2,6 +2,8 @@ package ltf.namerank.utils;
 
 import java.io.*;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author ltf
@@ -55,9 +57,9 @@ public class FileUtils {
     }
 
     /**
-     * save lines to file
+     * load lines from file
      */
-    public static void file2Lines(Collection<String> lines, String fn) throws IOException {
+    public static void file2Lines(String fn, Collection<String> lines) throws IOException {
         BufferedReader br = new BufferedReader(new StringReader(file2Str(fn)));
         String line;
         while ((line = br.readLine()) != null) lines.add(line);
@@ -78,5 +80,13 @@ public class FileUtils {
 
     public static boolean exists(String fn) {
         return new File(fn).exists();
+    }
+
+    public static void distinct(String fn) throws IOException {
+        List<String> in = new LinkedList<>();
+        List<String> out = new LinkedList<>();
+        file2Lines(fn, in);
+        StrUtils.distinct(in, out);
+        lines2File(out, fn);
     }
 }
