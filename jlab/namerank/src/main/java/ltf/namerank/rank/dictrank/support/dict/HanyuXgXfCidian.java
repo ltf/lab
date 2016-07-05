@@ -65,15 +65,11 @@ public class HanyuXgXfCidian extends MdxtDict {
             }
         }
 
-        selected.sort();
-        usedKeywords.sort();
+        selected.sortDesc();
+        usedKeywords.sortDesc();
 
-        selected.forEach(r -> {
-            System.out.println(String.format("%f\t%-10s%s", r.getScore(), r.getWord(), r.getLog()));
-        });
-        usedKeywords.forEach(r -> {
-            System.out.println(String.format("%f\t%-10s%s", r.getScore(), r.getWord(), r.getLog()));
-        });
+        selected.listDetails();
+        usedKeywords.listDetails();
 
         try {
             lines2File(selected.getWordList(), getRawHome() + "/selected.txt");

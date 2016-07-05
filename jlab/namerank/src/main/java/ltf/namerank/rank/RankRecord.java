@@ -46,7 +46,7 @@ public class RankRecord implements Comparable<RankRecord> {
 
     @Override
     public int compareTo(RankRecord o) {
-        double x = o.score - score;
+        double x = score - o.score;
         return x > 0 ? 1 : (x < 0 ? -1 : 0);
     }
 }

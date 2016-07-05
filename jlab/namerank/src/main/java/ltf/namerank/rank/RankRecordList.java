@@ -17,8 +17,14 @@ public class RankRecordList implements Iterable<RankRecord> {
         return record;
     }
 
-    public List<RankRecord> sort() {
+    public List<RankRecord> sortAsc() {
         Collections.sort(list);
+        return list;
+    }
+
+    public List<RankRecord> sortDesc() {
+        Collections.sort(list);
+        Collections.reverse(list);
         return list;
     }
 
@@ -30,6 +36,12 @@ public class RankRecordList implements Iterable<RankRecord> {
         List<String> wordList = new ArrayList<>(list.size() + 1);
         list.forEach(r -> wordList.add(r.getWord()));
         return wordList;
+    }
+
+    public void listDetails() {
+        list.forEach(r -> {
+            System.out.println(String.format("%f\t%-10s%s", r.getScore(), r.getWord(), r.getLog()));
+        });
     }
 
     @Override

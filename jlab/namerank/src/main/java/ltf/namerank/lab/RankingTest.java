@@ -1,18 +1,20 @@
 package ltf.namerank.lab;
 
+import com.hankcs.hanlp.dictionary.CoreSynonymDictionary;
 import ltf.namerank.rank.RankRecord;
+import ltf.namerank.rank.RankRecordList;
 import ltf.namerank.rank.Ranker;
 import ltf.namerank.rank.dictrank.support.dict.HanYuDaCidian;
-import ltf.namerank.rank.dictrank.support.dict.HanyuXgXfCidian;
 import ltf.namerank.rank.dictrank.support.dict.MdxtDict;
-import ltf.namerank.utils.FileUtils;
 import ltf.namerank.utils.LinesInFile;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
-import static ltf.namerank.utils.FileUtils.lines2File;
-import static ltf.namerank.utils.FileUtils.str2File;
+import static ltf.namerank.utils.FileUtils.*;
 import static ltf.namerank.utils.PathUtils.getNamesHome;
 import static ltf.namerank.utils.PathUtils.getRawHome;
 
@@ -36,13 +38,33 @@ public class RankingTest {
     }
 
     public void go() {
-
+        List<String> list = new ArrayList<>();
+        List<String> keys = new ArrayList<>();
 
         try {
-            FileUtils.distinct(getRawHome() + "/usedKeywords-bak.txt");
+            RankRecordList result = new RankRecordList();
+            file2Lines(getRawHome() + "/buty.txt", list);
+            file2Lines(getRawHome() + "/buty-keywords.txt", keys);
+            for (String s : list) {
+                double score = 0;
+                for (String k : keys) {
+                    score += CoreSynonymDictionary.distance(s, k);
+                }
+                result.add(s, score);
+            }
+            result.sortAsc();
+            result.listDetails();
+            //lines2File(result.getWordList(), getRawHome() + "/buty-keywords.txt");
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
+//        try {
+//            FileUtils.distinct(getRawHome() + "/usedKeywords-bak.txt");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         //HanyuXgXfCidian dict = new HanyuXgXfCidian();
         //dict.listKeys();
