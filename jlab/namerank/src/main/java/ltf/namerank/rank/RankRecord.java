@@ -5,7 +5,10 @@ package ltf.namerank.rank;
  * @since 16/6/30, 下午3:42
  */
 public class RankRecord implements Comparable<RankRecord> {
+
     private String word = "";
+
+    private String log;
 
     private double score = 0;
 
@@ -27,6 +30,14 @@ public class RankRecord implements Comparable<RankRecord> {
 
     public void setWord(String word) {
         this.word = word;
+    }
+
+    public String getLog() {
+        return log;
+    }
+
+    public void setLog(String log) {
+        this.log = log;
     }
 
     public void add(double delta) {

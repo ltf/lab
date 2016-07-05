@@ -1,10 +1,10 @@
 package ltf.namerank.rank.dictrank.support.dict;
 
+import ltf.namerank.rank.RankRecordList;
 import ltf.namerank.utils.LinesInFile;
 
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -33,31 +33,42 @@ public class HanyuXgXfCidian extends MdxtDict {
         selectWords();
     }
 
-    private void selectWords(){
+    private void selectWords() {
         Set<String> words = new HashSet<>();
         try {
-            new LinesInFile(getRawHome()+"/buty.txt").each(words::add);
+            new LinesInFile(getRawHome() + "/buty.txt").each(words::add);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         initItems();
 
-        List<String> selected = new LinkedList<>();
+        RankRecordList selected = new RankRecordList();
         for (List<MdxtItem> list : getItemsMap().values()) {
-            for (MdxtItem item: list){
-                for (String key: words){
-                    if (((XgXfItem)item).tongyi.contains(key)){
-                        selected.add(item.getKey());
-                        System.out.println(item.getKey() + " - " + key + " - " +((XgXfItem)item).tongyi);
-                        break;
+            for (MdxtItem item : list) {
+                double score = 0;
+                StringBuilder sb = new StringBuilder();
+                for (String key : words) {
+                    int count = existsCount(((XgXfItem) item).tongyi, key);
+                    if (count > 0) {
+                        score += count;
+                        sb.append(String.format("%s%d; ", key, count));
                     }
+                }
+                if (score>0){
+                    selected.add(item.getKey(), score).setLog(sb.toString());
                 }
             }
         }
 
+        selected.sort();
+
+        selected.forEach(r->{
+            System.out.println(String.format("%f\t%-10s%s",  r.getScore(),r.getWord(), r.getLog()));
+        });
+
         try {
-            lines2File(selected, getRawHome()+"/selected.txt");
+            lines2File(selected.getWordList(), getRawHome() + "/selected.txt");
         } catch (IOException e) {
             e.printStackTrace();
         }
