@@ -76,6 +76,9 @@ abstract public class MdxtDict implements Ranker {
         initItems();
         for (String itemKey : itemsMap.keySet())
             System.out.println(itemKey);
+
+        System.out.println(itemsMap.size());
+
     }
 
     public Map<String, List<MdxtItem>> getItemsMap() {

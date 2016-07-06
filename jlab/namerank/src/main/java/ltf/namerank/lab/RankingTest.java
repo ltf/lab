@@ -1,11 +1,15 @@
 package ltf.namerank.lab;
 
+import com.alibaba.fastjson.JSON;
 import com.hankcs.hanlp.dictionary.CoreSynonymDictionary;
+import ltf.namerank.entity.WordFeeling;
 import ltf.namerank.rank.RankRecord;
 import ltf.namerank.rank.RankRecordList;
 import ltf.namerank.rank.Ranker;
+import ltf.namerank.rank.dictrank.support.WordScore;
 import ltf.namerank.rank.dictrank.support.dict.HanYuDaCidian;
 import ltf.namerank.rank.dictrank.support.dict.MdxtDict;
+import ltf.namerank.utils.FileUtils;
 import ltf.namerank.utils.LinesInFile;
 
 import java.io.IOException;
@@ -15,6 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static ltf.namerank.utils.FileUtils.*;
+import static ltf.namerank.utils.PathUtils.getJsonHome;
 import static ltf.namerank.utils.PathUtils.getNamesHome;
 import static ltf.namerank.utils.PathUtils.getRawHome;
 
@@ -38,30 +43,21 @@ public class RankingTest {
     }
 
     public void go() {
-        List<String> list = new ArrayList<>();
-        List<String> keys = new ArrayList<>();
 
-        try {
-            RankRecordList result = new RankRecordList();
-            file2Lines(getRawHome() + "/buty.txt", list);
-            file2Lines(getRawHome() + "/buty-keywords.txt", keys);
-            for (String s : list) {
-                double score = 0;
-                for (String k : keys) {
-                    score += CoreSynonymDictionary.distance(s, k);
-                }
-                result.add(s, score);
-            }
-            result.sortAsc();
-            result.listDetails();
-            //lines2File(result.getWordList(), getRawHome() + "/buty-keywords.txt");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        //testWordFeeling();
+
+//        List<String> list = new ArrayList<>();
+//        try {
+//            file2Lines(getRawHome() + "/buty-keywords.txt", list);
+//            testWordUnion(list);
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
 
 //        try {
-//            FileUtils.distinct(getRawHome() + "/usedKeywords-bak.txt");
+//            FileUtils.distinct(getRawHome() + "/buty-keywords.txt");
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
@@ -81,6 +77,58 @@ public class RankingTest {
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
+    }
+
+
+    private void testWordFeeling(){
+        List<WordFeeling> wordFeelingList = null;
+        try {
+            wordFeelingList = JSON.parseArray(file2Str(getJsonHome() + "/wordfeeling"), WordFeeling.class);
+        } catch (IOException e) {
+        }
+        List<String> list = new ArrayList<>();
+        for (WordFeeling feeling : wordFeelingList) {
+
+            if (!( //"noun".equals(feeling.getProperty()) ||
+                    // "verb".equals(feeling.getProperty()) ||
+                    "adj".equals(feeling.getProperty()) ||
+                            "adv".equals(feeling.getProperty())))
+                continue;
+
+
+            if (feeling.getPolar() == 1) {
+                //System.out.println(feeling.getWord());
+                list.add(feeling.getWord());
+            }
+        }
+
+        testWordUnion(list);
+    }
+
+
+    private void testWordUnion(List<String> list) {
+        //List<String> list = new ArrayList<>();
+        List<String> keys = new ArrayList<>();
+
+        try {
+            RankRecordList result = new RankRecordList();
+            //file2Lines(getRawHome() + "/buty-keywords.txt", list);
+            file2Lines(getRawHome() + "/buty-keywords.txt", keys);
+            for (String s : list) {
+                double score = CoreSynonymDictionary.distance(s, "美丽")*100000;
+                score += CoreSynonymDictionary.distance(s, "漂亮")*100000;
+                score += CoreSynonymDictionary.distance(s, "可爱")*100000;
+                for (String k : keys) {
+                    score += CoreSynonymDictionary.distance(s, k);
+                }
+                result.add(s, score);
+            }
+            result.sortAsc();
+            result.listDetails();
+            lines2File(result.getWordList(), getRawHome() + "/buty-keywords2.txt");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void doRanking() throws IOException {
