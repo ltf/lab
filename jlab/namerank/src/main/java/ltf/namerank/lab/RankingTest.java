@@ -44,6 +44,8 @@ public class RankingTest {
 
     public void go() {
 
+        new HanYuDaCidian().listKeys();
+
         //testWordFeeling();
 
 //        List<String> list = new ArrayList<>();

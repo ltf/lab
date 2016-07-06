@@ -35,9 +35,12 @@ public class MdxtItem {
         stringBuilder.append(valueLine).append("\n");
     }
 
-    protected boolean isValid() {
+    protected void finishAdd() {
         value = stringBuilder.toString();
         stringBuilder = null;
+    }
+
+    protected boolean isValid() {
         return true;
     }
 }

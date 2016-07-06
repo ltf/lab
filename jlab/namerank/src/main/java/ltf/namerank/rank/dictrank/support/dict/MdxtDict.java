@@ -52,6 +52,7 @@ abstract public class MdxtDict implements Ranker {
         if (item == null) {
             item = newItem(line);
         } else if (ITEM_END_LINE.equals(line)) {
+            item.finishAdd();
             if (item.isValid()) {
                 List<MdxtItem> items = itemsMap.get(item.getKey());
                 if (items == null) {
@@ -74,11 +75,10 @@ abstract public class MdxtDict implements Ranker {
 
     public void listKeys() {
         initItems();
-        for (String itemKey : itemsMap.keySet())
-            System.out.println(itemKey);
+//        for (String itemKey : itemsMap.keySet())
+//            System.out.println(itemKey);
 
         System.out.println(itemsMap.size());
-
     }
 
     public Map<String, List<MdxtItem>> getItemsMap() {
