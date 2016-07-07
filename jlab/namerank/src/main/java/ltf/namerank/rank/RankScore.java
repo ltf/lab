@@ -1,6 +1,5 @@
 package ltf.namerank.rank;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -9,33 +8,33 @@ import java.util.Map;
  */
 public class RankScore {
 
-    private double defaultValue = 0;
+    private double value = 0;
 
-    private Map<String, Double> values = new HashMap<>();
+    public RankScore() {
+    }
 
-    /**
-     * addition
-     */
-    public RankScore add(RankScore summand) {
-        this.defaultValue += summand.defaultValue;
-        return this;
+    public RankScore(double value) {
+        this.value = value;
+    }
+
+    public double getValue() {
+        return value;
     }
 
     /**
      * addition
      */
-    public RankScore add(double summand) {
-        this.defaultValue += summand;
+    public RankScore add(String keyword, RankScore summand) {
+        add(keyword, summand, 1);
         return this;
     }
 
     /**
-     * multiplication
+     * addition
      */
-    public RankScore mul(double multiplicand) {
-        this.defaultValue *= multiplicand;
+    public RankScore add(String keyword, RankScore summand, double rate) {
+        this.value += summand.value * rate;
         return this;
     }
-
 
 }

@@ -36,7 +36,7 @@ public class Words {
     }
 
     public static boolean isButy(String word) {
-        return Holder.getInstance().positive.contains(word);
+        return Holder.getInstance().buty.contains(word);
     }
 
     private static class Holder {

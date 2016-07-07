@@ -6,6 +6,7 @@ import ltf.namerank.entity.WordFeeling;
 import ltf.namerank.rank.*;
 import ltf.namerank.rank.dictrank.support.dict.HanYuDaCidian;
 import ltf.namerank.rank.dictrank.support.dict.MdxtDict;
+import ltf.namerank.utils.FileUtils;
 import ltf.namerank.utils.LinesInFile;
 
 import java.io.IOException;
@@ -145,6 +146,7 @@ public class RankingTest {
     }
 
     private void nameRanking(String givenName) {
+        //if (!"清艳".equals(givenName)) return;
         //if (givenName.length() == 2 && givenName.substring(0, 1).equals(givenName.substring(1))) {
             RankRecord record = new RankRecord(givenName);
             record.setScore(ranker.rank(givenName, null));

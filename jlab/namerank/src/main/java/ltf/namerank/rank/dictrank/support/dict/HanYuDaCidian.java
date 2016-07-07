@@ -51,8 +51,11 @@ public class HanYuDaCidian extends MdxtDict {
                 if (Words.isPositive(word)) {
                     rk += 1;
                 }
+                if (Words.isNegative(word)) {
+                    rk -= 2;
+                }
                 if (Words.isButy(word)) {
-                    rk += 3;
+                    rk += 5;
                 }
             }
         }

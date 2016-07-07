@@ -1,6 +1,7 @@
 package ltf.namerank.rank;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.alibaba.fastjson.serializer.SerializerFeature.PrettyFormat;
+import static com.alibaba.fastjson.serializer.SerializerFeature.WriteClassName;
 import static ltf.namerank.utils.FileUtils.file2Str;
 import static ltf.namerank.utils.FileUtils.str2File;
 import static ltf.namerank.utils.PathUtils.getCacheHome;
@@ -32,7 +35,7 @@ public class CachedRanker extends WrappedRanker {
     @Override
     public double rank(String target, RankConfig config) {
         if (rankCache.containsKey(target))
-            return rankCache.get(target);
+            return (double)rankCache.get(target);
 
         double rk = super.rank(target, config);
         rankCache.put(target, rk);
@@ -46,7 +49,7 @@ public class CachedRanker extends WrappedRanker {
 
     private void saveCache() {
         try {
-            str2File(JSON.toJSONString(rankCache, true), getCacheFilename());
+            str2File(JSON.toJSONString(rankCache, WriteClassName, PrettyFormat), getCacheFilename());
         } catch (Exception e) {
             logger.error("save cache failed", e);
         }
