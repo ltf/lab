@@ -6,10 +6,8 @@ import ltf.namerank.entity.WordFeeling;
 import ltf.namerank.rank.RankRecord;
 import ltf.namerank.rank.RankRecordList;
 import ltf.namerank.rank.Ranker;
-import ltf.namerank.rank.dictrank.support.WordScore;
 import ltf.namerank.rank.dictrank.support.dict.HanYuDaCidian;
 import ltf.namerank.rank.dictrank.support.dict.MdxtDict;
-import ltf.namerank.utils.FileUtils;
 import ltf.namerank.utils.LinesInFile;
 
 import java.io.IOException;
@@ -19,9 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static ltf.namerank.utils.FileUtils.*;
-import static ltf.namerank.utils.PathUtils.getJsonHome;
-import static ltf.namerank.utils.PathUtils.getNamesHome;
-import static ltf.namerank.utils.PathUtils.getRawHome;
+import static ltf.namerank.utils.PathUtils.*;
 
 /**
  * @author ltf
@@ -44,9 +40,10 @@ public class RankingTest {
 
     public void go() {
 
-        new HanYuDaCidian().listKeys();
+        //new HanYuDaCidian().listKeys();
 
         //testWordFeeling();
+
 
 //        List<String> list = new ArrayList<>();
 //        try {
@@ -82,7 +79,7 @@ public class RankingTest {
     }
 
 
-    private void testWordFeeling(){
+    private void testWordFeeling() {
         List<WordFeeling> wordFeelingList = null;
         try {
             wordFeelingList = JSON.parseArray(file2Str(getJsonHome() + "/wordfeeling"), WordFeeling.class);
@@ -117,9 +114,9 @@ public class RankingTest {
             //file2Lines(getRawHome() + "/buty-keywords.txt", list);
             file2Lines(getRawHome() + "/buty-keywords.txt", keys);
             for (String s : list) {
-                double score = CoreSynonymDictionary.distance(s, "美丽")*100000;
-                score += CoreSynonymDictionary.distance(s, "漂亮")*100000;
-                score += CoreSynonymDictionary.distance(s, "可爱")*100000;
+                double score = CoreSynonymDictionary.distance(s, "美丽") * 100000;
+                score += CoreSynonymDictionary.distance(s, "漂亮") * 100000;
+                score += CoreSynonymDictionary.distance(s, "可爱") * 100000;
                 for (String k : keys) {
                     score += CoreSynonymDictionary.distance(s, k);
                 }

@@ -5,7 +5,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static ltf.namerank.utils.FileUtils.file2Str;
@@ -22,7 +24,7 @@ public class CachedRanker extends WrappedRanker {
 
     private Map<String, Double> rankCache = new HashMap<>();
 
-    public CachedRanker(Ranker ranker) {
+    private CachedRanker(Ranker ranker) {
         super(ranker);
         loadCache();
     }
@@ -60,9 +62,22 @@ public class CachedRanker extends WrappedRanker {
         }
     }
 
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
+    protected void flush() {
         saveCache();
+    }
+
+    private static final List<CachedRanker> cachedRankers = new ArrayList<>();
+
+    public static CachedRanker cache(Ranker ranker) {
+        CachedRanker cachedRanker = new CachedRanker(ranker);
+        cachedRankers.add(cachedRanker);
+        return cachedRanker;
+    }
+
+    public static void flushCachedRankers() {
+        for (CachedRanker ranker : cachedRankers) {
+            ranker.flush();
+        }
+        cachedRankers.clear();
     }
 }

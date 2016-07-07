@@ -37,6 +37,6 @@ shadowJar {
     append("META-INF/spring.handlers")
 
     manifest {
-        attributes("Main-Class": "ltf.namerank.Application")
+        attributes("Main-Class": "ltf.namerank.Runner")
     }
 }
