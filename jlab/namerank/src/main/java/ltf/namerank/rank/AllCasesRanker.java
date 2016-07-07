@@ -29,7 +29,7 @@ public class AllCasesRanker extends WrappedRanker {
     public double rank(String target, RankConfig config) {
         double rk = 0;
         for (String word : allCases(target))
-            rk += super.rank(target, config);
+            rk += super.rank(word, config);
         return rk;
     }
 }

@@ -41,5 +41,8 @@ public class PathUtils {
     public static String getCacheHome() {
         return getDataHome() + "/cache";
     }
+    public static String getWordsHome() {
+        return getDataHome() + "/words";
+    }
 
 }

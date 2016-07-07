@@ -74,7 +74,10 @@ public class CachedRanker extends WrappedRanker {
         return cachedRanker;
     }
 
-    public static void flushCachedRankers() {
+    /**
+     * flush cache data to disk
+     */
+    public static void finishAll() {
         for (CachedRanker ranker : cachedRankers) {
             ranker.flush();
         }

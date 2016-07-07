@@ -3,9 +3,7 @@ package ltf.namerank.lab;
 import com.alibaba.fastjson.JSON;
 import com.hankcs.hanlp.dictionary.CoreSynonymDictionary;
 import ltf.namerank.entity.WordFeeling;
-import ltf.namerank.rank.RankRecord;
-import ltf.namerank.rank.RankRecordList;
-import ltf.namerank.rank.Ranker;
+import ltf.namerank.rank.*;
 import ltf.namerank.rank.dictrank.support.dict.HanYuDaCidian;
 import ltf.namerank.rank.dictrank.support.dict.MdxtDict;
 import ltf.namerank.utils.LinesInFile;
@@ -16,6 +14,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import static ltf.namerank.rank.CachedRanker.cache;
 import static ltf.namerank.utils.FileUtils.*;
 import static ltf.namerank.utils.PathUtils.*;
 
@@ -56,7 +55,8 @@ public class RankingTest {
 
 
 //        try {
-//            FileUtils.distinct(getRawHome() + "/buty-keywords.txt");
+//            FileUtils.distinct(getWordsHome() + "/positive.txt");
+//            FileUtils.distinct(getWordsHome() + "/negative.txt");
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
@@ -69,13 +69,13 @@ public class RankingTest {
         //System.out.println(dict.getItemsMap().size());
 
         //WordFeelingRank.getInstance().listItems();
-//        try {
-//            ranker = new CachedRanker(new AllCasesRanker(new CachedRanker(new HanYuDaCidian())));
-//            //initDicts();
-//            doRanking();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            ranker = cache(new AllCasesRanker(cache(new HanYuDaCidian())));
+            doRanking();
+            CachedRanker.finishAll();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -134,7 +134,7 @@ public class RankingTest {
         new LinesInFile(getNamesHome() + "/givenNames.txt").each(this::nameRanking);
 
         Collections.sort(rankRecordList);
-
+        Collections.reverse(rankRecordList);
         StringBuilder sb = new StringBuilder();
         for (RankRecord record : rankRecordList) {
             System.out.println(String.format("%s: %f", record.getWord(), record.getScore()));

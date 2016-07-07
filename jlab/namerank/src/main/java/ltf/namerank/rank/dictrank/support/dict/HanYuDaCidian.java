@@ -3,7 +3,7 @@ package ltf.namerank.rank.dictrank.support.dict;
 import com.hankcs.hanlp.seg.common.Term;
 import com.hankcs.hanlp.tokenizer.StandardTokenizer;
 import ltf.namerank.rank.RankConfig;
-import ltf.namerank.rank.dictrank.support.WordFeelingRank;
+import ltf.namerank.rank.dictrank.support.Words;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,7 +34,26 @@ public class HanYuDaCidian extends MdxtDict {
         List<MdxtItem> items = itemsMap.get(target);
         if (items != null) {
             for (MdxtItem item : items) {
-                rk += WordFeelingRank.getInstance().rank(item.getValue(), config);
+                rk += itemRank(item);
+            }
+        }
+        return rk;
+    }
+
+    private double itemRank(MdxtItem item) {
+        HanyuDacidianItem it = (HanyuDacidianItem) item;
+        double rk = 0;
+        List<String> words = new ArrayList<>();
+        for (String explain : it.explains) {
+            words.clear();
+            segment(explain, words);
+            for (String word : words) {
+                if (Words.isPositive(word)) {
+                    rk += 1;
+                }
+                if (Words.isButy(word)) {
+                    rk += 3;
+                }
             }
         }
         return rk;
@@ -225,7 +244,7 @@ public class HanYuDaCidian extends MdxtDict {
 
         HanyuDacidianItem(String key) {
             super(key);
-            System.out.println(key);
+            //System.out.println(key);
             prefix2 = "`1`" + key + "`6`<br>";
         }
 

@@ -1,5 +1,7 @@
 package ltf.namerank.utils;
 
+import com.hankcs.hanlp.HanLP;
+
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.HashSet;
@@ -62,6 +64,7 @@ public class StrUtils {
     public static void distinct(final Iterable<String> in, Collection<String> out) {
         HashSet<String> set = new HashSet<>();
         in.forEach(s -> {
+            s = HanLP.convertToSimplifiedChinese(s);
             if (!set.contains(s)) {
                 set.add(s);
                 out.add(s);
