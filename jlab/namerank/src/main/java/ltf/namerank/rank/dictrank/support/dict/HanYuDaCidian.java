@@ -5,10 +5,11 @@ import com.hankcs.hanlp.tokenizer.StandardTokenizer;
 import ltf.namerank.rank.RankConfig;
 import ltf.namerank.rank.dictrank.support.Words;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
+import static ltf.namerank.rank.dictrank.support.Words.butyRank;
+import static ltf.namerank.rank.dictrank.support.Words.negativeRank;
+import static ltf.namerank.rank.dictrank.support.Words.positiveRank;
 import static ltf.namerank.utils.PathUtils.getRawHome;
 
 /**
@@ -42,23 +43,27 @@ public class HanYuDaCidian extends MdxtDict {
 
     private double itemRank(MdxtItem item) {
         HanyuDacidianItem it = (HanyuDacidianItem) item;
-        double rk = 0;
-        List<String> words = new ArrayList<>();
+        String means = "";
+        Set<String> words = new HashSet<>();
         for (String explain : it.explains) {
-            words.clear();
+            means += explain;
             segment(explain, words);
-            for (String word : words) {
-                if (Words.isPositive(word)) {
-                    rk += 1;
-                }
-                if (Words.isNegative(word)) {
-                    rk -= 2;
-                }
-                if (Words.isButy(word)) {
-                    rk += 5;
-                }
+        }
+
+        double rk = 0;
+        for (String word : words) {
+            if (Words.isPositive(word)) {
+                rk += 1;
+            }
+            if (Words.isNegative(word)) {
+                rk -= 2;
+            }
+            if (Words.isButy(word)) {
+                rk += 5;
             }
         }
+
+        rk += positiveRank(means) - negativeRank(means)*2 + butyRank(means)*5;
         return rk;
     }
 

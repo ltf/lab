@@ -52,6 +52,7 @@ public class StrUtils {
      * 统计关键词在内容中出现的次数
      */
     public static int existsCount(final String content, final String keyword) {
+        if ("".equals(keyword)) return 0;
         int count = 0;
         int offset = 0;
         while ((offset = content.indexOf(keyword, offset) + 1) > 0) count++;
