@@ -145,11 +145,11 @@ public class RankingTest {
     }
 
     private void nameRanking(String givenName) {
-        if (givenName.length() == 2 && givenName.substring(0, 1).equals(givenName.substring(1))) {
+        //if (givenName.length() == 2 && givenName.substring(0, 1).equals(givenName.substring(1))) {
             RankRecord record = new RankRecord(givenName);
             record.setScore(ranker.rank(givenName, null));
             rankRecordList.add(record);
             //for (MdxtDict dict : dictList) dict.rank(record);
-        }
+        //}
     }
 }
