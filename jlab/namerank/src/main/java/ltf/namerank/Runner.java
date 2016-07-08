@@ -13,8 +13,8 @@ public class Runner {
     public static void main(String[] args) {
         // new HanziWuxing().run();
         //new WordFeelings().go();
-        //new RankingTest().go();
-        new PinyinTest().go();
+        new RankingTest().go();
+        //new PinyinTest().go();
         //new HanYuDaCidian().listKeys();
     }
 }

@@ -2,6 +2,7 @@ package ltf.namerank.rank.dictrank.support.dict;
 
 import ltf.namerank.rank.RankConfig;
 import ltf.namerank.rank.Ranker;
+import ltf.namerank.rank.dictrank.support.PinyinMap;
 import ltf.namerank.utils.LinesInFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,6 +59,9 @@ abstract public class MdxtDict implements Ranker {
                 if (items == null) {
                     items = new ArrayList<>(5);
                     itemsMap.put(item.getKey(), items);
+
+                    // add into pinyin manager for reverse search
+                    PinyinMap.add(item.getKey());
                 }
                 items.add(item);
             }
