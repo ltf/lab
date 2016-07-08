@@ -13,10 +13,10 @@ public class SumRankers implements Ranker {
     }
 
     @Override
-    public double rank(String target, RankConfig config) {
+    public double rank(String target, RankLogger logger) {
         double rk = 0;
         for (Ranker ranker : rankers)
-            rk += ranker.rank(target, config);
+            rk += ranker.rank(target, logger);
         return rk;
     }
 }

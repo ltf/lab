@@ -1,7 +1,6 @@
 package ltf.namerank.rank;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,12 +32,14 @@ public class CachedRanker extends WrappedRanker {
     }
 
     @Override
-    public double rank(String target, RankConfig config) {
+    public double rank(String target, RankLogger logger) {
+        double rk;
         if (rankCache.containsKey(target))
-            return (double)rankCache.get(target);
-
-        double rk = super.rank(target, config);
-        rankCache.put(target, rk);
+            rk = rankCache.get(target);
+        else {
+            rk = super.rank(target, logger);
+            rankCache.put(target, rk);
+        }
         return rk;
     }
 

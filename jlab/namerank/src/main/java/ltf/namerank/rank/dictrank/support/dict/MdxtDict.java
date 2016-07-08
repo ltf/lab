@@ -1,6 +1,6 @@
 package ltf.namerank.rank.dictrank.support.dict;
 
-import ltf.namerank.rank.RankConfig;
+import ltf.namerank.rank.RankLogger;
 import ltf.namerank.rank.Ranker;
 import ltf.namerank.rank.dictrank.support.PinyinMap;
 import ltf.namerank.utils.LinesInFile;
@@ -73,7 +73,7 @@ abstract public class MdxtDict implements Ranker {
     }
 
     @Override
-    public double rank(String target, RankConfig config) {
+    public double rank(String target, RankLogger logger) {
         return 0;
     }
 

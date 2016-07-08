@@ -157,7 +157,7 @@ public class RankingTest {
         //if (!"清艳".equals(givenName)) return;
         //if (givenName.length() == 2 && givenName.substring(0, 1).equals(givenName.substring(1))) {
         RankRecord record = new RankRecord(givenName);
-        record.setScore(ranker.rank(givenName, null));
+        record.setScore(ranker.rank(givenName, new NopLogger()));
         rankRecordList.add(record);
         //for (MdxtDict dict : dictList) dict.rank(record);
         //}

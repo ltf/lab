@@ -2,7 +2,7 @@ package ltf.namerank.rank.dictrank.support.dict;
 
 import com.hankcs.hanlp.seg.common.Term;
 import com.hankcs.hanlp.tokenizer.StandardTokenizer;
-import ltf.namerank.rank.RankConfig;
+import ltf.namerank.rank.RankLogger;
 import ltf.namerank.rank.dictrank.support.Words;
 
 import java.util.*;
@@ -29,7 +29,7 @@ public class HanYuDaCidian extends MdxtDict {
     }
 
     @Override
-    public double rank(String target, RankConfig config) {
+    public double rank(String target, RankLogger logger) {
         initItems();
         double rk = 0;
         List<MdxtItem> items = itemsMap.get(target);

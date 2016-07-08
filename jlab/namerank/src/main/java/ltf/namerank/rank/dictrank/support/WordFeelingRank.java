@@ -2,7 +2,7 @@ package ltf.namerank.rank.dictrank.support;
 
 import com.alibaba.fastjson.JSON;
 import ltf.namerank.entity.WordFeeling;
-import ltf.namerank.rank.RankConfig;
+import ltf.namerank.rank.RankLogger;
 import ltf.namerank.rank.Ranker;
 
 import java.io.IOException;
@@ -50,7 +50,7 @@ public class WordFeelingRank implements Ranker {
 
 
     @Override
-    public double rank(String target, RankConfig config) {
+    public double rank(String target, RankLogger logger) {
         initWordFeelings();
         double rk = 0;
         for (WordScore wordScore : wordScores) {

@@ -26,10 +26,10 @@ public class AllCasesRanker extends WrappedRanker {
     }
 
     @Override
-    public double rank(String target, RankConfig config) {
+    public double rank(String target, RankLogger logger) {
         double rk = 0;
         for (String word : allCases(target))
-            rk += super.rank(word, config) * word.length() / target.length();
+            rk += super.rank(word, logger) * word.length() / target.length();
         return rk;
     }
 }
