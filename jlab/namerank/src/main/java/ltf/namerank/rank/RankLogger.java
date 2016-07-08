@@ -8,4 +8,8 @@ import java.util.function.Supplier;
  */
 public interface RankLogger {
     void log(Supplier<String> supplier);
+
+    default boolean skipCache() {
+        return false;
+    }
 }

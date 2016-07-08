@@ -30,6 +30,7 @@ public class RankingTest {
     private List<RankRecord> rankRecordList = new LinkedList<>();
 
     private Ranker ranker;
+    private StrLogger logger = new StrLogger();
 
     private void initDicts() {
         if (dictList == null) {
@@ -154,10 +155,12 @@ public class RankingTest {
     }
 
     private void nameRanking(String givenName) {
-        //if (!"清艳".equals(givenName)) return;
+        if (!"清艳".equals(givenName)) return;
         //if (givenName.length() == 2 && givenName.substring(0, 1).equals(givenName.substring(1))) {
         RankRecord record = new RankRecord(givenName);
-        record.setScore(ranker.rank(givenName, new NopLogger()));
+        logger.clearLog();
+        record.setScore(ranker.rank(givenName, logger));
+        System.out.println(logger.getLog());
         rankRecordList.add(record);
         //for (MdxtDict dict : dictList) dict.rank(record);
         //}

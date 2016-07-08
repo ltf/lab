@@ -34,7 +34,7 @@ public class CachedRanker extends WrappedRanker {
     @Override
     public double rank(String target, RankLogger logger) {
         double rk;
-        if (rankCache.containsKey(target))
+        if (rankCache.containsKey(target) && !logger.skipCache())
             rk = rankCache.get(target);
         else {
             rk = super.rank(target, logger);

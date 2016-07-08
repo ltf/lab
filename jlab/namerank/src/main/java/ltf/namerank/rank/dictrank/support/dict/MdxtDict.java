@@ -77,6 +77,11 @@ abstract public class MdxtDict implements Ranker {
         return 0;
     }
 
+
+    protected void log(RankLogger logger, String text) {
+        logger.log(() -> text);
+    }
+
     public void listKeys() {
         initItems();
 //        for (String itemKey : itemsMap.keySet())
