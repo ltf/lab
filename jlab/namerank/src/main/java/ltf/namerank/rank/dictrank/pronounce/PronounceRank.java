@@ -7,6 +7,7 @@ import ltf.namerank.rank.dictrank.support.PinyinMap;
 
 import java.util.Set;
 
+import static ltf.namerank.rank.RankItemHelper.acquireBuilder;
 import static ltf.namerank.rank.RankItemHelper.addInfo;
 import static ltf.namerank.rank.RankItemHelper.flushResult;
 
@@ -21,16 +22,22 @@ public class PronounceRank extends WrappedRanker {
     }
 
     @Override
+    public String getName() {
+        return "发音";
+    }
+
+    @Override
     public double rank(RankItem target) {
         double rk = 0;
         double childRk;
+        acquireBuilder();
         Set<String> words = PinyinMap.getWords(target.getKey());
         for (String word : words) {
             if (target.getKey().equals(word)) continue;
 
             childRk = super.rank(target.newChild(word));
             rk += childRk;
-            addInfo(String.format("%s: %f; ", word, childRk));
+            addInfo(String.format("%s: %.1f; ", word, childRk));
         }
 
         Set<String> wordsNoTone = PinyinMap.getWordsNoTone(target.getKey());
@@ -39,7 +46,7 @@ public class PronounceRank extends WrappedRanker {
 
             childRk = super.rank(target.newChild(word)) * 0.3;
             rk += childRk;
-            addInfo(String.format("%s: %f; ", word, childRk));
+            addInfo(String.format("%s: %.1f; ", word, childRk));
         }
 
         flushResult(target, rk);

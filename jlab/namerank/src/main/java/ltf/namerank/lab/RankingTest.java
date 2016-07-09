@@ -73,12 +73,11 @@ public class RankingTest {
 
             Ranker hanyuCidian = cache(new HanYuDaCidian());
             ranker = cache(new AllCasesRanker(
-                            new SumRankers(
-                                    hanyuCidian,
-                                    cache(new PronounceRank(hanyuCidian))
+                            new SumRankers()
+                                    .addRanker(hanyuCidian, 5)
+                                    .addRanker(cache(new PronounceRank(hanyuCidian)), 1)
                             )
-                    )
-            );
+                    );
             doRanking();
         } catch (IOException e) {
             e.printStackTrace();
@@ -148,7 +147,11 @@ public class RankingTest {
             sb.append(String.format("%s: %f", item.getKey(), item.getScore())).append("\n");
         }
         str2File(sb.toString(), getRawHome() + "/ranking.txt");
-        HtmlGenerator.gen(rankItems, getRawHome() + "/test.htm");
+        List<RankItem> genHtmlItems = new ArrayList<>();
+        for (int i=0; i< (rankItems.size()<1000?rankItems.size():1000); i++){
+            genHtmlItems.add(rankItems.get(i));
+        }
+        HtmlGenerator.gen(genHtmlItems, getRawHome() + "/test.htm");
     }
 
     private void nameRanking(String givenName) {
@@ -157,12 +160,6 @@ public class RankingTest {
         RankItem item = new RankItem(givenName);
         ranker.rank(item);
         rankItems.add(item);
-        System.out.println(item);
-        try {
-            str2File(item.toString(), getRawHome() + "/test.txt");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         //for (MdxtDict dict : dictList) dict.rank(record);
         //}
     }

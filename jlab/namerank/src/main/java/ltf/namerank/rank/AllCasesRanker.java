@@ -3,6 +3,7 @@ package ltf.namerank.rank;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ltf.namerank.rank.RankItemHelper.acquireBuilder;
 import static ltf.namerank.rank.RankItemHelper.addInfo;
 import static ltf.namerank.rank.RankItemHelper.flushResult;
 
@@ -31,11 +32,12 @@ public class AllCasesRanker extends WrappedRanker {
     @Override
     public double rank(RankItem target) {
         double rk = 0;
+        acquireBuilder();
         for (String word : allCases(target.getKey())) {
             double childRk = super.rank(target.newChild(word));
-            double rate = word.length() / target.getKey().length();
+            double rate = (double)word.length() / (double)target.getKey().length();
             rk += childRk * rate;
-            addInfo(String.format("%s: %f x %f; ", word, childRk, rate));
+            addInfo(String.format("%s: %.1f x %.1f; ", word, childRk, rate));
         }
         flushResult(target, rk);
         return rk;

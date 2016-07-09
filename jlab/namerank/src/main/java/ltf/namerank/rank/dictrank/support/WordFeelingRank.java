@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ltf.namerank.rank.RankItemHelper.acquireBuilder;
 import static ltf.namerank.rank.RankItemHelper.addInfo;
 import static ltf.namerank.rank.RankItemHelper.flushResult;
 import static ltf.namerank.utils.FileUtils.file2Str;
@@ -60,6 +61,7 @@ public class WordFeelingRank implements Ranker {
     public double rank(@NotNull RankItem target) {
         initWordFeelings();
         double rk = 0;
+        acquireBuilder();
         for (WordScore wordScore : wordScores) {
             int count = existsCount(target.getKey(), wordScore.getWord());
             rk += wordScore.getScore() * Math.sqrt(count);

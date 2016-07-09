@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static ltf.namerank.rank.RankItemHelper.acquireBuilder;
 import static ltf.namerank.rank.RankItemHelper.addInfo;
 import static ltf.namerank.rank.RankItemHelper.flushResult;
 
@@ -85,12 +86,13 @@ abstract public class MdxtDict implements Ranker {
         initItems();
         double rk = 0;
         List<MdxtItem> items = itemsMap.get(target.getKey());
+        acquireBuilder();
         if (items != null) {
             int i = 1;
             for (MdxtItem item : items) {
                 double childRk = item.rank(target.newChild());
                 rk += childRk;
-                addInfo(String.format("%d: %f; ", i++, childRk));
+                addInfo(String.format("%d: %.1f; ", i++, childRk));
             }
         }
         flushResult(target, rk);

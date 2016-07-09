@@ -2,8 +2,10 @@ package ltf.namerank.rank;
 
 import com.sun.istack.internal.NotNull;
 
-import static ltf.namerank.rank.RankItemHelper.addInfo;
-import static ltf.namerank.rank.RankItemHelper.flushResult;
+import java.util.ArrayList;
+import java.util.List;
+
+import static ltf.namerank.rank.RankItemHelper.*;
 
 /**
  * @author ltf
@@ -11,21 +13,26 @@ import static ltf.namerank.rank.RankItemHelper.flushResult;
  */
 public class SumRankers implements Ranker {
 
-    private Ranker[] rankers;
+    private List<Ranker> rankers = new ArrayList<>();
 
-    public SumRankers(Ranker... rankers) {
-        this.rankers = rankers;
-    }
+    private List<Double> rates = new ArrayList<>();
 
     @Override
     public double rank(@NotNull RankItem target) {
         double rk = 0;
-        for (Ranker ranker : rankers) {
-            double childRk = ranker.rank(target.newChild());
-            rk += childRk;
-            addInfo(String.format("%s: %f; ", ranker.getName(), childRk));
+        acquireBuilder();
+        for (int i = 0; i < rankers.size(); i++) {
+            double childRk = rankers.get(i).rank(target.newChild());
+            rk += childRk * rates.get(i);
+            addInfo(String.format("%s: %.1f x %.1f; ", rankers.get(i).getName(), childRk, rates.get(i)));
         }
         flushResult(target, rk);
         return rk;
+    }
+
+    public SumRankers addRanker(Ranker ranker, double rate) {
+        rankers.add(ranker);
+        rates.add(rate);
+        return this;
     }
 }

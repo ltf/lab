@@ -25,6 +25,11 @@ public class HanYuDaCidian extends MdxtDict {
 
 
     @Override
+    public String getName() {
+        return "汉语大词典";
+    }
+
+    @Override
     protected MdxtItem newItem(String key) {
         return new HanyuDacidianItem(key);
     }
@@ -100,21 +105,21 @@ public class HanYuDaCidian extends MdxtDict {
             double childRk = existsRank(means, positiveSet, infoBuilder);
             if (childRk > 0) {
                 rk += childRk;
-                addInfo(String.format("P1:%f:%s; ", childRk, infoBuilder.toString()));
+                addInfo(String.format("P1:%.1f:%s; ", childRk, infoBuilder.toString()));
             }
 
             infoBuilder.delete(0, infoBuilder.length());
             childRk = existsRank(means, negativeSet, infoBuilder) * 2;
             if (childRk > 0) {
                 rk += childRk;
-                addInfo(String.format("N2:%f:%s; ", childRk, infoBuilder.toString()));
+                addInfo(String.format("N2:%.1f:%s; ", childRk, infoBuilder.toString()));
             }
 
             infoBuilder.delete(0, infoBuilder.length());
             childRk = existsRank(means, butySet, infoBuilder) * 2;
             if (childRk > 0) {
                 rk += childRk;
-                addInfo(String.format("B5:%f:%s; ", childRk, infoBuilder.toString()));
+                addInfo(String.format("B5:%.1f:%s; ", childRk, infoBuilder.toString()));
             }
 
             Rtc.end();

@@ -32,6 +32,11 @@ public class CachedRanker extends WrappedRanker implements TeardownListener {
     }
 
     @Override
+    public String getName() {
+        return getInnerRanker().getName();
+    }
+
+    @Override
     public double rank(RankItem target) {
         double rk;
         if (rankCache.containsKey(target.getKey())) {
