@@ -44,5 +44,8 @@ public class PathUtils {
     public static String getWordsHome() {
         return getDataHome() + "/words";
     }
+    public static String getHtmlHome() {
+        return getDataHome() + "/html";
+    }
 
 }

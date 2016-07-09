@@ -73,10 +73,10 @@ public class RankingTest {
 
             Ranker hanyuCidian = cache(new HanYuDaCidian());
             ranker = cache(new AllCasesRanker(
-                            //new SumRankers(
-                                    hanyuCidian//,
-                                    //cache(new PronounceRank(hanyuCidian))
-                            //)
+                            new SumRankers(
+                                    hanyuCidian,
+                                    cache(new PronounceRank(hanyuCidian))
+                            )
                     )
             );
             doRanking();
@@ -140,7 +140,7 @@ public class RankingTest {
     private void doRanking() throws IOException {
         new LinesInFile(getNamesHome() + "/givenNames.txt").each(this::nameRanking);
 
-        rankItems.sort(RankItem::ascOrder);
+        rankItems.sort(RankItem::descOrder);
 
         StringBuilder sb = new StringBuilder();
         for (RankItem item : rankItems) {
@@ -148,15 +148,21 @@ public class RankingTest {
             sb.append(String.format("%s: %f", item.getKey(), item.getScore())).append("\n");
         }
         str2File(sb.toString(), getRawHome() + "/ranking.txt");
-
+        HtmlGenerator.gen(rankItems, getRawHome() + "/test.htm");
     }
 
     private void nameRanking(String givenName) {
-        if (!"清艳".equals(givenName)) return;
+        if (!"燕婉".equals(givenName)) return;
         //if (givenName.length() == 2 && givenName.substring(0, 1).equals(givenName.substring(1))) {
         RankItem item = new RankItem(givenName);
         ranker.rank(item);
         rankItems.add(item);
+        System.out.println(item);
+        try {
+            str2File(item.toString(), getRawHome() + "/test.txt");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         //for (MdxtDict dict : dictList) dict.rank(record);
         //}
     }

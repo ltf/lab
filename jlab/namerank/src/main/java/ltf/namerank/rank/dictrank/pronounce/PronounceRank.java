@@ -28,7 +28,7 @@ public class PronounceRank extends WrappedRanker {
         for (String word : words) {
             if (target.getKey().equals(word)) continue;
 
-            childRk = super.rank(target.newChild(target.getKey()));
+            childRk = super.rank(target.newChild(word));
             rk += childRk;
             addInfo(String.format("%s: %f; ", word, childRk));
         }
@@ -37,7 +37,7 @@ public class PronounceRank extends WrappedRanker {
         for (String word : wordsNoTone) {
             if (target.getKey().equals(word) || words.contains(word)) continue;
 
-            childRk = super.rank(target.newChild(target.getKey())) * 0.3;
+            childRk = super.rank(target.newChild(word)) * 0.3;
             rk += childRk;
             addInfo(String.format("%s: %f; ", word, childRk));
         }

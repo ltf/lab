@@ -1,5 +1,8 @@
 package ltf.namerank.rank;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,19 +41,29 @@ public class RankItem {
         children.add(child);
     }
 
-    public RankItem newChild(String key) {
+    /**
+     * new child with same key
+     */
+    public RankItem newChild() {
         RankItem child = new RankItem(key);
-        //addChild(child);
+        addChild(child);
         return child;
     }
 
+    /**
+     * new child with different key
+     */
+    public RankItem newChild(String newKey) {
+        RankItem child = new RankItem(newKey);
+        addChild(child);
+        return child;
+    }
 
     public List<RankItem> getChildren() {
         return children;
     }
 
     public String getKey() {
-
         return key;
     }
 
@@ -82,5 +95,42 @@ public class RankItem {
     public int descOrder(RankItem o) {
         double x = score - o.score;
         return x > 0 ? -1 : (x < 0 ? 1 : 0);
+    }
+
+    @Override
+    public String toString() {
+        String title = String.format("[ %s ] (%f) : %s", key, score, info);
+
+        StringBuilder content = new StringBuilder();
+        if (children != null) {
+            for (RankItem item : children) {
+                BufferedReader br = new BufferedReader(new StringReader(item.toString()));
+
+                String line;
+                try {
+                    while ((line = br.readLine()) != null) {
+                        content.append("\t\t").append(line).append("\n");
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+        return title + "\n" + content.toString();
+    }
+
+    public String toHtml(boolean display) {
+        StringBuilder content = new StringBuilder();
+        if (children != null) {
+            for (RankItem item : children) {
+                content.append(item.toHtml(false));
+            }
+        }
+        String disp = "";
+        if (!display) disp = " style=\"display:none;\"";
+        return String.format("<li%s><span>%s (%f)</span>%s<ul>%s</ul></li>",
+                disp, key, score, info, content.toString());
+
     }
 }

@@ -5,6 +5,7 @@ import ltf.namerank.lab.PinyinTest;
 import ltf.namerank.lab.RankingTest;
 import ltf.namerank.rank.dictrank.support.dict.HanYuDaCidian;
 import ltf.namerank.service.EvenManager;
+import ltf.namerank.utils.Rtc;
 
 /**
  * @author ltf
@@ -12,6 +13,7 @@ import ltf.namerank.service.EvenManager;
  */
 public class Runner {
     public static void main(String[] args) {
+        Rtc.begin();
         // new HanziWuxing().run();
         //new WordFeelings().go();
         new RankingTest().go();
@@ -19,7 +21,11 @@ public class Runner {
         //new HanYuDaCidian().listKeys();
 
 
+
         EvenManager.notifyTeardown();
+
+        Rtc.end();
+        System.out.println(Rtc.getReport());
     }
 
 }

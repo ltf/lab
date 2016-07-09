@@ -21,7 +21,7 @@ public class SumRankers implements Ranker {
     public double rank(@NotNull RankItem target) {
         double rk = 0;
         for (Ranker ranker : rankers) {
-            double childRk = ranker.rank(target.newChild(target.getKey()));
+            double childRk = ranker.rank(target.newChild());
             rk += childRk;
             addInfo(String.format("%s: %f; ", ranker.getName(), childRk));
         }

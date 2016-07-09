@@ -5,6 +5,7 @@ import ltf.namerank.rank.RankItem;
 import ltf.namerank.rank.Ranker;
 import ltf.namerank.rank.dictrank.support.PinyinMap;
 import ltf.namerank.utils.LinesInFile;
+import ltf.namerank.utils.Rtc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +35,7 @@ abstract public class MdxtDict implements Ranker {
 
 
     protected void initItems() {
-        long start = System.currentTimeMillis();
+        Rtc.begin();
         if (itemsMap == null) {
             itemsMap = new HashMap<>();
             try {
@@ -43,7 +44,7 @@ abstract public class MdxtDict implements Ranker {
                 logger.warn("load dictionary failed: " + getFileName(), e);
             }
         }
-        System.out.println(System.currentTimeMillis() - start);
+        Rtc.end();
     }
 
     private void loadItems() throws IOException {
@@ -87,7 +88,7 @@ abstract public class MdxtDict implements Ranker {
         if (items != null) {
             int i = 1;
             for (MdxtItem item : items) {
-                double childRk = item.rank(target.newChild(target.getKey()));
+                double childRk = item.rank(target.newChild());
                 rk += childRk;
                 addInfo(String.format("%d: %f; ", i++, childRk));
             }

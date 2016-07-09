@@ -4,6 +4,7 @@ import com.hankcs.hanlp.seg.common.Term;
 import com.hankcs.hanlp.tokenizer.StandardTokenizer;
 import com.sun.istack.internal.NotNull;
 import ltf.namerank.rank.RankItem;
+import ltf.namerank.utils.Rtc;
 
 import java.util.*;
 
@@ -69,6 +70,7 @@ public class HanYuDaCidian extends MdxtDict {
 
         @Override
         public double rank(@NotNull RankItem target) {
+            Rtc.begin();
             String means = "";
             Set<String> words = new HashSet<>();
             for (String explain : explains) {
@@ -115,6 +117,7 @@ public class HanYuDaCidian extends MdxtDict {
                 addInfo(String.format("B5:%f:%s; ", childRk, infoBuilder.toString()));
             }
 
+            Rtc.end();
             return rk;
         }
 
