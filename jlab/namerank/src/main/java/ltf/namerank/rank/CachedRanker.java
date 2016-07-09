@@ -1,17 +1,17 @@
 package ltf.namerank.rank;
 
 import com.alibaba.fastjson.JSON;
+import ltf.namerank.service.TeardownListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static com.alibaba.fastjson.serializer.SerializerFeature.PrettyFormat;
 import static com.alibaba.fastjson.serializer.SerializerFeature.WriteClassName;
+import static ltf.namerank.service.EvenManager.add;
 import static ltf.namerank.utils.FileUtils.file2Str;
 import static ltf.namerank.utils.FileUtils.str2File;
 import static ltf.namerank.utils.PathUtils.getCacheHome;
@@ -20,7 +20,7 @@ import static ltf.namerank.utils.PathUtils.getCacheHome;
  * @author ltf
  * @since 16/7/1, 下午5:01
  */
-public class CachedRanker extends WrappedRanker {
+public class CachedRanker extends WrappedRanker implements TeardownListener {
 
     private Logger logger = LoggerFactory.getLogger(CachedRanker.class);
 
@@ -68,24 +68,18 @@ public class CachedRanker extends WrappedRanker {
     }
 
     protected void flush() {
-        saveCache();
+        if (rankCache.size() > 0)
+            saveCache();
     }
-
-    private static final List<CachedRanker> cachedRankers = new ArrayList<>();
 
     public static CachedRanker cache(Ranker ranker) {
         CachedRanker cachedRanker = new CachedRanker(ranker);
-        cachedRankers.add(cachedRanker);
+        add(cachedRanker);
         return cachedRanker;
     }
 
-    /**
-     * flush cache data to disk
-     */
-    public static void finishAll() {
-        for (CachedRanker ranker : cachedRankers) {
-            ranker.flush();
-        }
-        cachedRankers.clear();
+    @Override
+    public void onTeardown() {
+        //flush();
     }
 }

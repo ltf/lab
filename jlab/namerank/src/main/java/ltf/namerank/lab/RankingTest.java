@@ -80,7 +80,6 @@ public class RankingTest {
                     )
             );
             doRanking();
-            CachedRanker.finishAll();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -153,7 +152,7 @@ public class RankingTest {
     }
 
     private void nameRanking(String givenName) {
-        //if (!"清艳".equals(givenName)) return;
+        if (!"清艳".equals(givenName)) return;
         //if (givenName.length() == 2 && givenName.substring(0, 1).equals(givenName.substring(1))) {
         RankItem item = new RankItem(givenName);
         ranker.rank(item);

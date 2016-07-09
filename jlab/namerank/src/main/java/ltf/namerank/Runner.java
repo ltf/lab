@@ -4,6 +4,7 @@ import ltf.namerank.dataprepare.WordFeelings;
 import ltf.namerank.lab.PinyinTest;
 import ltf.namerank.lab.RankingTest;
 import ltf.namerank.rank.dictrank.support.dict.HanYuDaCidian;
+import ltf.namerank.service.EvenManager;
 
 /**
  * @author ltf
@@ -16,5 +17,9 @@ public class Runner {
         new RankingTest().go();
         //new PinyinTest().go();
         //new HanYuDaCidian().listKeys();
+
+
+        EvenManager.notifyTeardown();
     }
+
 }

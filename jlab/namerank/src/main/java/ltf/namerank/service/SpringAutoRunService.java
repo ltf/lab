@@ -1,13 +1,12 @@
 package ltf.namerank.service;
 
-import ltf.namerank.dataprepare.CalendarTest;
-import ltf.namerank.dataprepare.WordFeelings;
-import ltf.namerank.lab.*;
 import ltf.namerank.dao.DictItemDao;
+import ltf.namerank.dataprepare.WordFeelings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 /**
  * @author ltf
@@ -52,5 +51,10 @@ public class SpringAutoRunService {
 //
 //                }
 //        );
+    }
+
+    @PreDestroy
+    public void preDestroy() {
+        EvenManager.notifyTeardown();
     }
 }
