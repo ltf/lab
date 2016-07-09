@@ -14,21 +14,22 @@ import static ltf.namerank.utils.StrUtils.existsCount;
  * @since 16/7/7, 下午4:55
  */
 public class Words {
-    private Set<String> negative = new HashSet<>();
-    private Set<String> positive = new HashSet<>();
-    private Set<String> buty = new HashSet<>();
+    public final static Set<String> negativeSet = new HashSet<>();
+    public final static Set<String> positiveSet = new HashSet<>();
+    public final static Set<String> butySet = new HashSet<>();
 
 
-    private Words() {
+    static  {
         try {
-            file2Lines(getWordsHome() + "/positive.txt", positive);
-            file2Lines(getWordsHome() + "/negative.txt", negative);
-            file2Lines(getWordsHome() + "/buty.txt", buty);
+            file2Lines(getWordsHome() + "/positive.txt", positiveSet);
+            file2Lines(getWordsHome() + "/negative.txt", negativeSet);
+            file2Lines(getWordsHome() + "/buty.txt", butySet);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    /*
     public static boolean isNegative(String word) {
         return Holder.getInstance().negative.contains(word);
     }
@@ -69,4 +70,5 @@ public class Words {
             return words;
         }
     }
+     */
 }

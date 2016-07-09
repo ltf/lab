@@ -1,10 +1,14 @@
 package ltf.namerank.rank.dictrank.support.dict;
 
+import com.sun.istack.internal.NotNull;
+import ltf.namerank.rank.RankItem;
+import ltf.namerank.rank.Ranker;
+
 /**
  * @author ltf
  * @since 6/21/16, 10:22 PM
  */
-public class MdxtItem {
+public class MdxtItem implements Ranker {
 
     private String key;
 
@@ -42,5 +46,10 @@ public class MdxtItem {
 
     protected boolean isValid() {
         return true;
+    }
+
+    @Override
+    public double rank(@NotNull RankItem target) {
+        return 0;
     }
 }

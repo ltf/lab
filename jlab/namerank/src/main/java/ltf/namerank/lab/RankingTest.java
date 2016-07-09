@@ -11,7 +11,6 @@ import ltf.namerank.utils.LinesInFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,10 +26,9 @@ public class RankingTest {
 
     private List<MdxtDict> dictList;
 
-    private List<RankRecord> rankRecordList = new LinkedList<>();
+    private List<RankItem> rankItems = new LinkedList<>();
 
     private Ranker ranker;
-    private StrLogger logger = new StrLogger();
 
     private void initDicts() {
         if (dictList == null) {
@@ -143,12 +141,12 @@ public class RankingTest {
     private void doRanking() throws IOException {
         new LinesInFile(getNamesHome() + "/givenNames.txt").each(this::nameRanking);
 
-        Collections.sort(rankRecordList);
-        Collections.reverse(rankRecordList);
+        rankItems.sort(RankItem::ascOrder);
+
         StringBuilder sb = new StringBuilder();
-        for (RankRecord record : rankRecordList) {
-            System.out.println(String.format("%s: %f", record.getWord(), record.getScore()));
-            sb.append(String.format("%s: %f", record.getWord(), record.getScore())).append("\n");
+        for (RankItem item : rankItems) {
+            System.out.println(String.format("%s: %f", item.getKey(), item.getScore()));
+            sb.append(String.format("%s: %f", item.getKey(), item.getScore())).append("\n");
         }
         str2File(sb.toString(), getRawHome() + "/ranking.txt");
 
@@ -157,11 +155,9 @@ public class RankingTest {
     private void nameRanking(String givenName) {
         if (!"清艳".equals(givenName)) return;
         //if (givenName.length() == 2 && givenName.substring(0, 1).equals(givenName.substring(1))) {
-        RankRecord record = new RankRecord(givenName);
-        logger.clearLog();
-        record.setScore(ranker.rank(givenName, logger));
-        System.out.println(logger.getLog());
-        rankRecordList.add(record);
+        RankItem item = new RankItem(givenName);
+        ranker.rank(item);
+        rankItems.add(item);
         //for (MdxtDict dict : dictList) dict.rank(record);
         //}
     }

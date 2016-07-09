@@ -1,6 +1,7 @@
 package ltf.namerank.rank.dictrank.support.dict;
 
-import ltf.namerank.rank.RankLogger;
+import com.sun.istack.internal.NotNull;
+import ltf.namerank.rank.RankItem;
 import ltf.namerank.rank.Ranker;
 import ltf.namerank.rank.dictrank.support.PinyinMap;
 import ltf.namerank.utils.LinesInFile;
@@ -12,6 +13,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static ltf.namerank.rank.RankItemHelper.addInfo;
+import static ltf.namerank.rank.RankItemHelper.flushResult;
 
 /**
  * @author ltf
@@ -73,13 +77,20 @@ abstract public class MdxtDict implements Ranker {
     }
 
     @Override
-    public double rank(String target, RankLogger logger) {
-        return 0;
-    }
-
-
-    protected void log(RankLogger logger, String text) {
-        logger.log(() -> text);
+    public double rank(@NotNull RankItem target) {
+        initItems();
+        double rk = 0;
+        List<MdxtItem> items = itemsMap.get(target.getKey());
+        if (items != null) {
+            int i = 1;
+            for (MdxtItem item : items) {
+                double childRk = item.rank(target.newChild(target.getKey()));
+                rk += childRk;
+                addInfo(String.format("%d: %f; ", i++, childRk));
+            }
+        }
+        flushResult(target, rk);
+        return rk;
     }
 
     public void listKeys() {

@@ -13,8 +13,8 @@ public abstract class WrappedRanker implements Ranker {
     }
 
     @Override
-    public double rank(String target, RankLogger logger) {
-        return innerRanker.rank(target, logger);
+    public double rank(RankItem target) {
+        return innerRanker.rank(target);
     }
 
     public Ranker getInnerRanker() {

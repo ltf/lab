@@ -3,6 +3,9 @@ package ltf.namerank.rank;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ltf.namerank.rank.RankItemHelper.addInfo;
+import static ltf.namerank.rank.RankItemHelper.flushResult;
+
 /**
  * @author ltf
  * @since 16/7/1, 下午5:14
@@ -26,10 +29,15 @@ public class AllCasesRanker extends WrappedRanker {
     }
 
     @Override
-    public double rank(String target, RankLogger logger) {
+    public double rank(RankItem target) {
         double rk = 0;
-        for (String word : allCases(target))
-            rk += super.rank(word, logger) * word.length() / target.length();
+        for (String word : allCases(target.getKey())) {
+            double childRk = super.rank(target.newChild(word));
+            double rate = word.length() / target.getKey().length();
+            rk += childRk * rate;
+            addInfo(String.format("%s: %f x %f; ", word, childRk, rate));
+        }
+        flushResult(target, rk);
         return rk;
     }
 }

@@ -1,11 +1,14 @@
 package ltf.namerank.rank.dictrank.pronounce;
 
-import ltf.namerank.rank.RankLogger;
+import ltf.namerank.rank.RankItem;
 import ltf.namerank.rank.Ranker;
 import ltf.namerank.rank.WrappedRanker;
 import ltf.namerank.rank.dictrank.support.PinyinMap;
 
 import java.util.Set;
+
+import static ltf.namerank.rank.RankItemHelper.addInfo;
+import static ltf.namerank.rank.RankItemHelper.flushResult;
 
 /**
  * @author ltf
@@ -18,26 +21,28 @@ public class PronounceRank extends WrappedRanker {
     }
 
     @Override
-    public double rank(String target, RankLogger logger) {
-
+    public double rank(RankItem target) {
         double rk = 0;
-        Set<String> words = PinyinMap.getWords(target);
+        double childRk;
+        Set<String> words = PinyinMap.getWords(target.getKey());
         for (String word : words) {
-            if (target.equals(word)) continue;
+            if (target.getKey().equals(word)) continue;
 
-            rk += super.rank(word, logger);
+            childRk = super.rank(target.newChild(target.getKey()));
+            rk += childRk;
+            addInfo(String.format("%s: %f; ", word, childRk));
         }
 
-        final double finalRk = rk;
-        logger.log(() -> String.format("%f", finalRk));
-
-        Set<String> wordsNoTone = PinyinMap.getWords(target);
+        Set<String> wordsNoTone = PinyinMap.getWords(target.getKey());
         for (String word : wordsNoTone) {
-            if (target.equals(word) || words.contains(word)) continue;
+            if (target.getKey().equals(word) || words.contains(word)) continue;
 
-            rk += super.rank(word, logger) * 0.3;
+            childRk = super.rank(target.newChild(target.getKey())) * 0.3;
+            rk += childRk;
+            addInfo(String.format("%s: %f; ", word, childRk));
         }
 
+        flushResult(target, rk);
 
         return rk;
     }

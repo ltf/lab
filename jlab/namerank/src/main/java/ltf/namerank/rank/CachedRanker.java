@@ -24,7 +24,7 @@ public class CachedRanker extends WrappedRanker {
 
     private Logger logger = LoggerFactory.getLogger(CachedRanker.class);
 
-    private Map<String, Double> rankCache = new HashMap<>();
+    private Map<String, RankItem> rankCache = new HashMap<>();
 
     private CachedRanker(Ranker ranker) {
         super(ranker);
@@ -32,17 +32,18 @@ public class CachedRanker extends WrappedRanker {
     }
 
     @Override
-    public double rank(String target, RankLogger logger) {
+    public double rank(RankItem target) {
         double rk;
-        if (rankCache.containsKey(target) && !logger.skipCache())
-            rk = rankCache.get(target);
-        else {
-            rk = super.rank(target, logger);
-            rankCache.put(target, rk);
+        if (rankCache.containsKey(target.getKey())) {
+            RankItem cachedItem = rankCache.get(target.getKey());
+            target.setBy(cachedItem);
+            rk = cachedItem.getScore();
+        } else {
+            rk = super.rank(target);
+            rankCache.put(target.getKey(), target);
         }
         return rk;
     }
-
 
     private String getCacheFilename() {
         return getCacheHome() + "/" + getInnerRanker().getClass().getCanonicalName() + ".cache";
@@ -59,7 +60,7 @@ public class CachedRanker extends WrappedRanker {
     private void loadCache() {
         try {
             if (new File(getCacheFilename()).exists()) {
-                rankCache = (HashMap<String, Double>) JSON.parseObject(file2Str(getCacheFilename()), HashMap.class);
+                rankCache = (HashMap<String, RankItem>) JSON.parseObject(file2Str(getCacheFilename()), HashMap.class);
             }
         } catch (Exception e) {
             logger.error("load cache failed", e);

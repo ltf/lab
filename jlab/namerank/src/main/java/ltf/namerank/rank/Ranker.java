@@ -7,5 +7,9 @@ import com.sun.istack.internal.NotNull;
  * @since 16/7/1, 下午2:22
  */
 public interface Ranker {
-    double rank(@NotNull String target, @NotNull RankLogger logger);
+    double rank(@NotNull RankItem target);
+
+    default String getName() {
+        return this.getClass().getSimpleName();
+    }
 }

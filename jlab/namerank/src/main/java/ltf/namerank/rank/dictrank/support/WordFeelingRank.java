@@ -1,14 +1,17 @@
 package ltf.namerank.rank.dictrank.support;
 
 import com.alibaba.fastjson.JSON;
+import com.sun.istack.internal.NotNull;
 import ltf.namerank.entity.WordFeeling;
-import ltf.namerank.rank.RankLogger;
+import ltf.namerank.rank.RankItem;
 import ltf.namerank.rank.Ranker;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ltf.namerank.rank.RankItemHelper.addInfo;
+import static ltf.namerank.rank.RankItemHelper.flushResult;
 import static ltf.namerank.utils.FileUtils.file2Str;
 import static ltf.namerank.utils.PathUtils.getJsonHome;
 import static ltf.namerank.utils.StrUtils.existsCount;
@@ -49,20 +52,21 @@ public class WordFeelingRank implements Ranker {
     }
 
 
+    public static WordFeelingRank getInstance() {
+        return Holder.getInstance();
+    }
+
     @Override
-    public double rank(String target, RankLogger logger) {
+    public double rank(@NotNull RankItem target) {
         initWordFeelings();
         double rk = 0;
         for (WordScore wordScore : wordScores) {
-            int count = existsCount(target, wordScore.getWord());
+            int count = existsCount(target.getKey(), wordScore.getWord());
             rk += wordScore.getScore() * Math.sqrt(count);
+            addInfo(String.format("%s %f %d; ", wordScore.getWord(), wordScore.getScore(), count));
         }
+        flushResult(target, rk);
         return rk;
-    }
-
-
-    public static WordFeelingRank getInstance() {
-        return Holder.getInstance();
     }
 
     private static class Holder {
