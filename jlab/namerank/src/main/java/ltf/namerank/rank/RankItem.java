@@ -130,7 +130,7 @@ public class RankItem {
         String disp = "";
         if (!display) disp = " style=\"display:none;\"";
         return String.format("<li%s><span>%s (%f)</span>%s<ul>%s</ul></li>",
-                disp, key, score, info, content.toString());
+                disp, key, score, info == null ? "" : info.replaceAll("\n", "<br>"), content.toString());
 
     }
 }

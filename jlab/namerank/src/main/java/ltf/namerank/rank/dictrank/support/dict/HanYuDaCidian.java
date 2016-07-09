@@ -90,8 +90,8 @@ public class HanYuDaCidian extends MdxtDict {
                     addInfo(word).append("+1");
                 }
                 if (negativeSet.contains(word)) {
-                    rk -= 2;
-                    addInfo(word).append("-2");
+                    rk -= 5;
+                    addInfo(word).append("-5");
                 }
                 if (butySet.contains(word)) {
                     rk += 5;
@@ -105,22 +105,25 @@ public class HanYuDaCidian extends MdxtDict {
             double childRk = existsRank(means, positiveSet, infoBuilder);
             if (childRk > 0) {
                 rk += childRk;
-                addInfo(String.format("P1:%.1f:%s; ", childRk, infoBuilder.toString()));
+                addInfo(String.format("P1x%.1f:%s; ", childRk, infoBuilder.toString()));
             }
 
-            infoBuilder.delete(0, infoBuilder.length());
-            childRk = existsRank(means, negativeSet, infoBuilder) * 2;
+
+            childRk = existsRank(means, negativeSet, infoBuilder) * 20;
             if (childRk > 0) {
-                rk += childRk;
-                addInfo(String.format("N2:%.1f:%s; ", childRk, infoBuilder.toString()));
+                rk += childRk * (-5);
+                addInfo(String.format("N5x%.1f:%s; ", childRk, infoBuilder.toString()));
             }
 
-            infoBuilder.delete(0, infoBuilder.length());
-            childRk = existsRank(means, butySet, infoBuilder) * 2;
+            childRk = existsRank(means, butySet, infoBuilder) * 5;
             if (childRk > 0) {
-                rk += childRk;
-                addInfo(String.format("B5:%.1f:%s; ", childRk, infoBuilder.toString()));
+                rk += childRk * 5;
+                addInfo(String.format("B5x%.1f:%s; ", childRk, infoBuilder.toString()));
             }
+
+            addInfo("\n");
+            addInfo(means);
+            addInfo("\n");
 
             Rtc.end();
             return rk;
@@ -143,7 +146,9 @@ public class HanYuDaCidian extends MdxtDict {
 
             if (infoBuilder != null) {
                 for (int i = 0; i < countWords.length; i++)
-                    countWords[i] = null;
+                    countWords[i] = "";
+
+                infoBuilder.delete(0, infoBuilder.length());
             }
 
             for (String word : words) {
@@ -160,7 +165,7 @@ public class HanYuDaCidian extends MdxtDict {
 
             if (infoBuilder != null) {
                 for (int i = countWords.length - 1; i > 0; i--) {
-                    if (countWords[i] != null) {
+                    if (!"".equals(countWords[i])) {
                         infoBuilder.append(i).append(":").append(countWords[i]).append("; ");
                     }
                 }

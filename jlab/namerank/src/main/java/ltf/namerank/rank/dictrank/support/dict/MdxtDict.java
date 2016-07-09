@@ -92,7 +92,7 @@ abstract public class MdxtDict implements Ranker {
             for (MdxtItem item : items) {
                 double childRk = item.rank(target.newChild());
                 rk += childRk;
-                addInfo(String.format("%d: %.1f; ", i++, childRk));
+                addInfo(String.format("\n%d: %.1f; ", i++, childRk));
             }
         }
         flushResult(target, rk);

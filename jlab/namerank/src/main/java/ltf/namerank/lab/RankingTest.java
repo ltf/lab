@@ -76,8 +76,8 @@ public class RankingTest {
                             new SumRankers()
                                     .addRanker(hanyuCidian, 5)
                                     .addRanker(cache(new PronounceRank(hanyuCidian)), 1)
-                            )
-                    );
+                    ).setFamilyname('李')
+            );
             doRanking();
         } catch (IOException e) {
             e.printStackTrace();
@@ -148,14 +148,14 @@ public class RankingTest {
         }
         str2File(sb.toString(), getRawHome() + "/ranking.txt");
         List<RankItem> genHtmlItems = new ArrayList<>();
-        for (int i=0; i< (rankItems.size()<1000?rankItems.size():1000); i++){
+        for (int i = 0; i < (rankItems.size() < 1000 ? rankItems.size() : 1000); i++) {
             genHtmlItems.add(rankItems.get(i));
         }
         HtmlGenerator.gen(genHtmlItems, getRawHome() + "/test.htm");
     }
 
     private void nameRanking(String givenName) {
-        if (!"燕婉".equals(givenName)) return;
+        //if (!"燕婉".equals(givenName)) return;
         //if (givenName.length() == 2 && givenName.substring(0, 1).equals(givenName.substring(1))) {
         RankItem item = new RankItem(givenName);
         ranker.rank(item);
