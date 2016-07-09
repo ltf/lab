@@ -40,7 +40,7 @@ public class RankItem {
 
     public RankItem newChild(String key) {
         RankItem child = new RankItem(key);
-        addChild(child);
+        //addChild(child);
         return child;
     }
 

@@ -33,7 +33,7 @@ public class PronounceRank extends WrappedRanker {
             addInfo(String.format("%s: %f; ", word, childRk));
         }
 
-        Set<String> wordsNoTone = PinyinMap.getWords(target.getKey());
+        Set<String> wordsNoTone = PinyinMap.getWordsNoTone(target.getKey());
         for (String word : wordsNoTone) {
             if (target.getKey().equals(word) || words.contains(word)) continue;
 

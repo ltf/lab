@@ -96,18 +96,24 @@ public class HanYuDaCidian extends MdxtDict {
 
             StringBuilder infoBuilder = new StringBuilder();
             double childRk = existsRank(means, positiveSet, infoBuilder);
-            rk+=childRk;
-            addInfo(String.format("P1:%f:%s; ", childRk, infoBuilder.toString()));
+            if (childRk > 0) {
+                rk += childRk;
+                addInfo(String.format("P1:%f:%s; ", childRk, infoBuilder.toString()));
+            }
 
-            infoBuilder.delete(0,infoBuilder.length());
-            childRk = existsRank(means, negativeSet, infoBuilder)*2;
-            rk+=childRk;
-            addInfo(String.format("N2:%f:%s; ", childRk, infoBuilder.toString()));
+            infoBuilder.delete(0, infoBuilder.length());
+            childRk = existsRank(means, negativeSet, infoBuilder) * 2;
+            if (childRk > 0) {
+                rk += childRk;
+                addInfo(String.format("N2:%f:%s; ", childRk, infoBuilder.toString()));
+            }
 
-            infoBuilder.delete(0,infoBuilder.length());
-            childRk = existsRank(means, butySet, infoBuilder)*2;
-            rk+=childRk;
-            addInfo(String.format("B5:%f:%s; ", childRk, infoBuilder.toString()));
+            infoBuilder.delete(0, infoBuilder.length());
+            childRk = existsRank(means, butySet, infoBuilder) * 2;
+            if (childRk > 0) {
+                rk += childRk;
+                addInfo(String.format("B5:%f:%s; ", childRk, infoBuilder.toString()));
+            }
 
             return rk;
         }

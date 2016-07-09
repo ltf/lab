@@ -40,38 +40,65 @@ public class PinyinMap {
         list.add(v);
     }
 
-    public static void add(String word) {
-        if (word == null) return;
+    private static String[] toPinyin(String word) {
         try {
             if (word.length() == 1) {
-                String[] pys = PinyinHelper.toHanyuPinyinStringArray(word.charAt(0));
-                if (pys != null) {
-                    for (String py : pys) {
-                        addMapList(pinyin2Words, py, word);
-                        addMapList(pinyin2WordsNoTone, py.replaceAll("\\d", ""), word);
-                    }
-                }
+                return PinyinHelper.toHanyuPinyinStringArray(word.charAt(0));
             } else {
-                String pinyin = PinyinHelper.toHanYuPinyinString(word, format, "", true);
-                addMapList(pinyin2Words, pinyin, word);
-                addMapList(pinyin2WordsNoTone, pinyin.replaceAll("\\d", ""), word);
+                String[] result = new String[1];
+                result[0] = PinyinHelper.toHanYuPinyinString(word, format, "", true);
+                return result;
             }
         } catch (BadHanyuPinyinOutputFormatCombination badHanyuPinyinOutputFormatCombination) {
             badHanyuPinyinOutputFormatCombination.printStackTrace();
         }
+        return null;
     }
 
-    private static Set<String> innerGetWords(Map<String, Set<String>> map, String k) {
-        Set<String> result = map.get(k);
-        if (result == null) result = noWords;
+    private static String[] toPinyinNoTone(String word) {
+        String[] result = toPinyin(word);
+        if (result != null) {
+            for (int i = 0; i < result.length; i++)
+                result[i] = result[i].replaceAll("\\d", "");
+        }
+
         return result;
     }
 
+    public static void add(String word) {
+        if (word == null) return;
+        String[] pys = toPinyin(word);
+        if (pys != null) {
+            for (String py : pys) {
+                addMapList(pinyin2Words, py, word);
+                addMapList(pinyin2WordsNoTone, py.replaceAll("\\d", ""), word);
+            }
+        }
+    }
+
+    private static Set<String> innerGetWords(Map<String, Set<String>> map, String[] pinyins) {
+        if (pinyins == null)
+            return noWords;
+        else if (pinyins.length == 1) {
+            Set<String> result = map.get(pinyins[0]);
+            if (result == null) result = noWords;
+            return result;
+        } else {
+            Set<String> result = new HashSet<>();
+            for (String py : pinyins) {
+                Set<String> oneSet = map.get(py);
+                if (oneSet == null) result.addAll(oneSet);
+            }
+            return result;
+        }
+    }
+
     public static Set<String> getWords(String word) {
-        return innerGetWords(pinyin2Words, word);
+
+        return innerGetWords(pinyin2Words, toPinyin(word));
     }
 
     public static Set<String> getWordsNoTone(String word) {
-        return innerGetWords(pinyin2WordsNoTone, word);
+        return innerGetWords(pinyin2WordsNoTone, toPinyinNoTone(word));
     }
 }
