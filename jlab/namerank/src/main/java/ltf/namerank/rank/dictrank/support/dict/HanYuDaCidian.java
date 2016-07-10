@@ -102,28 +102,28 @@ public class HanYuDaCidian extends MdxtDict {
 
             if (RankSettings.reportMode) addInfo("\n");
 
-            StringBuilder infoBuilder = null;
-            if (RankSettings.reportMode) infoBuilder = new StringBuilder();
-            double childRk = existsRank(means, positiveSet, infoBuilder);
-            if (childRk > 0) {
-                rk += childRk;
-                if (RankSettings.reportMode) addInfo(String.format("P1x%.1f:%s; ", childRk, infoBuilder.toString()));
-            }
-
-
-            childRk = existsRank(means, negativeSet, infoBuilder) * (-5);
-            if (childRk > 0) {
-                rk += childRk * (-5);
-                if (RankSettings.reportMode) addInfo(String.format("N5x%.1f:%s; ", childRk, infoBuilder.toString()));
-            }
-
-            childRk = existsRank(means, butySet, infoBuilder) * 5;
-            if (childRk > 0) {
-                rk += childRk * 5;
-                if (RankSettings.reportMode) addInfo(String.format("B5x%.1f:%s; ", childRk, infoBuilder.toString()));
-            }
-
-            if (RankSettings.reportMode) addInfo("\n");
+//            StringBuilder infoBuilder = null;
+//            if (RankSettings.reportMode) infoBuilder = new StringBuilder();
+//            double childRk = existsRank(means, positiveSet, infoBuilder);
+//            if (childRk > 0) {
+//                rk += childRk;
+//                if (RankSettings.reportMode) addInfo(String.format("P1x%.1f:%s; ", childRk, infoBuilder.toString()));
+//            }
+//
+//
+//            childRk = existsRank(means, negativeSet, infoBuilder) * (-5);
+//            if (childRk > 0) {
+//                rk += childRk * (-5);
+//                if (RankSettings.reportMode) addInfo(String.format("N5x%.1f:%s; ", childRk, infoBuilder.toString()));
+//            }
+//
+//            childRk = existsRank(means, butySet, infoBuilder) * 5;
+//            if (childRk > 0) {
+//                rk += childRk * 5;
+//                if (RankSettings.reportMode) addInfo(String.format("B5x%.1f:%s; ", childRk, infoBuilder.toString()));
+//            }
+//
+//            if (RankSettings.reportMode) addInfo("\n");
             if (RankSettings.reportMode) addInfo(means);
             if (RankSettings.reportMode) addInfo("\n");
 
