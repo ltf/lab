@@ -1,5 +1,6 @@
 package ltf.namerank;
 
+import ltf.namerank.dataprepare.DictNameCollecter;
 import ltf.namerank.dataprepare.WordFeelings;
 import ltf.namerank.lab.PinyinTest;
 import ltf.namerank.lab.RankingTest;
@@ -14,9 +15,11 @@ import ltf.namerank.utils.Rtc;
 public class Runner {
     public static void main(String[] args) {
         Rtc.begin();
+
+        new DictNameCollecter();
         // new HanziWuxing().run();
         //new WordFeelings().go();
-        new RankingTest().go();
+        //new RankingTest().go();
         //new PinyinTest().go();
         //new HanYuDaCidian().listKeys();
 
