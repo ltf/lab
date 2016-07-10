@@ -26,6 +26,8 @@ public class RankingTest {
 
     private List<RankItem> rankItems = new LinkedList<>();
 
+    private List<String> ignoreWords = new ArrayList<>();
+
     private Ranker ranker;
 
     private void initDicts() {
@@ -62,6 +64,32 @@ public class RankingTest {
         //HanyuXgXfCidian dict = new HanyuXgXfCidian();
         //dict.listKeys();
         //dict.debug();
+
+
+//        List<String> list = new ArrayList<>();
+//        try {
+//            file2Lines(getRawHome() + "/ranking4.txt", list);
+//            //file2Lines(getWordsHome() + "/ignore.txt", ignoreWords);
+//            String ignore = "姣娇";
+//            for (int i = list.size() - 1; i >= 0; i--) {
+//                //if (list.get(i).contains("淑")) list.remove(i);
+//                //if (list.get(i).contains("春")) list.remove(i);
+//                if (list.get(i).contains("妍")) list.remove(i);
+//                if (list.get(i).contains("馨")) list.remove(i);
+//                if (list.get(i).contains("雅")) list.remove(i);
+//                if (list.get(i).contains("快")) list.remove(i);
+//                if (list.get(i).contains("熙")) list.remove(i);
+//
+//                for (char c: ignore.toCharArray()){
+//                    if (list.get(i).contains(c+"")) list.remove(i);
+//                }
+//            }
+//
+//            lines2File(list, getRawHome() + "/ranking4.txt");
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
 
         //System.out.println(dict.getItemsMap().size());
@@ -138,6 +166,8 @@ public class RankingTest {
 
     private void doRanking() throws IOException {
 
+        RankSettings.reportMode = true;
+
         file2Lines(getRawHome() + "/picked.txt", picked);
 
         new LinesInFile(getNamesHome() + "/givenNames.txt").each(this::nameRanking);
@@ -159,7 +189,7 @@ public class RankingTest {
 
     private void nameRanking(String givenName) {
         //if (!picked.contains(givenName)) return;
-        //if (!"燕婉".equals(givenName)) return;
+        if (!"钰琦".equals(givenName)) return;
         //if (givenName.length() == 2 && givenName.substring(0, 1).equals(givenName.substring(1))) {
         RankItem item = new RankItem(givenName);
         ranker.rank(item);

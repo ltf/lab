@@ -144,6 +144,7 @@ public class HanYuDaCidian extends MdxtDict {
          * @param infoBuilder infoBuilder, is null will don't generate info
          */
         private static double existsRank(String content, Collection<String> words, StringBuilder infoBuilder) {
+            Rtc.begin();
             double rk = 0;
 
             if (infoBuilder != null) {
@@ -172,6 +173,7 @@ public class HanYuDaCidian extends MdxtDict {
                     }
                 }
             }
+            Rtc.end();
             return rk;
         }
 
