@@ -4,6 +4,7 @@ import com.hankcs.hanlp.seg.common.Term;
 import com.hankcs.hanlp.tokenizer.StandardTokenizer;
 import com.sun.istack.internal.NotNull;
 import ltf.namerank.rank.RankItem;
+import ltf.namerank.rank.RankSettings;
 import ltf.namerank.utils.Rtc;
 
 import java.util.*;
@@ -87,43 +88,44 @@ public class HanYuDaCidian extends MdxtDict {
             for (String word : words) {
                 if (positiveSet.contains(word)) {
                     rk += 1;
-                    addInfo(word).append("+1");
+                    if (RankSettings.reportMode) addInfo(word).append("+1");
                 }
                 if (negativeSet.contains(word)) {
                     rk -= 5;
-                    addInfo(word).append("-5");
+                    if (RankSettings.reportMode) addInfo(word).append("-5");
                 }
                 if (butySet.contains(word)) {
                     rk += 5;
-                    addInfo(word).append("+5");
+                    if (RankSettings.reportMode) addInfo(word).append("+5");
                 }
             }
 
-            addInfo("\n");
+            if (RankSettings.reportMode) addInfo("\n");
 
-            StringBuilder infoBuilder = new StringBuilder();
+            StringBuilder infoBuilder = null;
+            if (RankSettings.reportMode) infoBuilder = new StringBuilder();
             double childRk = existsRank(means, positiveSet, infoBuilder);
             if (childRk > 0) {
                 rk += childRk;
-                addInfo(String.format("P1x%.1f:%s; ", childRk, infoBuilder.toString()));
+                if (RankSettings.reportMode) addInfo(String.format("P1x%.1f:%s; ", childRk, infoBuilder.toString()));
             }
 
 
             childRk = existsRank(means, negativeSet, infoBuilder) * (-5);
             if (childRk > 0) {
                 rk += childRk * (-5);
-                addInfo(String.format("N5x%.1f:%s; ", childRk, infoBuilder.toString()));
+                if (RankSettings.reportMode) addInfo(String.format("N5x%.1f:%s; ", childRk, infoBuilder.toString()));
             }
 
             childRk = existsRank(means, butySet, infoBuilder) * 5;
             if (childRk > 0) {
                 rk += childRk * 5;
-                addInfo(String.format("B5x%.1f:%s; ", childRk, infoBuilder.toString()));
+                if (RankSettings.reportMode) addInfo(String.format("B5x%.1f:%s; ", childRk, infoBuilder.toString()));
             }
 
-            addInfo("\n");
-            addInfo(means);
-            addInfo("\n");
+            if (RankSettings.reportMode) addInfo("\n");
+            if (RankSettings.reportMode) addInfo(means);
+            if (RankSettings.reportMode) addInfo("\n");
 
             Rtc.end();
             return rk;

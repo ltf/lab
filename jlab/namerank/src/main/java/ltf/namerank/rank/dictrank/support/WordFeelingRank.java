@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.sun.istack.internal.NotNull;
 import ltf.namerank.entity.WordFeeling;
 import ltf.namerank.rank.RankItem;
+import ltf.namerank.rank.RankSettings;
 import ltf.namerank.rank.Ranker;
 
 import java.io.IOException;
@@ -61,13 +62,13 @@ public class WordFeelingRank implements Ranker {
     public double rank(@NotNull RankItem target) {
         initWordFeelings();
         double rk = 0;
-        acquireBuilder();
+        if (RankSettings.reportMode) acquireBuilder();
         for (WordScore wordScore : wordScores) {
             int count = existsCount(target.getKey(), wordScore.getWord());
             rk += wordScore.getScore() * Math.sqrt(count);
-            addInfo(String.format("%s %f %d; ", wordScore.getWord(), wordScore.getScore(), count));
+            if (RankSettings.reportMode) addInfo(String.format("%s %f %d; ", wordScore.getWord(), wordScore.getScore(), count));
         }
-        flushResult(target, rk);
+        if (RankSettings.reportMode) flushResult(target, rk);
         return rk;
     }
 

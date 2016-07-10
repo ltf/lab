@@ -140,7 +140,6 @@ public class RankingTest {
 
         file2Lines(getRawHome() + "/picked.txt", picked);
 
-
         new LinesInFile(getNamesHome() + "/givenNames.txt").each(this::nameRanking);
 
         rankItems.sort(RankItem::descOrder);
@@ -155,7 +154,7 @@ public class RankingTest {
         for (int i = 0; i < (rankItems.size() < 1000 ? rankItems.size() : 1000); i++) {
             genHtmlItems.add(rankItems.get(i));
         }
-        HtmlGenerator.gen(genHtmlItems, getRawHome() + "/test.htm");
+        if (RankSettings.reportMode) HtmlGenerator.gen(genHtmlItems, getRawHome() + "/test.htm");
     }
 
     private void nameRanking(String givenName) {
@@ -164,11 +163,6 @@ public class RankingTest {
         //if (givenName.length() == 2 && givenName.substring(0, 1).equals(givenName.substring(1))) {
         RankItem item = new RankItem(givenName);
         ranker.rank(item);
-
-        double sc = item.getScore();
-        item = new RankItem(item.getKey());
-        item.setScore(sc);
-
         rankItems.add(item);
         //for (MdxtDict dict : dictList) dict.rank(record);
         //}

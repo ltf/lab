@@ -35,6 +35,8 @@ public class RankItem {
     }
 
     public void addChild(RankItem child) {
+        // only construct hierarchy structure in report mode
+        if (!RankSettings.reportMode) return;
         if (children == null) {
             children = new ArrayList<>();
         }

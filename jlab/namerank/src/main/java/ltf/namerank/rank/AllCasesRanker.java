@@ -48,14 +48,14 @@ public class AllCasesRanker extends WrappedRanker {
     @Override
     public double rank(RankItem target) {
         double rk = 0;
-        acquireBuilder();
+        if (RankSettings.reportMode) acquireBuilder();
         for (Case cs : allCases(target.getKey())) {
             if (cs.rate == 0) continue;
             double childRk = super.rank(target.newChild(cs.word));
             rk += childRk * cs.rate;
-            addInfo(String.format("%s: %.1f x %.1f; ", cs.word, childRk, cs.rate));
+            if (RankSettings.reportMode) addInfo(String.format("%s: %.1f x %.1f; ", cs.word, childRk, cs.rate));
         }
-        flushResult(target, rk);
+        if (RankSettings.reportMode) flushResult(target, rk);
         return rk;
     }
 

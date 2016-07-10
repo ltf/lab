@@ -2,6 +2,7 @@ package ltf.namerank.rank.dictrank.support.dict;
 
 import com.sun.istack.internal.NotNull;
 import ltf.namerank.rank.RankItem;
+import ltf.namerank.rank.RankSettings;
 import ltf.namerank.rank.Ranker;
 import ltf.namerank.rank.dictrank.support.PinyinMap;
 import ltf.namerank.utils.LinesInFile;
@@ -86,16 +87,16 @@ abstract public class MdxtDict implements Ranker {
         initItems();
         double rk = 0;
         List<MdxtItem> items = itemsMap.get(target.getKey());
-        acquireBuilder();
+        if (RankSettings.reportMode) acquireBuilder();
         if (items != null) {
             int i = 1;
             for (MdxtItem item : items) {
                 double childRk = item.rank(target.newChild());
                 rk += childRk;
-                addInfo(String.format("\n%d: %.1f; ", i++, childRk));
+                if (RankSettings.reportMode) addInfo(String.format("\n%d: %.1f; ", i++, childRk));
             }
         }
-        flushResult(target, rk);
+        if (RankSettings.reportMode) flushResult(target, rk);
         return rk;
     }
 
