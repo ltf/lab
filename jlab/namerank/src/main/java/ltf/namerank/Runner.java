@@ -18,12 +18,12 @@ public class Runner {
     public static void main(String[] args) {
         Rtc.begin();
 
-        new ChoseWords();
+        //new ChoseWords();
         //new NameDataProcessor().go();
         //new DictNameCollecter();
         // new HanziWuxing().run();
         //new WordFeelings().go();
-        //new RankingTest().go();
+        new RankingTest().go();
         //new PinyinTest().go();
         //new HanYuDaCidian().listKeys();
 

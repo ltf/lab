@@ -39,6 +39,12 @@ public class RankingTest {
 
     public void go() {
 
+        try {
+            file2Lines(getWordsHome() + "/fyignore.txt", ignoreWords);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         //new HanYuDaCidian().listKeys();
 
         //testWordFeeling();
@@ -55,6 +61,12 @@ public class RankingTest {
 
 
 //        try {
+//            FileUtils.distinct(getNamesHome() + "/givenNames.txt");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+//        try {
 //            FileUtils.distinct(getWordsHome() + "/positive.txt");
 //            FileUtils.distinct(getWordsHome() + "/negative.txt");
 //        } catch (IOException e) {
@@ -69,7 +81,7 @@ public class RankingTest {
 //        List<String> list = new ArrayList<>();
 //        try {
 //            file2Lines(getRawHome() + "/ranking4.txt", list);
-//            //file2Lines(getWordsHome() + "/ignore.txt", ignoreWords);
+//            //
 //            String ignore = "姣娇";
 //            for (int i = list.size() - 1; i >= 0; i--) {
 //                //if (list.get(i).contains("淑")) list.remove(i);
@@ -96,14 +108,17 @@ public class RankingTest {
 
         //WordFeelingRank.getInstance().listItems();
         try {
-
-            Ranker hanyuCidian = cache(new HanYuDaCidian());
-            ranker = cache(new AllCasesRanker(
-                            new SumRankers()
-                                    .addRanker(hanyuCidian, 5)
-                                    .addRanker(cache(new PronounceRank(hanyuCidian)), 1)
-                    ).setFamilyname('李')
-            );
+            HanYuDaCidian hanYuDaCidian = new HanYuDaCidian();
+            Ranker cachedHanyuCidian = cache(hanYuDaCidian);
+            ranker =
+                    new SumRankers().addRanker(
+                            new AllCasesRanker(
+                                    new SumRankers()
+                                            .addRanker(cachedHanyuCidian, 5)
+                                            .addRanker(cache(new PronounceRank(cachedHanyuCidian)), 1)
+                            ).setFamilyname('李'), 1).addRanker(
+                            new ExistWordRanker(hanYuDaCidian), 1
+                    );
             doRanking();
         } catch (IOException e) {
             e.printStackTrace();
@@ -166,9 +181,8 @@ public class RankingTest {
 
     private void doRanking() throws IOException {
 
-        RankSettings.reportMode = true;
-
-        file2Lines(getRawHome() + "/picked.txt", picked);
+        RankSettings.reportMode = false;
+        //file2Lines(getRawHome() + "/picked2.txt", picked);
 
         new LinesInFile(getNamesHome() + "/givenNames.txt").each(this::nameRanking);
 
@@ -188,8 +202,11 @@ public class RankingTest {
     }
 
     private void nameRanking(String givenName) {
+        for (String ign : ignoreWords) {
+            if (givenName.contains(ign)) return;
+        }
         //if (!picked.contains(givenName)) return;
-        if (!"钰琦".equals(givenName)) return;
+        //if (!"钰琦".equals(givenName)) return;
         //if (givenName.length() == 2 && givenName.substring(0, 1).equals(givenName.substring(1))) {
         RankItem item = new RankItem(givenName);
         ranker.rank(item);

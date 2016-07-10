@@ -55,7 +55,7 @@ public class AllCasesRanker extends WrappedRanker {
             rk += childRk * cs.rate;
             if (RankSettings.reportMode) addInfo(String.format("%s: %.1f x %.1f; ", cs.word, childRk, cs.rate));
         }
-        if (RankSettings.reportMode) flushResult(target, rk);
+        if (RankSettings.reportMode) flushResult(target, rk); else target.setScore(rk);
         return rk;
     }
 

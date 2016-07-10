@@ -68,7 +68,7 @@ public class WordFeelingRank implements Ranker {
             rk += wordScore.getScore() * Math.sqrt(count);
             if (RankSettings.reportMode) addInfo(String.format("%s %f %d; ", wordScore.getWord(), wordScore.getScore(), count));
         }
-        if (RankSettings.reportMode) flushResult(target, rk);
+        if (RankSettings.reportMode) flushResult(target, rk); else target.setScore(rk);
         return rk;
     }
 

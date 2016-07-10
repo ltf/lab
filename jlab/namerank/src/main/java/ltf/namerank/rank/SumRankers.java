@@ -19,14 +19,14 @@ public class SumRankers implements Ranker {
 
     @Override
     public double rank(@NotNull RankItem target) {
-        double rk = 0;
+        double rk = target.getScore();
         if (RankSettings.reportMode) acquireBuilder();
         for (int i = 0; i < rankers.size(); i++) {
             double childRk = rankers.get(i).rank(target.newChild());
             rk += childRk * rates.get(i);
             if (RankSettings.reportMode) addInfo(String.format("%s: %.1f x %.1f; ", rankers.get(i).getName(), childRk, rates.get(i)));
         }
-        if (RankSettings.reportMode) flushResult(target, rk);
+        if (RankSettings.reportMode) flushResult(target, rk); else target.setScore(rk);
         return rk;
     }
 

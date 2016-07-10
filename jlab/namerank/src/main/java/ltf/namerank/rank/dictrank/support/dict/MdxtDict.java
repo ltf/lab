@@ -85,7 +85,7 @@ abstract public class MdxtDict implements Ranker {
     @Override
     public double rank(@NotNull RankItem target) {
         initItems();
-        double rk = 0;
+        double rk = target.getScore();
         List<MdxtItem> items = itemsMap.get(target.getKey());
         if (RankSettings.reportMode) acquireBuilder();
         if (items != null) {
@@ -96,7 +96,7 @@ abstract public class MdxtDict implements Ranker {
                 if (RankSettings.reportMode) addInfo(String.format("\n%d: %.1f; ", i++, childRk));
             }
         }
-        if (RankSettings.reportMode) flushResult(target, rk);
+        if (RankSettings.reportMode) flushResult(target, rk); else target.setScore(rk);
         return rk;
     }
 

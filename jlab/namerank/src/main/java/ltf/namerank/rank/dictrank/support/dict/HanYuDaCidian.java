@@ -5,6 +5,7 @@ import com.hankcs.hanlp.tokenizer.StandardTokenizer;
 import com.sun.istack.internal.NotNull;
 import ltf.namerank.rank.RankItem;
 import ltf.namerank.rank.RankSettings;
+import ltf.namerank.rank.WordExistChecker;
 import ltf.namerank.utils.Rtc;
 
 import java.util.*;
@@ -18,7 +19,7 @@ import static ltf.namerank.utils.StrUtils.existsCount;
  * @author ltf
  * @since 16/6/30, 下午3:30
  */
-public class HanYuDaCidian extends MdxtDict {
+public class HanYuDaCidian extends MdxtDict implements WordExistChecker {
     @Override
     protected String getFileName() {
         return getRawHome() + "/mdx/汉语大词典简体精排.txt";
@@ -33,6 +34,12 @@ public class HanYuDaCidian extends MdxtDict {
     @Override
     protected MdxtItem newItem(String key) {
         return new HanyuDacidianItem(key);
+    }
+
+    @Override
+    public boolean exists(String word) {
+        initItems();
+        return itemsMap.containsKey(word);
     }
 
     private static class HanyuDacidianItem extends MdxtItem {
@@ -84,7 +91,7 @@ public class HanYuDaCidian extends MdxtDict {
                 segment(explain, words);
             }
 
-            double rk = 0;
+            double rk = target.getScore();
             for (String word : words) {
                 if (positiveSet.contains(word)) {
                     rk += 1;
