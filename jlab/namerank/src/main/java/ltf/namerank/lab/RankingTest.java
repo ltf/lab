@@ -10,9 +10,7 @@ import ltf.namerank.rank.dictrank.support.dict.MdxtDict;
 import ltf.namerank.utils.LinesInFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static ltf.namerank.rank.CachedRanker.cache;
 import static ltf.namerank.utils.FileUtils.*;
@@ -136,7 +134,13 @@ public class RankingTest {
         }
     }
 
+    private Set<String> picked = new HashSet<>();
+
     private void doRanking() throws IOException {
+
+        file2Lines(getRawHome() + "/picked.txt", picked);
+
+
         new LinesInFile(getNamesHome() + "/givenNames.txt").each(this::nameRanking);
 
         rankItems.sort(RankItem::descOrder);
@@ -155,10 +159,16 @@ public class RankingTest {
     }
 
     private void nameRanking(String givenName) {
+        //if (!picked.contains(givenName)) return;
         //if (!"燕婉".equals(givenName)) return;
         //if (givenName.length() == 2 && givenName.substring(0, 1).equals(givenName.substring(1))) {
         RankItem item = new RankItem(givenName);
         ranker.rank(item);
+
+        double sc = item.getScore();
+        item = new RankItem(item.getKey());
+        item.setScore(sc);
+
         rankItems.add(item);
         //for (MdxtDict dict : dictList) dict.rank(record);
         //}

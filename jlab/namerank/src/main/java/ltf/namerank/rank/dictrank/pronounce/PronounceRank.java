@@ -7,9 +7,7 @@ import ltf.namerank.rank.dictrank.support.PinyinMap;
 
 import java.util.Set;
 
-import static ltf.namerank.rank.RankItemHelper.acquireBuilder;
-import static ltf.namerank.rank.RankItemHelper.addInfo;
-import static ltf.namerank.rank.RankItemHelper.flushResult;
+import static ltf.namerank.rank.RankItemHelper.*;
 
 /**
  * @author ltf
@@ -35,7 +33,7 @@ public class PronounceRank extends WrappedRanker {
         for (String word : words) {
             if (target.getKey().equals(word)) continue;
 
-            childRk = super.rank(target.newChild(word));
+            childRk = super.rank(new RankItem(word));
             rk += childRk;
             addInfo(String.format("%s: %.1f; ", word, childRk));
         }
@@ -44,9 +42,9 @@ public class PronounceRank extends WrappedRanker {
         for (String word : wordsNoTone) {
             if (target.getKey().equals(word) || words.contains(word)) continue;
 
-            childRk = super.rank(target.newChild(word)) * 0.3;
+            childRk = super.rank(new RankItem(word)) * 0.2;
             rk += childRk;
-            addInfo(String.format("%s: %.1f; ", word, childRk));
+            addInfo(String.format("%s: %.1fx0.2; ", word, childRk));
         }
 
         flushResult(target, rk);

@@ -109,7 +109,7 @@ public class HanYuDaCidian extends MdxtDict {
             }
 
 
-            childRk = existsRank(means, negativeSet, infoBuilder) * 20;
+            childRk = existsRank(means, negativeSet, infoBuilder) * (-5);
             if (childRk > 0) {
                 rk += childRk * (-5);
                 addInfo(String.format("N5x%.1f:%s; ", childRk, infoBuilder.toString()));
