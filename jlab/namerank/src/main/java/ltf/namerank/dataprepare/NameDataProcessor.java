@@ -1,12 +1,16 @@
 package ltf.namerank.dataprepare;
 
+import com.hankcs.hanlp.HanLP;
 import ltf.namerank.utils.LinesInFile;
 
 import java.io.*;
 import java.text.DecimalFormat;
 import java.util.*;
 
+import static ltf.namerank.utils.FileUtils.file2Lines;
 import static ltf.namerank.utils.FileUtils.lines2File;
+import static ltf.namerank.utils.PathUtils.getNamesHome;
+import static ltf.namerank.utils.PathUtils.getRawHome;
 
 
 /**
@@ -27,22 +31,66 @@ public class NameDataProcessor {
 
         try {
             //processDoubleFamilyNames();
-            cleanAllNames();
-            joinAllNames();
+
+            //cleanAllNames();
+            //joinAllNames();
+
+            cleanGivenNames();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void mergeGivenNames() throws IOException {
+        Set<String> ex = new HashSet<>();
+        List<String> out = new ArrayList<>();
+        List<String> in = new ArrayList<>();
+
+
+        file2Lines(getNamesHome() + "/givenNames.txt", out);
+        file2Lines(getRawHome() + "/givenNames.txt", in);
+        ex.addAll(out);
+
+        for (String name : in) {
+            name = HanLP.convertToSimplifiedChinese(name);
+            if (!ex.contains(name))
+                out.add(name);
+        }
+
+
+        lines2File(out, getNamesHome() + "/givenNames.txt");
+    }
+
+    private void cleanGivenNames() throws IOException {
+        Set<String> ex = new HashSet<>();
+        List<String> out = new ArrayList<>();
+        List<String> in = new ArrayList<>();
+
+
+        file2Lines(getNamesHome() + "/givenNames.txt", out);
+        file2Lines(getRawHome() + "/givenNames.txt", in);
+        ex.addAll(out);
+
+        for (String name : in) {
+            name = HanLP.convertToSimplifiedChinese(name);
+            if (!ex.contains(name))
+                out.add(name);
+        }
+
+
+        lines2File(out, getNamesHome() + "/givenNames.txt");
     }
 
     private void joinAllNames() throws IOException {
         Set<String> names = new HashSet<>();
         Map<String, Integer> familyNames = new HashMap<>();
         Map<String, Integer> givenNames = new HashMap<>();
-        new LinesInFile(dfn("10w.txt.cleaned")).each(names::add);
-        new LinesInFile(dfn("260w.txt.cleaned")).each(names::add);
-        new LinesInFile(dfn("3k_female.txt.cleaned")).each(names::add);
-        new LinesInFile(dfn("3k_male.txt.cleaned")).each(names::add);
-        new LinesInFile(dfn("50w.txt.cleaned")).each(names::add);
+//        new LinesInFile(dfn("10w.txt.cleaned")).each(names::add);
+//        new LinesInFile(dfn("260w.txt.cleaned")).each(names::add);
+//        new LinesInFile(dfn("3k_female.txt.cleaned")).each(names::add);
+//        new LinesInFile(dfn("3k_male.txt.cleaned")).each(names::add);
+//        new LinesInFile(dfn("50w.txt.cleaned")).each(names::add);
+        new LinesInFile(dfn("newNames.txt.cleaned")).each(names::add);
 
         System.out.println(String.format("names count: %d", names.size()));
 
@@ -81,11 +129,12 @@ public class NameDataProcessor {
     }
 
     private void cleanAllNames() throws IOException {
-        cleanNames("gbk", dfn("10w.txt"));
-        cleanNames("gbk", dfn("260w.txt"));
-        cleanNames("gbk", dfn("3k_female.txt"));
-        cleanNames("gbk", dfn("3k_male.txt"));
-        cleanNames("utf8", dfn("50w.txt"));
+//        cleanNames("gbk", dfn("10w.txt"));
+//        cleanNames("gbk", dfn("260w.txt"));
+//        cleanNames("gbk", dfn("3k_female.txt"));
+//        cleanNames("gbk", dfn("3k_male.txt"));
+//        cleanNames("utf8", dfn("50w.txt"));
+        cleanNames("utf8", dfn("newNames.txt"));
     }
 
     private void cleanNames(String encoding, String fn) throws IOException {
@@ -131,7 +180,10 @@ public class NameDataProcessor {
 
     private void initDoubleFamilyNames() throws IOException {
         doubleFamilyNames = new HashSet<>();
-        new LinesInFile(dfn("doubleFamilyName.txt")).each(doubleFamilyNames::add);
+        new LinesInFile(dfn("doubleFamilyName.txt")).each(s -> {
+            if (s != null && s.length() == 2) doubleFamilyNames.add(s);
+
+        });
     }
 
     private void processDoubleFamilyNames() throws IOException {
@@ -182,7 +234,7 @@ public class NameDataProcessor {
      * return $data_path/filename
      */
     private String dfn(final String filename) {
-        return "/Users/f/labfy/test1/data/" + filename;
+        return getRawHome() + "/" + filename;
     }
 
 
