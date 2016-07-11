@@ -1,7 +1,6 @@
 package ltf.namerank.rank.dictrank.support.dict;
 
 import com.alibaba.fastjson.JSON;
-import ltf.namerank.rank.dictrank.support.Cipin;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -34,7 +33,7 @@ public class HanyuCipinCd extends MdxtDict {
     private static class CipinItem extends MdxtItem {
 
         private boolean enable;
-        private Cipin cipin;
+        private ltf.namerank.rank.dictrank.support.CipinItem cipin;
 
         CipinItem(String key) {
             super(key);
@@ -53,7 +52,7 @@ public class HanyuCipinCd extends MdxtDict {
         @Override
         protected void addValue(String valueLine) {
             if (!enable) return;
-            if (cipin == null) cipin = new Cipin();
+            if (cipin == null) cipin = new ltf.namerank.rank.dictrank.support.CipinItem();
             if (valueLine.contains(">国<")) {
                 Matcher matcher = pCJ.matcher(valueLine);
                 if (matcher.find()) {
@@ -92,7 +91,7 @@ public class HanyuCipinCd extends MdxtDict {
         }
     }
 
-    private static Map<String, Cipin> cipins = new HashMap<>();
+    private static Map<String, ltf.namerank.rank.dictrank.support.CipinItem> cipins = new HashMap<>();
 
 
     private static void saveData() {
