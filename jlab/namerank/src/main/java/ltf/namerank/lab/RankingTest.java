@@ -126,15 +126,14 @@ public class RankingTest {
 
             ExistWordRanker existWordRanker = new ExistWordRanker(hanYuDaCidian);
 
-            BihuaRanker bihuaRanker = new BihuaRanker()
-                    .addWantedChar('金', 100)
-                    .addWantedChar('水', 80);
+//            BihuaRanker bihuaRanker = new BihuaRanker()
+//                    .addWantedChar('金', 100)
+//                    .addWantedChar('水', 80);
 
 
             ranker = new SumRankers()
                     .addRanker(allCasesRanker, 1)
-                    .addRanker(existWordRanker, 1)
-                    .addRanker(bihuaRanker, 1);
+                    .addRanker(existWordRanker, 1);
 
             doRanking();
         } catch (IOException e) {

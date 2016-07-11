@@ -31,4 +31,9 @@ public class ExistWordRanker implements Ranker {
 
         return rk;
     }
+
+    @Override
+    public String getName() {
+        return "常用词分析";
+    }
 }

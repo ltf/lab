@@ -46,6 +46,11 @@ public class AllCasesRanker extends WrappedRanker {
     }
 
     @Override
+    public String getName() {
+        return "组合分析";
+    }
+
+    @Override
     public double rank(RankItem target) {
         double rk = 0;
         if (RankSettings.reportMode) acquireBuilder();

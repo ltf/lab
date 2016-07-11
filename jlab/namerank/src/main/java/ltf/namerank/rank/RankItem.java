@@ -101,7 +101,7 @@ public class RankItem {
 
     @Override
     public String toString() {
-        String title = String.format("[ %s ] (%f) : %s", key, score, info);
+        String title = String.format("[ %s ] (%.1f) : %s", key, score, info);
 
         StringBuilder content = new StringBuilder();
         if (children != null) {
@@ -131,7 +131,7 @@ public class RankItem {
         }
         String disp = "";
         if (!display) disp = " style=\"display:none;\"";
-        return String.format("<li%s><span>%s (%f)</span>%s<ul>%s</ul></li>",
+        return String.format("<li%s><span>%s (%.1f)</span>%s<ul>%s</ul></li>",
                 disp, key, score, info == null ? "" : info.replaceAll("\n", "<br>"), content.toString());
 
     }
