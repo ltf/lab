@@ -1,15 +1,8 @@
 package ltf.namerank.rank.dictrank.support.dict;
 
-import com.alibaba.fastjson.JSON;
-
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.alibaba.fastjson.serializer.SerializerFeature.PrettyFormat;
-import static com.alibaba.fastjson.serializer.SerializerFeature.WriteClassName;
-import static ltf.namerank.utils.FileUtils.str2File;
-import static ltf.namerank.utils.PathUtils.getJsonHome;
 import static ltf.namerank.utils.PathUtils.getRawHome;
 
 /**
@@ -53,18 +46,18 @@ public class HanziBihuaxuCd extends MdxtDict {
                 bihua = getKey();
                 word = getValue(valueLine);
                 //if (!bihuaMap.containsKey(word)) bihuaMap.put(word, bihua);
-                if (!("2`丨".equals(word) ||"2`亅".equals(word)))
-                    addToBihuaMap(word,bihua);
+                if (!("2`丨".equals(word) || "2`亅".equals(word)))
+                    addToBihuaMap(word, bihua);
             } else {
                 word = getKey();
                 bihua = getValue(valueLine);
-                addToBihuaMap(word,bihua);
+                addToBihuaMap(word, bihua);
                 //if (valueLine.endsWith(bihua.))
             }
         }
 
-        private void addToBihuaMap(String word, String bihua){
-            if (word.length()>1)throw new IllegalStateException(getKey() + " = len>1 = " + word);
+        private void addToBihuaMap(String word, String bihua) {
+            if (word.length() > 1) throw new IllegalStateException(getKey() + " = len>1 = " + word);
             if (bihuaMap.containsKey(word)) {
                 //throw new IllegalStateException(getKey() + " = repeated = " + word);
                 if (!bihua.equals(bihuaMap.get(word)))
@@ -72,6 +65,7 @@ public class HanziBihuaxuCd extends MdxtDict {
 
             } else {
                 bihuaMap.put(word, bihua);
+                //bihuaMap.put(word.toCharArray()[0], bihua);
             }
         }
 
@@ -94,16 +88,20 @@ public class HanziBihuaxuCd extends MdxtDict {
 
     private static Map<String, String> bihuaMap = new HashMap<>();
 
+    private static void saveData() {
+//        try {
+//            str2File(JSON.toJSONString(bihuaMap, WriteClassName, PrettyFormat), getJsonHome()+"/bihua.json");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+    }
+
     @Override
     public void listKeys() {
         initItems();
         System.out.println(itemsMap.size());
         System.out.println(bihuaMap.size());
         System.out.println(itemsMap.size() - bihuaMap.size());
-//        try {
-//            str2File(JSON.toJSONString(bihuaMap, WriteClassName, PrettyFormat), getJsonHome()+"/bihua.json");
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+
     }
 }
