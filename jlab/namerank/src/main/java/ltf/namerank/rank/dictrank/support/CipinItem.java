@@ -15,44 +15,4 @@ public class CipinItem {
     // 人民日报词频
     public Integer bc;   // 词次
     public Integer bg;   // 结构词次
-
-    public Integer getBg() {
-        return bg;
-    }
-
-    public void setBg(Integer bg) {
-        this.bg = bg;
-    }
-
-    public Integer getBc() {
-        return bc;
-    }
-
-    public void setBc(Integer bc) {
-        this.bc = bc;
-    }
-
-    public Integer getXc() {
-        return xc;
-    }
-
-    public void setXc(Integer xc) {
-        this.xc = xc;
-    }
-
-    public Integer getXj() {
-        return xj;
-    }
-
-    public void setXj(Integer xj) {
-        this.xj = xj;
-    }
-
-    public Integer getGj() {
-        return gj;
-    }
-
-    public void setGj(Integer gj) {
-        this.gj = gj;
-    }
 }
