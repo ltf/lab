@@ -19,7 +19,7 @@ public class ExistWordRanker implements Ranker {
 
     @Override
     public double rank(@NotNull RankItem target) {
-        double rk = target.getScore();
+        double rk = 0;
         if (RankSettings.reportMode) acquireBuilder();
         if (checker.exists(target.getKey())) {
             rk += -200;

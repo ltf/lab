@@ -85,7 +85,7 @@ abstract public class MdxtDict implements Ranker {
     @Override
     public double rank(@NotNull RankItem target) {
         initItems();
-        double rk = target.getScore();
+        double rk = 0;
         List<MdxtItem> items = itemsMap.get(target.getKey());
         if (RankSettings.reportMode) acquireBuilder();
         if (items != null) {

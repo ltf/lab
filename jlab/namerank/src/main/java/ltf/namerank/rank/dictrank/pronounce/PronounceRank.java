@@ -27,7 +27,7 @@ public class PronounceRank extends WrappedRanker {
 
     @Override
     public double rank(RankItem target) {
-        double rk = target.getScore();
+        double rk = 0;
         double childRk;
         if (RankSettings.reportMode) acquireBuilder();
         Set<String> words = PinyinMap.getWords(target.getKey());

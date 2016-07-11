@@ -38,13 +38,17 @@ public class BihuaRanker implements Ranker {
 
     @Override
     public double rank(@NotNull RankItem target) {
-        double rk = target.getScore();
+        double rk = 0;
         if (RankSettings.reportMode) acquireBuilder();
 
         for (int i = 0; i < exists.size(); i++) exists.set(0, false);
 
         for (char c : target.getKey().toCharArray()) {
             String bh = bihua.char2Bihua(c);
+            if (bh == null) {
+                System.out.println(String.format("can't find binhua info for %s", c));
+                continue;
+            }
             for (int i = 0; i < wantedBihuas.size(); i++) {
                 if (exists.get(i)) continue;
 

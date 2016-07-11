@@ -19,7 +19,7 @@ public class SumRankers implements Ranker {
 
     @Override
     public double rank(@NotNull RankItem target) {
-        double rk = target.getScore();
+        double rk = 0;
         if (RankSettings.reportMode) acquireBuilder();
         for (int i = 0; i < rankers.size(); i++) {
             double childRk = rankers.get(i).rank(target.newChild());
