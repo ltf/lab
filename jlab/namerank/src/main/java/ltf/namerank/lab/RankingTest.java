@@ -37,7 +37,13 @@ public class RankingTest {
         }
     }
 
+    private void testNewDict(){
+
+    }
+
     public void go() {
+
+        testNewDict();
 
         try {
             file2Lines(getWordsHome() + "/fyignore.txt", ignoreWords);

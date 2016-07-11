@@ -40,8 +40,10 @@ public class MdxtItem implements Ranker {
     }
 
     protected void finishAdd() {
-        value = stringBuilder.toString();
-        stringBuilder = null;
+        if (stringBuilder != null) {
+            value = stringBuilder.toString();
+            stringBuilder = null;
+        }
     }
 
     protected boolean isValid() {

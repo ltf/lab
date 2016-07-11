@@ -102,8 +102,8 @@ abstract public class MdxtDict implements Ranker {
 
     public void listKeys() {
         initItems();
-//        for (String itemKey : itemsMap.keySet())
-//            System.out.println(itemKey);
+        for (String itemKey : itemsMap.keySet())
+            System.out.println(itemKey);
 
         System.out.println(itemsMap.size());
     }

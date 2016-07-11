@@ -4,6 +4,7 @@ import ltf.namerank.dataprepare.ChoseWords;
 import ltf.namerank.dataprepare.DictNameCollecter;
 import ltf.namerank.dataprepare.NameDataProcessor;
 import ltf.namerank.dataprepare.WordFeelings;
+import ltf.namerank.lab.NewDictTest;
 import ltf.namerank.lab.PinyinTest;
 import ltf.namerank.lab.RankingTest;
 import ltf.namerank.rank.dictrank.support.dict.HanYuDaCidian;
@@ -23,7 +24,8 @@ public class Runner {
         //new DictNameCollecter();
         // new HanziWuxing().run();
         //new WordFeelings().go();
-        new RankingTest().go();
+        //new RankingTest().go();
+        new NewDictTest();
         //new PinyinTest().go();
         //new HanYuDaCidian().listKeys();
 
