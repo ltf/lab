@@ -195,11 +195,13 @@ public class RankingTest {
     }
 
     private Set<String> picked = new HashSet<>();
+    private static final String PICKED_LIST = getRawHome() + "/picked.txt";
 
     private void doRanking() throws IOException {
 
-        RankSettings.reportMode = false;
-        //file2Lines(getRawHome() + "/picked2.txt", picked);
+        RankSettings.reportMode = true;
+        if (exists(PICKED_LIST))
+            file2Lines(PICKED_LIST, picked);
 
         new LinesInFile(getNamesHome() + "/givenNames.txt").each(this::nameRanking);
 
@@ -222,7 +224,7 @@ public class RankingTest {
         for (String ign : ignoreWords) {
             if (givenName.contains(ign)) return;
         }
-        //if (!picked.contains(givenName)) return;
+        if (!picked.contains(givenName)) return;
         //if (!"钰琦".equals(givenName)) return;
         //if (givenName.length() == 2 && givenName.substring(0, 1).equals(givenName.substring(1))) {
         RankItem item = new RankItem(givenName);
