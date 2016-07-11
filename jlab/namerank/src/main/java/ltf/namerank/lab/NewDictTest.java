@@ -1,6 +1,7 @@
 package ltf.namerank.lab;
 
 import ltf.namerank.rank.dictrank.support.Bihua;
+import ltf.namerank.rank.dictrank.support.dict.HanyuCipinCd;
 import ltf.namerank.rank.dictrank.support.dict.HanziBihuaxuCd;
 
 /**
@@ -15,8 +16,9 @@ public class NewDictTest {
 
     private static void testNewDict() {
 
-//        HanziBihuaxuCd cd = new HanziBihuaxuCd();
-//        cd.listKeys();
+        HanyuCipinCd cd = new HanyuCipinCd();
+
+        cd.listKeys();
 
         //System.out.println(new Bihua().char2Bihua("金"));
 
