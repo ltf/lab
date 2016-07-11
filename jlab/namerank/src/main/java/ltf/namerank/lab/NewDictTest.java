@@ -18,7 +18,7 @@ public class NewDictTest {
 //        HanziBihuaxuCd cd = new HanziBihuaxuCd();
 //        cd.listKeys();
 
-        System.out.println(new Bihua().char2Bihua("金"));
+        //System.out.println(new Bihua().char2Bihua("金"));
 
     }
 

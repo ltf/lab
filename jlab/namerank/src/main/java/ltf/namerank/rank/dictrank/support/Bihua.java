@@ -27,8 +27,8 @@ public class Bihua {
         }
     }
 
-    public String char2Bihua(String zi) {
+    public String char2Bihua(char zi) {
         checkOrLoad();
-        return bihuaMap.get(zi);
+        return bihuaMap.get(String.valueOf(zi));
     }
 }

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.hankcs.hanlp.dictionary.CoreSynonymDictionary;
 import ltf.namerank.entity.WordFeeling;
 import ltf.namerank.rank.*;
+import ltf.namerank.rank.dictrank.BihuaRanker;
 import ltf.namerank.rank.dictrank.pronounce.PronounceRank;
 import ltf.namerank.rank.dictrank.support.dict.HanYuDaCidian;
 import ltf.namerank.rank.dictrank.support.dict.MdxtDict;
@@ -37,7 +38,7 @@ public class RankingTest {
         }
     }
 
-    private void testNewDict(){
+    private void testNewDict() {
 
     }
 
@@ -115,16 +116,26 @@ public class RankingTest {
         //WordFeelingRank.getInstance().listItems();
         try {
             HanYuDaCidian hanYuDaCidian = new HanYuDaCidian();
-            Ranker cachedHanyuCidian = cache(hanYuDaCidian);
-            ranker =
-                    new SumRankers().addRanker(
-                            new AllCasesRanker(
-                                    new SumRankers()
-                                            .addRanker(cachedHanyuCidian, 5)
-                                            .addRanker(cache(new PronounceRank(cachedHanyuCidian)), 1)
-                            ).setFamilyname('李'), 1).addRanker(
-                            new ExistWordRanker(hanYuDaCidian), 1
-                    );
+            CachedRanker cachedHanyuCidian = cache(hanYuDaCidian);
+
+            AllCasesRanker allCasesRanker = new AllCasesRanker(
+                    new SumRankers()
+                            .addRanker(cachedHanyuCidian, 5)
+                            .addRanker(cache(new PronounceRank(cachedHanyuCidian)), 1)
+            ).setFamilyname('李');
+
+            ExistWordRanker existWordRanker = new ExistWordRanker(hanYuDaCidian);
+
+            BihuaRanker bihuaRanker = new BihuaRanker()
+                    .addWantedChar('金', 100)
+                    .addWantedChar('水', 80);
+
+
+            ranker = new SumRankers()
+                    .addRanker(allCasesRanker, 1)
+                    .addRanker(existWordRanker, 1)
+                    .addRanker(bihuaRanker, 1);
+
             doRanking();
         } catch (IOException e) {
             e.printStackTrace();
