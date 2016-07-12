@@ -9,8 +9,10 @@ import ltf.namerank.utils.LinesInFile;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import static com.alibaba.fastjson.serializer.SerializerFeature.PrettyFormat;
+import static ltf.namerank.utils.FileUtils.file2Str;
 import static ltf.namerank.utils.FileUtils.str2File;
 import static ltf.namerank.utils.PathUtils.getJsonHome;
 import static ltf.namerank.utils.PathUtils.getRawHome;
@@ -26,7 +28,74 @@ public class WugeDataCollect {
 
     private void collect() {
         try {
-            collectXingmingxueBihua();
+            //collectXingmingxueBihua();
+
+            loadBihuaData();
+            collectXingmingxue_Wuxing();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private static class WuxingBihua {
+        public String wx;
+        public Integer bh;
+
+        public WuxingBihua(String wx, Integer bh) {
+            this.wx = wx;
+            this.bh = bh;
+        }
+    }
+
+    private static final String patternStr = "(.)（(\\d{1,2})";
+    private final Pattern pattern = Pattern.compile(patternStr);
+
+    private Map<String, WuxingBihua> wuxingMap = new HashMap<>();
+
+    private String wuxing = "";
+
+    private void collectXingmingxue_Wuxing() throws IOException {
+        wuge_bihuashu = 0;
+        new LinesInFile(getRawHome() + "/xingmingxue_pdf_wuxing.txt").each(s -> {
+            if (s.trim().endsWith("五行")||s.trim().endsWith("五行")) {
+                flushWuxing(wuxing);
+                wuxing = s.substring(0, 1);
+                if ("2".equals(s.substring(1, 2))) wuxing += "(2)";
+            } else {
+                strBuilder.append(s);
+            }
+        });
+        flushWuxing(wuxing);
+        saveWuxingData();
+        System.out.println(wuxingMap.size());
+    }
+
+    private void flushWuxing(String wuxing) {
+        if ("".equals(wuxing)) return;
+        String words = strBuilder.toString();
+        words = words.replaceAll(" ", "").replaceAll(",", "");
+
+        Matcher matcher = pattern.matcher(words);
+        while (matcher.find()) {
+            String k = matcher.group(1);
+            Integer bihua = Integer.parseInt(matcher.group(2));
+            wuxingMap.put(k, new WuxingBihua(wuxing, bihua));
+            Integer bihua2 = wugeBihua.get(k);
+
+            if (!bihua.equals(bihua2)) {
+                System.out.println(String.format("%s  this:%d  alone:%d ",
+                        k, bihua, bihua2));
+            }
+        }
+
+        strBuilder.delete(0, strBuilder.length());
+    }
+
+
+    private void saveWuxingData() {
+        try {
+            str2File(JSON.toJSONString(wuxingMap, true), getJsonHome() + "/xingmingxue_pdf_wuxing.json");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -47,7 +116,7 @@ public class WugeDataCollect {
             }
         });
         flushXingmingxueBihua(wuge_bihuashu);
-        saveData();
+        //saveData();
 
         System.out.println(wugeBihua.size());
     }
@@ -56,7 +125,7 @@ public class WugeDataCollect {
         String words = strBuilder.toString();
         words = words.replaceAll(" ", "").replaceAll(",", "");
         for (char c : words.toCharArray()) {
-            wugeBihua.put(c+"", bihuashu);
+            wugeBihua.put(c + "", bihuashu);
             //verifyWithOldDict(c, bihuashu);
             //System.out.println(c + " " + bihuashu);
         }
@@ -64,9 +133,18 @@ public class WugeDataCollect {
         strBuilder.delete(0, strBuilder.length());
     }
 
-    private void saveData() {
+    private void saveBihuaData() {
         try {
             str2File(JSON.toJSONString(wugeBihua, true), getJsonHome() + "/xingmingxue_pdf_bihua.json");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadBihuaData() {
+        try {
+            wugeBihua = (HashMap<String, Integer>) JSON.parseObject(file2Str(getJsonHome() + "/xingmingxue_pdf_bihua.json"),
+                    HashMap.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -87,8 +165,4 @@ public class WugeDataCollect {
         }
     }
 
-
-    private void collectXingmingxueWuxing() {
-
-    }
 }
