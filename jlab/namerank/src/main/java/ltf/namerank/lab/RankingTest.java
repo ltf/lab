@@ -5,6 +5,7 @@ import com.hankcs.hanlp.dictionary.CoreSynonymDictionary;
 import ltf.namerank.entity.WordFeeling;
 import ltf.namerank.rank.*;
 import ltf.namerank.rank.dictrank.pronounce.PronounceRank;
+import ltf.namerank.rank.dictrank.pronounce.YinYunFilter;
 import ltf.namerank.rank.dictrank.support.dict.HanYuDaCidian;
 import ltf.namerank.rank.dictrank.support.dict.MdxtDict;
 import ltf.namerank.rank.filter.BlacklistCharsFilter;
@@ -31,7 +32,7 @@ public class RankingTest {
 
     private Ranker ranker;
 
-    private RankFilter filter;
+    private ChainedFilter filter;
 
     private void initDicts() {
         if (dictList == null) {
@@ -131,15 +132,18 @@ public class RankingTest {
                     .addRanker(existWordRanker, 1);
 
             BlacklistCharsFilter blacklistCharsFilter = new BlacklistCharsFilter()
-                    .addChars(getWordsHome() + "fyignore.txt")
-                    .addChars(getWordsHome() + "taboo_girl.txt");
+                    .addChars(getWordsHome() + "/fyignore.txt")
+                    .addChars(getWordsHome() + "/taboo_girl.txt");
 
             filter = new ChainedFilter()
                     .add(new LengthFilter())
                     .add(blacklistCharsFilter)
+                    .add(new YinYunFilter())
             ;
 
             doRanking();
+
+            filter.printBannedCount();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -202,9 +206,9 @@ public class RankingTest {
 
     private void doRanking() throws IOException {
 
-        RankSettings.reportMode = true;
-        if (exists(PICKED_LIST))
-            file2Lines(PICKED_LIST, picked);
+        //RankSettings.reportMode = true;
+
+        if (RankSettings.reportMode && exists(PICKED_LIST)) file2Lines(PICKED_LIST, picked);
 
         new LinesInFile(getNamesHome() + "/givenNames.txt").each(this::nameRanking);
 
@@ -225,7 +229,7 @@ public class RankingTest {
 
     private void nameRanking(String givenName) {
         if (filter.banned(givenName)) return;
-        if (!picked.contains(givenName)) return;
+        if (RankSettings.reportMode && !picked.contains(givenName)) return;
         //if (!"钰琦".equals(givenName)) return;
         //if (givenName.length() == 2 && givenName.substring(0, 1).equals(givenName.substring(1))) {
         RankItem item = new RankItem(givenName);

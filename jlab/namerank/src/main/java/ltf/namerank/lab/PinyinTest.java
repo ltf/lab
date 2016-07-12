@@ -66,7 +66,7 @@ public class PinyinTest {
         System.out.println("");
         for (String c : yun) {
             if (sheng.contains(c)) System.out.print("//");
-            System.out.println("case '" + c +"':");
+            System.out.println("case '" + c + "':");
         }
 
     }
@@ -85,11 +85,11 @@ public class PinyinTest {
             }
         }
 
-        for(char c : chars){
+        for (char c : chars) {
             System.out.print(c + " :");
             PinyinMap.Pinyin[] pys = toPinyin(c);
-            for (PinyinMap.Pinyin py:pys){
-                System.out.print( py.shengmu + "-"+py.yunmu+"-"+py.tone +" ");
+            for (PinyinMap.Pinyin py : pys) {
+                System.out.print(py.shengMu + "-" + py.yunTou + "." + py.yunFu + "." + py.yunWei + "-" + py.tone + " ");
             }
             System.out.println("");
         }

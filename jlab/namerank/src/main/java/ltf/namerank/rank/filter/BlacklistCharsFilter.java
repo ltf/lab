@@ -19,7 +19,7 @@ public class BlacklistCharsFilter implements RankFilter {
     @Override
     public boolean banned(String givenName) {
         for (char c : givenName.toCharArray()) {
-            if (givenName.contains(c + "")) return true;
+            if (bannedWords.contains(c + "")) return true;
         }
         return false;
     }

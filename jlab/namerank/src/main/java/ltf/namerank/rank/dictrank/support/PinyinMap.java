@@ -38,7 +38,20 @@ public class PinyinMap {
     }
 
     public static String[] toPinyin(String word) {
+        return toPinyin(word, true);
+    }
+
+    public static String[] toPinyin(String word, boolean onePinyinForMutliChars) {
         try {
+            String firstPinyin = PinyinHelper.toHanYuPinyinString(word, format, "", true);
+
+            if (onePinyinForMutliChars && word.length() > 1) {
+                String[] result = new String[1];
+                result[0] = firstPinyin;
+                return result;
+            }
+
+
             List<String[]> pinyinsList = new ArrayList<>();
             int count = 1;
             for (char c : word.toCharArray()) {
@@ -59,7 +72,6 @@ public class PinyinMap {
             }
 
             // make the most used pinyin first
-            String firstPinyin = PinyinHelper.toHanYuPinyinString(word, format, "", true);
             for (int i = 0; i < count; i++) {
                 if (firstPinyin.equals(result[i])) {
                     result[i] = result[0];
@@ -124,7 +136,7 @@ public class PinyinMap {
 
 
     public static Pinyin[] toPinyin(char c) {
-        String[] pys = toPinyin(String.valueOf(c));
+        String[] pys = toPinyin(String.valueOf(c), false);
         Pinyin[] rs = new Pinyin[pys.length];
         for (int i = 0; i < pys.length; i++) {
             rs[i] = parse(pys[i]);
@@ -133,8 +145,18 @@ public class PinyinMap {
     }
 
     public static Pinyin parse(String onePinyin) {
+
+//        所有元音都可以充当韵腹，能作韵头的只有（）、（）、（），能作韵尾的只有（）、（）、（）三个元音和（）、（）两个辅音。
+//        参考答案
+//        i；u；v；    i；u；o；n；ng
+
+//        韵腹是韵母的（），位置在韵腹（）的是韵头，在韵腹（）的是韵尾。（）一定是韵尾。一个韵母可以没有（），但一定有韵腹。
+//        参考答案
+//        主要成分；前；后；韵母中的辅音；韵头或韵尾
         Pinyin pinyin = new Pinyin();
         char[] cs = onePinyin.toCharArray();
+        boolean yunTouFin = false;
+
         for (int i = 0; i < cs.length; i++) {
             switch (cs[i]) {
                 case '0':
@@ -166,31 +188,59 @@ public class PinyinMap {
                 case 'x':
                 case 'y':
                 case 'z':
-                    pinyin.shengmu += cs[i];
+                    pinyin.shengMu += cs[i];
                     break;
 
                 case 'r':
                 case 'g':
                 case 'n':
-                    if (i == 0) pinyin.shengmu += cs[i];
-                    else pinyin.yunmu += cs[i];
+                    if (i == 0) pinyin.shengMu += cs[i];
+                    else {
+                        pinyin.yunMu += cs[i];
+                        if (!"".equals(pinyin.yunFu)) {
+                            pinyin.yunWei += cs[i];
+                        }
+                    }
                     break;
 
                 case 'a':
                 case 'e':
+                case 'o':
+                    yunTouFin = true;
+
                 case 'u':
                 case 'v':
                 case 'i':
-                case 'o':
-                    pinyin.yunmu += cs[i];
+                    pinyin.yunMu += cs[i];
+
+                    if (!yunTouFin) {
+                        pinyin.yunTou += cs[i];
+                        yunTouFin = true;
+                    } else {
+                        if (pinyin.yunFu.length() == 0) pinyin.yunFu += cs[i];
+                        else {
+                            pinyin.yunWei += cs[i];
+                            if ('i' != cs[i] && 'u' != cs[i] && 'o' != cs[i])
+                                throw new IllegalStateException("韵尾 parse error");
+                        }
+                    }
+                    break;
             }
+        }
+
+        if (pinyin.yunFu.length() == 0) {
+            pinyin.yunFu = pinyin.yunTou;
+            pinyin.yunTou = "";
         }
         return pinyin;
     }
 
     public static class Pinyin {
-        public String shengmu = "";
-        public String yunmu = "";
+        public String shengMu = "";
+        public String yunMu = "";
         public String tone = "";
+        public String yunTou = "";
+        public String yunFu = "";
+        public String yunWei = "";
     }
 }
