@@ -12,6 +12,8 @@ import static ltf.namerank.utils.PathUtils.getJsonHome;
 import static ltf.namerank.utils.PathUtils.getRawHome;
 
 /**
+ * 词频数据
+ *
  * @author ltf
  * @since 16/7/11, 下午4:42
  */
@@ -40,7 +42,7 @@ public class Cipin {
         for (String k : cipinMap.keySet()) {
 //            CipinItem item = cipinMap.get(k);
 //            if (item.bg == null && item.gj == null && item.xc == null && item.xj == null)
-                list.add(k);
+            list.add(k);
         }
         String k = "bc";
         System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");

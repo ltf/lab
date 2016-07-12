@@ -10,6 +10,8 @@ import static ltf.namerank.utils.FileUtils.file2Str;
 import static ltf.namerank.utils.PathUtils.getJsonHome;
 
 /**
+ * 笔画数据
+ *
  * @author ltf
  * @since 16/7/11, 上午10:19
  */
