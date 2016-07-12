@@ -40,7 +40,7 @@ public class PinyinMap {
         list.add(v);
     }
 
-    private static String[] toPinyin(String word) {
+    public static String[] toPinyin(String word) {
         try {
             if (word.length() == 1) {
                 return PinyinHelper.toHanyuPinyinStringArray(word.charAt(0));
@@ -55,7 +55,7 @@ public class PinyinMap {
         return null;
     }
 
-    private static String[] toPinyinNoTone(String word) {
+    public static String[] toPinyinNoTone(String word) {
         String[] result = toPinyin(word);
         if (result != null) {
             for (int i = 0; i < result.length; i++)

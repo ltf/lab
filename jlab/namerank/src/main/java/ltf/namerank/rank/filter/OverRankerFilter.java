@@ -1,4 +1,8 @@
-package ltf.namerank.rank;
+package ltf.namerank.rank.filter;
+
+import ltf.namerank.rank.RankFilter;
+import ltf.namerank.rank.RankItem;
+import ltf.namerank.rank.Ranker;
 
 import java.util.ArrayList;
 import java.util.List;

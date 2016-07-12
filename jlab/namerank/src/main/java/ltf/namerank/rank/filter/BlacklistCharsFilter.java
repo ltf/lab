@@ -1,4 +1,6 @@
-package ltf.namerank.rank;
+package ltf.namerank.rank.filter;
+
+import ltf.namerank.rank.RankFilter;
 
 import java.io.IOException;
 import java.util.HashSet;

@@ -7,6 +7,9 @@ import ltf.namerank.rank.*;
 import ltf.namerank.rank.dictrank.pronounce.PronounceRank;
 import ltf.namerank.rank.dictrank.support.dict.HanYuDaCidian;
 import ltf.namerank.rank.dictrank.support.dict.MdxtDict;
+import ltf.namerank.rank.filter.BlacklistCharsFilter;
+import ltf.namerank.rank.filter.ChainedFilter;
+import ltf.namerank.rank.filter.LengthFilter;
 import ltf.namerank.utils.LinesInFile;
 
 import java.io.IOException;
@@ -132,7 +135,9 @@ public class RankingTest {
                     .addChars(getWordsHome() + "taboo_girl.txt");
 
             filter = new ChainedFilter()
-                    .add(blacklistCharsFilter);
+                    .add(new LengthFilter())
+                    .add(blacklistCharsFilter)
+            ;
 
             doRanking();
         } catch (IOException e) {
