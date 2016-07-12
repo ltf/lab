@@ -2,16 +2,20 @@ package ltf.namerank.lab;
 
 import com.hankcs.hanlp.HanLP;
 import com.hankcs.hanlp.dictionary.py.Pinyin;
+import ltf.namerank.rank.dictrank.support.PinyinMap;
 import ltf.namerank.utils.LinesInFile;
-import ltf.namerank.utils.PathUtils;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
 import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import static ltf.namerank.utils.FileUtils.file2Lines;
+import static ltf.namerank.utils.PathUtils.getNamesHome;
 
 /**
  * @author ltf
@@ -19,9 +23,14 @@ import java.util.List;
  */
 public class PinyinTest {
     public void go() {
+        try {
+            testAllNames();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        for (String s : PinyinHelper.toHanyuPinyinStringArray('重'))
-            System.out.println(s);
+//        for (String s : PinyinHelper.toHanyuPinyinStringArray('重'))
+//            System.out.println(s);
 
         //testHanPinyin();
 
@@ -31,6 +40,22 @@ public class PinyinTest {
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
+    }
+
+    private void testAllNames() throws IOException {
+
+
+        List<String> list = new ArrayList<>();
+        file2Lines(getNamesHome() + "/givenNames.txt", list);
+        for (String name : list) {
+            String pys[] = PinyinMap.toPinyin(name);
+            if (pys.length > 1) {
+                System.out.print(name + " ");
+                for (String py : pys) System.out.print(py + " ");
+                System.out.println("");
+            }
+        }
+
     }
 
     private void testLoadMdx() {
@@ -131,7 +156,7 @@ public class PinyinTest {
     private void initNames() throws IOException {
         if (names == null) {
             names = new LinkedList<>();
-            new LinesInFile(PathUtils.getNamesHome() + "/givenNames.txt").each(names::add);
+            new LinesInFile(getNamesHome() + "/givenNames.txt").each(names::add);
         }
     }
 

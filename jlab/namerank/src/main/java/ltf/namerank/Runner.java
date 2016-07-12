@@ -16,7 +16,7 @@ public class Runner {
     public static void main(String[] args) {
         Rtc.begin();
 
-        new WugeDataCollect();
+        //new WugeDataCollect();
         //new ChoseWords();
         //new NameDataProcessor().go();
         //new DictNameCollecter();
@@ -24,7 +24,7 @@ public class Runner {
         //new WordFeelings().go();
         //new RankingTest().go();
         //new NewDictTest();
-        //new PinyinTest().go();
+        new PinyinTest().go();
         //new HanYuDaCidian().listKeys();
 
 
