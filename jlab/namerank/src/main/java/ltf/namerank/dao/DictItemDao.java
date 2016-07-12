@@ -11,5 +11,5 @@ import java.util.Collection;
 public interface DictItemDao {
     void saveDictItem(DictItem dictItem);
 
-    Collection<DictItem> loadItemsByZi(String zi);
+    DictItem loadItemsByZi(String zi);
 }
