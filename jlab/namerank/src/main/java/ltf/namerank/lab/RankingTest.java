@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.hankcs.hanlp.dictionary.CoreSynonymDictionary;
 import ltf.namerank.entity.WordFeeling;
 import ltf.namerank.rank.*;
-import ltf.namerank.rank.dictrank.BihuaRanker;
 import ltf.namerank.rank.dictrank.pronounce.PronounceRank;
 import ltf.namerank.rank.dictrank.support.dict.HanYuDaCidian;
 import ltf.namerank.rank.dictrank.support.dict.MdxtDict;
@@ -27,9 +26,9 @@ public class RankingTest {
 
     private List<RankItem> rankItems = new LinkedList<>();
 
-    private List<String> ignoreWords = new ArrayList<>();
-
     private Ranker ranker;
+
+    private RankFilter filter;
 
     private void initDicts() {
         if (dictList == null) {
@@ -45,13 +44,6 @@ public class RankingTest {
     public void go() {
 
         testNewDict();
-
-        try {
-            file2Lines(getWordsHome() + "/fyignore.txt", ignoreWords);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         //new HanYuDaCidian().listKeys();
 
         //testWordFeeling();
@@ -134,6 +126,13 @@ public class RankingTest {
             ranker = new SumRankers()
                     .addRanker(allCasesRanker, 1)
                     .addRanker(existWordRanker, 1);
+
+            BlacklistCharsFilter blacklistCharsFilter = new BlacklistCharsFilter()
+                    .addChars(getWordsHome() + "fyignore.txt")
+                    .addChars(getWordsHome() + "taboo_girl.txt");
+
+            filter = new ChainedFilter()
+                    .add(blacklistCharsFilter);
 
             doRanking();
         } catch (IOException e) {
@@ -220,9 +219,7 @@ public class RankingTest {
     }
 
     private void nameRanking(String givenName) {
-        for (String ign : ignoreWords) {
-            if (givenName.contains(ign)) return;
-        }
+        if (filter.banned(givenName)) return;
         if (!picked.contains(givenName)) return;
         //if (!"钰琦".equals(givenName)) return;
         //if (givenName.length() == 2 && givenName.substring(0, 1).equals(givenName.substring(1))) {
