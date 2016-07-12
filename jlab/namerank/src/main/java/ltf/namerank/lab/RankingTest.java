@@ -133,7 +133,9 @@ public class RankingTest {
 
             BlacklistCharsFilter blacklistCharsFilter = new BlacklistCharsFilter()
                     .addChars(getWordsHome() + "/fyignore.txt")
-                    .addChars(getWordsHome() + "/taboo_girl.txt");
+                    .addChars(getWordsHome() + "/taboo_girl.txt")
+                    .addChars(getWordsHome() + "/gaopinzi.txt")
+                    .addChars(getWordsHome() + "/badchars.txt");
 
             filter = new ChainedFilter()
                     .add(new LengthFilter())
