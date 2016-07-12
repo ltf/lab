@@ -1,10 +1,15 @@
 package ltf.namerank.utils;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
+
 import java.io.*;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
+
+import static com.alibaba.fastjson.serializer.SerializerFeature.PrettyFormat;
+import static ltf.namerank.utils.PathUtils.getJsonHome;
 
 /**
  * @author ltf
@@ -89,5 +94,14 @@ public class FileUtils {
         file2Lines(fn, in);
         StrUtils.distinct(in, out);
         lines2File(out, fn);
+    }
+
+
+    public static void toJsData(Object obj, String shortFileName) throws IOException {
+        str2File(JSON.toJSONString(obj, PrettyFormat), getJsonHome() + "/" + shortFileName + ".json");
+    }
+
+    public static <T> T fromJsData(String shortFileName, TypeReference<T> type) throws IOException {
+        return (T) JSON.parseObject(file2Str(getJsonHome() + "/" + shortFileName + ".json"), type);
     }
 }

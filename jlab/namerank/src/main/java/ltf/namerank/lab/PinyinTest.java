@@ -3,6 +3,7 @@ package ltf.namerank.lab;
 import com.hankcs.hanlp.HanLP;
 import com.hankcs.hanlp.dictionary.py.Pinyin;
 import ltf.namerank.rank.dictrank.support.PinyinMap;
+import ltf.namerank.utils.FileUtils;
 import ltf.namerank.utils.LinesInFile;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
@@ -10,12 +11,13 @@ import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 import static ltf.namerank.utils.FileUtils.file2Lines;
+import static ltf.namerank.utils.FileUtils.lines2File;
+import static ltf.namerank.utils.FileUtils.toJsData;
 import static ltf.namerank.utils.PathUtils.getNamesHome;
+import static ltf.namerank.utils.PathUtils.getWordsHome;
 
 /**
  * @author ltf
@@ -46,15 +48,32 @@ public class PinyinTest {
 
 
         List<String> list = new ArrayList<>();
+        Set<String> chars = new HashSet<>();
         file2Lines(getNamesHome() + "/givenNames.txt", list);
+
         for (String name : list) {
+            for (char c : name.toCharArray()) {
+
+                chars.add(c + "");
+            }
+        }
+
+        Set<String> multiPyChars = new HashSet<>();
+        for (String name : chars) {
             String pys[] = PinyinMap.toPinyin(name);
+            if (pys== null){
+                System.out.println(name+" has no pinyin");
+                continue;
+            }
             if (pys.length > 1) {
                 System.out.print(name + " ");
                 for (String py : pys) System.out.print(py + " ");
                 System.out.println("");
+                multiPyChars.add(name);
             }
         }
+
+        lines2File(multiPyChars, getWordsHome()+"/multiPinyiChars.txt");
 
     }
 
