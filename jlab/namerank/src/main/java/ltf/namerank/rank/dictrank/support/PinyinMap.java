@@ -6,10 +6,7 @@ import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author ltf
@@ -42,13 +39,36 @@ public class PinyinMap {
 
     public static String[] toPinyin(String word) {
         try {
-            if (word.length() == 1) {
-                return PinyinHelper.toHanyuPinyinStringArray(word.charAt(0));
-            } else {
-                String[] result = new String[1];
-                result[0] = PinyinHelper.toHanYuPinyinString(word, format, "", true);
-                return result;
+            List<String[]> pinyinsList = new ArrayList<>();
+            int count = 1;
+            for (char c : word.toCharArray()) {
+                String[] pinyins = PinyinHelper.toHanyuPinyinStringArray(word.charAt(0));
+                if (pinyins == null || pinyins.length == 0) continue;
+                pinyinsList.add(pinyins);
+                count *= pinyins.length;
             }
+            String[] result = new String[count];
+            for (int i = 0; i < result.length; i++) result[i] = "";
+
+
+            for (int i = 0; i < count; i++) {
+                for (int pos = 0; pos < pinyinsList.size(); pos++) {
+                    String[] pinyins = pinyinsList.get(pos);
+                    result[i] += pinyins[i % pinyins.length];
+                }
+            }
+
+            // make the most used pinyin first
+            String firstPinyin = PinyinHelper.toHanYuPinyinString(word, format, "", true);
+            for (int i = 0; i < count; i++) {
+                if (firstPinyin.equals(result[i])) {
+                    result[i] = result[0];
+                    result[0] = firstPinyin;
+                    break;
+                }
+            }
+
+            return result;
         } catch (BadHanyuPinyinOutputFormatCombination badHanyuPinyinOutputFormatCombination) {
             badHanyuPinyinOutputFormatCombination.printStackTrace();
         }
@@ -100,5 +120,77 @@ public class PinyinMap {
 
     public static Set<String> getWordsNoTone(String word) {
         return innerGetWords(pinyin2WordsNoTone, toPinyinNoTone(word));
+    }
+
+
+    public static Pinyin[] toPinyin(char c) {
+        String[] pys = toPinyin(String.valueOf(c));
+        Pinyin[] rs = new Pinyin[pys.length];
+        for (int i = 0; i < pys.length; i++) {
+            rs[i] = parse(pys[i]);
+        }
+        return rs;
+    }
+
+    public static Pinyin parse(String onePinyin) {
+        Pinyin pinyin = new Pinyin();
+        char[] cs = onePinyin.toCharArray();
+        for (int i = 0; i < cs.length; i++) {
+            switch (cs[i]) {
+                case '0':
+                case '1':
+                case '2':
+                case '3':
+                case '4':
+                case '5':
+                case '6':
+                case '7':
+                case '8':
+                case '9':
+                    pinyin.tone += cs[i];
+                    break;
+                case 'b':
+                case 'c':
+                case 'd':
+                case 'f':
+                case 'h':
+                case 'j':
+                case 'k':
+                case 'l':
+                case 'm':
+                case 'p':
+                case 'q':
+                case 's':
+                case 't':
+                case 'w':
+                case 'x':
+                case 'y':
+                case 'z':
+                    pinyin.shengmu += cs[i];
+                    break;
+
+                case 'r':
+                case 'g':
+                case 'n':
+                    if (i == 0) pinyin.shengmu += cs[i];
+                    else pinyin.yunmu += cs[i];
+                    break;
+
+                case 'a':
+                case 'e':
+                case 'u':
+                case 'v':
+                case 'i':
+                case 'o':
+                    pinyin.yunmu += cs[i];
+            }
+        }
+        return pinyin;
+    }
+
+    public static class Pinyin {
+        public String shengmu = "";
+        public String yunmu = "";
+        public String tone = "";
     }
 }

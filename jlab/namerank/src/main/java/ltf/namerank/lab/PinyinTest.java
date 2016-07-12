@@ -1,9 +1,9 @@
 package ltf.namerank.lab;
 
 import com.hankcs.hanlp.HanLP;
-import com.hankcs.hanlp.dictionary.py.Pinyin;
+import com.hankcs.hanlp.dictionary.py.Shengmu;
+import com.hankcs.hanlp.dictionary.py.Yunmu;
 import ltf.namerank.rank.dictrank.support.PinyinMap;
-import ltf.namerank.utils.FileUtils;
 import ltf.namerank.utils.LinesInFile;
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
@@ -13,11 +13,9 @@ import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombi
 import java.io.IOException;
 import java.util.*;
 
+import static ltf.namerank.rank.dictrank.support.PinyinMap.toPinyin;
 import static ltf.namerank.utils.FileUtils.file2Lines;
-import static ltf.namerank.utils.FileUtils.lines2File;
-import static ltf.namerank.utils.FileUtils.toJsData;
 import static ltf.namerank.utils.PathUtils.getNamesHome;
-import static ltf.namerank.utils.PathUtils.getWordsHome;
 
 /**
  * @author ltf
@@ -25,6 +23,7 @@ import static ltf.namerank.utils.PathUtils.getWordsHome;
  */
 public class PinyinTest {
     public void go() {
+        //collectShengYun();
         try {
             testAllNames();
         } catch (IOException e) {
@@ -44,36 +43,80 @@ public class PinyinTest {
 //        }
     }
 
+    private void collectShengYun() {
+        Set<String> sheng = new HashSet<>();
+        Set<String> yun = new HashSet<>();
+        for (Yunmu v : Yunmu.values()) {
+            if (v.name().equals("none")) continue;
+            char[] cs = v.name().toCharArray();
+            for (int i = 0; i < cs.length; i++) yun.add(cs[i] + "");
+        }
+
+        for (Shengmu v : Shengmu.values()) {
+            if (v.name().equals("none")) continue;
+            char[] cs = v.name().toCharArray();
+            for (int i = 0; i < cs.length; i++) sheng.add(cs[i] + "");
+        }
+
+        for (String c : sheng) {
+            if (yun.contains(c)) System.out.print("//");
+            System.out.println("case '" + c + "':");
+        }
+
+        System.out.println("");
+        for (String c : yun) {
+            if (sheng.contains(c)) System.out.print("//");
+            System.out.println("case '" + c +"':");
+        }
+
+    }
+
     private void testAllNames() throws IOException {
 
 
         List<String> list = new ArrayList<>();
-        Set<String> chars = new HashSet<>();
+        Set<Character> chars = new HashSet<>();
         file2Lines(getNamesHome() + "/givenNames.txt", list);
 
         for (String name : list) {
             for (char c : name.toCharArray()) {
 
-                chars.add(c + "");
+                chars.add(c);
             }
         }
 
-        Set<String> multiPyChars = new HashSet<>();
-        for (String name : chars) {
-            String pys[] = PinyinMap.toPinyin(name);
-            if (pys== null){
-                System.out.println(name+" has no pinyin");
-                continue;
+        for(char c : chars){
+            System.out.print(c + " :");
+            PinyinMap.Pinyin[] pys = toPinyin(c);
+            for (PinyinMap.Pinyin py:pys){
+                System.out.print( py.shengmu + "-"+py.yunmu+"-"+py.tone +" ");
             }
-            if (pys.length > 1) {
-                System.out.print(name + " ");
-                for (String py : pys) System.out.print(py + " ");
-                System.out.println("");
-                multiPyChars.add(name);
-            }
+            System.out.println("");
         }
 
-        lines2File(multiPyChars, getWordsHome()+"/multiPinyiChars.txt");
+
+//        Set<String> multiPyChars = new HashSet<>();
+//        for (String name : chars) {
+//            String pys[] = PinyinMap.toPinyin(name);
+//            if (pys == null) {
+//                System.out.println(name + " has no pinyin");
+//                continue;
+//            }
+//            if (pys.length > 1) {
+//                System.out.print(name + " ");
+//                for (String py : pys) System.out.print(py + " ");
+//
+//                try {
+//                    System.out.print(PinyinHelper.toHanYuPinyinString(name, new HanyuPinyinOutputFormat(), "", true));
+//                } catch (BadHanyuPinyinOutputFormatCombination badHanyuPinyinOutputFormatCombination) {
+//                    badHanyuPinyinOutputFormatCombination.printStackTrace();
+//                }
+//                System.out.println("");
+//                multiPyChars.add(name);
+//            }
+//        }
+
+        //lines2File(multiPyChars, getWordsHome()+"/multiPinyiChars.txt");
 
     }
 
@@ -84,7 +127,7 @@ public class PinyinTest {
 
     private void testHanPinyin() {
         String text = "重载不是重任";
-        List<Pinyin> pinyinList = HanLP.convertToPinyinList(text);
+        List<com.hankcs.hanlp.dictionary.py.Pinyin> pinyinList = HanLP.convertToPinyinList(text);
 
         System.out.print("原文,");
         for (char c : text.toCharArray()) {
@@ -93,53 +136,53 @@ public class PinyinTest {
         System.out.println();
 
         System.out.print("拼音（数字音调）,");
-        for (Pinyin pinyin : pinyinList) {
+        for (com.hankcs.hanlp.dictionary.py.Pinyin pinyin : pinyinList) {
             System.out.printf("%s,", pinyin);
         }
         System.out.println();
 
         System.out.print("拼音（符号音调）,");
-        for (Pinyin pinyin : pinyinList) {
+        for (com.hankcs.hanlp.dictionary.py.Pinyin pinyin : pinyinList) {
             System.out.printf("%s,", pinyin.getPinyinWithToneMark());
         }
         System.out.println();
 
         System.out.print("拼音（无音调）,");
-        for (Pinyin pinyin : pinyinList) {
+        for (com.hankcs.hanlp.dictionary.py.Pinyin pinyin : pinyinList) {
             System.out.printf("%s,", pinyin.getPinyinWithoutTone());
         }
         System.out.println();
 
         System.out.print("声调,");
-        for (Pinyin pinyin : pinyinList) {
+        for (com.hankcs.hanlp.dictionary.py.Pinyin pinyin : pinyinList) {
             System.out.printf("%s,", pinyin.getTone());
         }
         System.out.println();
 
         System.out.print("声母,");
-        for (Pinyin pinyin : pinyinList) {
+        for (com.hankcs.hanlp.dictionary.py.Pinyin pinyin : pinyinList) {
             System.out.printf("%s,", pinyin.getShengmu());
         }
         System.out.println();
 
         System.out.print("韵母,");
-        for (Pinyin pinyin : pinyinList) {
+        for (com.hankcs.hanlp.dictionary.py.Pinyin pinyin : pinyinList) {
             System.out.printf("%s,", pinyin.getYunmu());
         }
         System.out.println();
 
         System.out.print("输入法头,");
-        for (Pinyin pinyin : pinyinList) {
+        for (com.hankcs.hanlp.dictionary.py.Pinyin pinyin : pinyinList) {
             System.out.printf("%s,", pinyin.getHead());
         }
         System.out.println();
     }
 
     private String Han2Pinyin(String in) {
-        List<Pinyin> pinyinList = HanLP.convertToPinyinList(in);
+        List<com.hankcs.hanlp.dictionary.py.Pinyin> pinyinList = HanLP.convertToPinyinList(in);
 
         StringBuilder sb = new StringBuilder();
-        for (Pinyin pinyin : pinyinList) {
+        for (com.hankcs.hanlp.dictionary.py.Pinyin pinyin : pinyinList) {
             sb.append(pinyin);
         }
 
