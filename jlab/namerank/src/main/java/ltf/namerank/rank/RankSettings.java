@@ -6,4 +6,11 @@ package ltf.namerank.rank;
  */
 public class RankSettings {
     public static boolean reportMode = false;
+    public static String familyName = "李";
+
+    public static String getFamilyName() {
+        return familyName;
+    }
+
+    ;
 }

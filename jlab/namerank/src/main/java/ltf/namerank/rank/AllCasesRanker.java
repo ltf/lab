@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ltf.namerank.rank.RankItemHelper.*;
+import static ltf.namerank.rank.RankSettings.getFamilyName;
 
 /**
  * @author ltf
  * @since 16/7/1, 下午5:14
  */
 public class AllCasesRanker extends WrappedRanker {
-
-    private Character familyname = null;
 
     public AllCasesRanker(Ranker ranker) {
         super(ranker);
@@ -25,17 +24,17 @@ public class AllCasesRanker extends WrappedRanker {
         char[] chars = word.toCharArray();
 
         if (fullLen == 1) {
-            if (familyname != null) {
-                result.add(new Case(familyname + "" + chars[0], 1));
+            if (getFamilyName() != null) {
+                result.add(new Case(getFamilyName() + "" + chars[0], 1));
             }
             result.add(new Case("" + chars[0], 1));
         } else if (fullLen == 2) {
-            if (familyname != null) {
-                result.add(new Case(familyname + "" + chars[0] + chars[1], 1));
+            if (getFamilyName() != null) {
+                result.add(new Case(getFamilyName() + "" + chars[0] + chars[1], 1));
                 result.add(new Case("" + chars[0] + chars[1], 1));
                 result.add(new Case("" + chars[0], 0.6));
                 result.add(new Case("" + chars[1], 0.6));
-                result.add(new Case(familyname + "" + chars[0], 0.2));
+                result.add(new Case(getFamilyName() + "" + chars[0], 0.2));
             } else {
                 result.add(new Case("" + chars[0] + chars[1], 1));
                 result.add(new Case("" + chars[0], 0.6));
@@ -60,7 +59,8 @@ public class AllCasesRanker extends WrappedRanker {
             rk += childRk * cs.rate;
             if (RankSettings.reportMode) addInfo(String.format("%s: %.1f x %.1f; ", cs.word, childRk, cs.rate));
         }
-        if (RankSettings.reportMode) flushResult(target, rk); else target.setScore(rk);
+        if (RankSettings.reportMode) flushResult(target, rk);
+        else target.setScore(rk);
         return rk;
     }
 
@@ -72,10 +72,5 @@ public class AllCasesRanker extends WrappedRanker {
             this.word = word;
             this.rate = rate;
         }
-    }
-
-    public AllCasesRanker setFamilyname(Character familyname) {
-        this.familyname = familyname;
-        return this;
     }
 }

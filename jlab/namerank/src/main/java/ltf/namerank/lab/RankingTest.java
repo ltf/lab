@@ -114,7 +114,7 @@ public class RankingTest {
                     new SumRankers()
                             .addRanker(cachedHanyuCidian, 5)
                             .addRanker(cache(new PronounceRank(cachedHanyuCidian)), 1)
-            ).setFamilyname('李');
+            );
 
             ExistWordRanker existWordRanker = new ExistWordRanker(hanYuDaCidian);
 
