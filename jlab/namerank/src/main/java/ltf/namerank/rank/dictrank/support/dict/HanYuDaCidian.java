@@ -6,6 +6,7 @@ import com.sun.istack.internal.NotNull;
 import ltf.namerank.rank.RankItem;
 import ltf.namerank.rank.RankSettings;
 import ltf.namerank.rank.WordExistChecker;
+import ltf.namerank.rank.dictrank.support.Cipin;
 import ltf.namerank.utils.Rtc;
 
 import java.util.*;
@@ -92,19 +93,21 @@ public class HanYuDaCidian extends MdxtDict implements WordExistChecker {
             }
 
             double rk = target.getScore();
+            double delta;
             for (String word : words) {
+                delta = 0;
+                double rate = Math.sqrt(Cipin.get(word));
                 if (positiveSet.contains(word)) {
-                    rk += 1;
-                    if (RankSettings.reportMode) addInfo(word).append("+1");
+                    delta += 1 * rate;
                 }
                 if (negativeSet.contains(word)) {
-                    rk -= 5;
-                    if (RankSettings.reportMode) addInfo(word).append("-5");
+                    delta -= 5 * rate;
                 }
                 if (butySet.contains(word)) {
-                    rk += 5;
-                    if (RankSettings.reportMode) addInfo(word).append("+5");
+                    delta += 5 * rate;
                 }
+                if (RankSettings.reportMode) addInfo(word).append(String.format("%.1f", delta));
+                rk += delta;
             }
 
             if (RankSettings.reportMode) addInfo("\n");
@@ -169,7 +172,7 @@ public class HanYuDaCidian extends MdxtDict implements WordExistChecker {
                             countWords[count] += ",";
                         countWords[count] += word;
                     }
-                    rk += Math.sqrt(count);
+                    rk += Math.sqrt(count * Cipin.get(word));
                 }
             }
 
