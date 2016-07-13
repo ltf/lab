@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.hankcs.hanlp.dictionary.CoreSynonymDictionary;
 import ltf.namerank.entity.WordFeeling;
 import ltf.namerank.rank.*;
+import ltf.namerank.rank.dictrank.meaning.SameMeaningRanker;
 import ltf.namerank.rank.dictrank.pronounce.PronounceRank;
 import ltf.namerank.rank.dictrank.pronounce.YinYunFilter;
 import ltf.namerank.rank.dictrank.support.dict.HanYuDaCidian;
@@ -113,10 +114,12 @@ public class RankingTest {
         try {
             HanYuDaCidian hanYuDaCidian = new HanYuDaCidian();
             CachedRanker cachedHanyuCidian = cache(hanYuDaCidian);
+            SameMeaningRanker sameMeaningRanker = new SameMeaningRanker();
 
             AllCasesRanker allCasesRanker = new AllCasesRanker(
                     new SumRankers()
-                            .addRanker(cachedHanyuCidian, 5)
+                            .addRanker(cache(sameMeaningRanker), 4)
+                            .addRanker(cachedHanyuCidian, 6)
                             .addRanker(cache(new PronounceRank(cachedHanyuCidian)), 1)
             );
 
@@ -135,8 +138,7 @@ public class RankingTest {
                     .addChars(getWordsHome() + "/fyignore.txt")
                     .addChars(getWordsHome() + "/taboo_girl.txt")
                     .addChars(getWordsHome() + "/gaopinzi.txt")
-                    .addChars(getWordsHome() + "/badchars.txt")
-                    ;
+                    .addChars(getWordsHome() + "/badchars.txt");
 
             filter = new ChainedFilter()
                     .add(new LengthFilter())

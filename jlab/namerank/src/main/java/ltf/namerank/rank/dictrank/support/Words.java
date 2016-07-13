@@ -1,5 +1,7 @@
 package ltf.namerank.rank.dictrank.support;
 
+import com.hankcs.hanlp.dictionary.CoreSynonymDictionary;
+
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,7 +16,8 @@ import static ltf.namerank.utils.PathUtils.getWordsHome;
 public class Words {
     //    public final static Set<String> negativeSet = new HashSet<>();
 //    public final static Set<String> positiveSet = new HashSet<>();
-//    public final static Set<String> butySet = new HashSet<>();
+    public final static Set<String> butySet = new HashSet<>();
+    public final static Set<String> happySet = new HashSet<>();
     public final static Set<String> goodSet = new HashSet<>();
     public final static Set<String> badSet = new HashSet<>();
 
@@ -23,7 +26,8 @@ public class Words {
         try {
 //            file2Lines(getWordsHome() + "/positive.txt", positiveSet);
 //            file2Lines(getWordsHome() + "/negative.txt", negativeSet);
-//            file2Lines(getWordsHome() + "/buty.txt", butySet);
+            file2Lines(getWordsHome() + "/buty.txt", butySet);
+            file2Lines(getWordsHome() + "/happy.txt", happySet);
 
             file2Lines(getWordsHome() + "/goodwords.txt", goodSet);
             file2Lines(getWordsHome() + "/badwords.txt", badSet);
@@ -31,6 +35,14 @@ public class Words {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static double isSame(String word, Set<String> targetSet) {
+        double v = 0;
+        for (String s : targetSet) {
+            v += CoreSynonymDictionary.similarity(word, s);
+        }
+        return v / targetSet.size();
     }
 
     /*

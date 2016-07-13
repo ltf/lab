@@ -1,6 +1,8 @@
 package ltf.namerank.lab;
 
+import com.hankcs.hanlp.dictionary.CoreSynonymDictionary;
 import ltf.namerank.rank.RankItem;
+import ltf.namerank.rank.RankRecordList;
 import ltf.namerank.rank.dictrank.support.dict.HanYuDaCidian;
 
 import java.io.IOException;
@@ -17,20 +19,43 @@ import static ltf.namerank.utils.PathUtils.getWordsHome;
 public class DataCleaner {
     public DataCleaner() {
         try {
-            testWords();
+            distanceClean();
             //autoCleanByDistance();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    private void distanceClean() throws IOException {
+        Set<String> good = new HashSet<>();
+        Set<String> bad = new HashSet<>();
+        Set<String> buty = new HashSet<>();
+        file2Lines(getWordsHome() + "/badwords.txt", bad);
+        file2Lines(getWordsHome() + "/goodwords.txt", good);
+        file2Lines(getWordsHome() + "/buty.txt", buty);
+
+        RankRecordList recordList = new RankRecordList();
+        for (String s : good) {
+            double v = 0;
+            for (String s2 : buty) {
+                v += CoreSynonymDictionary.similarity(s, s2);
+            }
+
+            recordList.add(s,  v / buty.size());
+        }
+        recordList.sortAsc();
+        recordList.listDetails();
+        lines2File(recordList.getWordList(), getWordsHome() + "/goodwords_.txt");
+    }
+
+
     private void testWords() throws IOException {
         Set<String> good = new HashSet<>();
         Set<String> bad = new HashSet<>();
         file2Lines(getWordsHome() + "/badwords.txt", bad);
         file2Lines(getWordsHome() + "/goodwords.txt", good);
-        for(String s:good){
-            if(bad.contains(s))
+        for (String s : good) {
+            if (bad.contains(s))
                 System.out.println(s);
         }
     }
