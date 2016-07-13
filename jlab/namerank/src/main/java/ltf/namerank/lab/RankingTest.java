@@ -135,7 +135,8 @@ public class RankingTest {
                     .addChars(getWordsHome() + "/fyignore.txt")
                     .addChars(getWordsHome() + "/taboo_girl.txt")
                     .addChars(getWordsHome() + "/gaopinzi.txt")
-                    .addChars(getWordsHome() + "/badchars.txt");
+                    .addChars(getWordsHome() + "/badchars.txt")
+                    ;
 
             filter = new ChainedFilter()
                     .add(new LengthFilter())
@@ -208,7 +209,7 @@ public class RankingTest {
 
     private void doRanking() throws IOException {
 
-        RankSettings.reportMode = true;
+        //RankSettings.reportMode = true;
 
         if (RankSettings.reportMode && exists(PICKED_LIST)) file2Lines(PICKED_LIST, picked);
 

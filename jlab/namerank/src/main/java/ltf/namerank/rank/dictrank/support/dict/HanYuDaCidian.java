@@ -113,12 +113,14 @@ public class HanYuDaCidian extends MdxtDict implements WordExistChecker {
                 if (badSet.contains(target.getKey())) {
                     rk = -10;
                 }
-                if (rk < 0) {
-                    addInfo("<font color=red>").append(target.getKey()).append("-10</font> ");
-                } else if (rk > 0) {
-                    addInfo(target.getKey()).append("10 ");
-                } else {
-                    addInfo(target.getKey()).append(" ");
+                if (RankSettings.reportMode) {
+                    if (rk < 0) {
+                        addInfo("<font color=red>").append(target.getKey()).append("-10</font> ");
+                    } else if (rk > 0) {
+                        addInfo(target.getKey()).append("10 ");
+                    } else {
+                        addInfo(target.getKey()).append(" ");
+                    }
                 }
 
             } else {

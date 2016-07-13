@@ -84,8 +84,13 @@ public class YinYunFilter implements RankFilter {
         // “o”与“u”、“u”与“ü”、“i”与“ï、ï”的区别度都很小，
         // 姓名用字间一定要注意挑主元音区别大的做韵腹以提高语音区别度。
         // 在众多的主元音中，取名字最易发且响亮动听的是“ɑ（a）”
-        if (!yunFus.contains("a")) return false; // need "a"
-        return true;
+        //if (!yunFus.contains("a")) return false; // need "a"
+        if (
+                (yunFus.contains('o') && yunFus.contains('u')) ||
+                        (yunFus.contains('v') && yunFus.contains('u'))
+                )     return false;
+
+            return true;
     }
 
     /**
