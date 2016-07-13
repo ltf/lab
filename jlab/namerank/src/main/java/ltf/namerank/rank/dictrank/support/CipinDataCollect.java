@@ -16,7 +16,7 @@ import static ltf.namerank.utils.PathUtils.getRawHome;
  * @author ltf
  * @since 16/7/11, 下午4:42
  */
-public class Cipin {
+public class CipinDataCollect {
     private static Map<String, CipinItem> cipinMap;
 
     private static Set<String> ignoreSet = new HashSet<>();

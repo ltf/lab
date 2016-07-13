@@ -1,9 +1,6 @@
 package ltf.namerank.lab;
 
-import ltf.namerank.rank.dictrank.support.Bihua;
-import ltf.namerank.rank.dictrank.support.Cipin;
-import ltf.namerank.rank.dictrank.support.dict.HanyuCipinCd;
-import ltf.namerank.rank.dictrank.support.dict.HanziBihuaxuCd;
+import ltf.namerank.rank.dictrank.support.CipinDataCollect;
 
 /**
  * @author ltf
@@ -22,7 +19,7 @@ public class NewDictTest {
 
         //System.out.println(new Bihua().char2Bihua("金"));
 
-        new Cipin().test();
+        new CipinDataCollect().test();
 
     }
 
