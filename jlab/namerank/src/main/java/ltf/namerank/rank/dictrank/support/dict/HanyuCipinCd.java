@@ -37,8 +37,9 @@ public class HanyuCipinCd extends MdxtDict {
 
         CipinItem(String key) {
             super(key);
-            hanYuDaCidian.initItems();
-            enable = hanYuDaCidian.exists(key);
+            //hanYuDaCidian.initItems();
+            //enable = hanYuDaCidian.exists(key);
+            enable = true;
             //enable = "成功".equals(key);
         }
 
@@ -106,6 +107,6 @@ public class HanyuCipinCd extends MdxtDict {
     public void listKeys() {
         initItems();
         System.out.println(cipins.size());
-        //saveData();
+        saveData();
     }
 }

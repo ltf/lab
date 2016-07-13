@@ -17,8 +17,8 @@ public class NewDictTest {
 
     private static void testNewDict() {
 
-        //HanyuCipinCd cd = new HanyuCipinCd();
-        //cd.listKeys();
+//        HanyuCipinCd cd = new HanyuCipinCd();
+//        cd.listKeys();
 
         //System.out.println(new Bihua().char2Bihua("金"));
 

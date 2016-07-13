@@ -22,8 +22,8 @@ public class Runner {
         //new DictNameCollecter();
         // new HanziWuxing().run();
         //new WordFeelings().go();
-        new RankingTest().go();
-        //new NewDictTest();
+        //new RankingTest().go();
+        new NewDictTest();
         //new PinyinTest().go();
         //new HanYuDaCidian().listKeys();
 
