@@ -12,6 +12,7 @@ import ltf.namerank.rank.dictrank.support.dict.MdxtDict;
 import ltf.namerank.rank.filter.BlacklistCharsFilter;
 import ltf.namerank.rank.filter.ChainedFilter;
 import ltf.namerank.rank.filter.LengthFilter;
+import ltf.namerank.rank.wuxing.WugeFilter;
 import ltf.namerank.utils.LinesInFile;
 
 import java.io.IOException;
@@ -142,6 +143,7 @@ public class RankingTest {
 
             filter = new ChainedFilter()
                     .add(new LengthFilter())
+                    //.add(new WugeFilter())
                     .add(blacklistCharsFilter)
                     .add(new YinYunFilter())
             ;
