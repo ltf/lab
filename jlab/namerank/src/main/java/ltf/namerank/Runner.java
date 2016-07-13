@@ -1,6 +1,7 @@
 package ltf.namerank;
 
 import ltf.namerank.dataprepare.*;
+import ltf.namerank.lab.DataCleaner;
 import ltf.namerank.lab.NewDictTest;
 import ltf.namerank.lab.PinyinTest;
 import ltf.namerank.lab.RankingTest;
@@ -16,13 +17,15 @@ public class Runner {
     public static void main(String[] args) {
         Rtc.begin();
 
+
+        new DataCleaner();
         //new WugeDataCollect();
         //new ChoseWords();
         //new NameDataProcessor().go();
         //new DictNameCollecter();
-        // new HanziWuxing().run();
+        //new HanziWuxing().run();
         //new WordFeelings().go();
-        new RankingTest().go();
+        //new RankingTest().go();
         //new NewDictTest();
         //new PinyinTest().go();
         //new HanYuDaCidian().listKeys();
