@@ -1,29 +1,33 @@
 package ltf.namerank.rank.dictrank.support;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 import static ltf.namerank.utils.FileUtils.file2Lines;
 import static ltf.namerank.utils.PathUtils.getWordsHome;
-import static ltf.namerank.utils.StrUtils.existsCount;
 
 /**
  * @author ltf
  * @since 16/7/7, 下午4:55
  */
 public class Words {
-    public final static Set<String> negativeSet = new HashSet<>();
-    public final static Set<String> positiveSet = new HashSet<>();
+    //    public final static Set<String> negativeSet = new HashSet<>();
+//    public final static Set<String> positiveSet = new HashSet<>();
     public final static Set<String> butySet = new HashSet<>();
+    public final static Set<String> goodSet = new HashSet<>();
+    public final static Set<String> badSet = new HashSet<>();
 
 
-    static  {
+    static {
         try {
-            file2Lines(getWordsHome() + "/positive.txt", positiveSet);
-            file2Lines(getWordsHome() + "/negative.txt", negativeSet);
+//            file2Lines(getWordsHome() + "/positive.txt", positiveSet);
+//            file2Lines(getWordsHome() + "/negative.txt", negativeSet);
             file2Lines(getWordsHome() + "/buty.txt", butySet);
+
+            file2Lines(getWordsHome() + "/goodwords.txt", goodSet);
+            file2Lines(getWordsHome() + "/badwords.txt", badSet);
+
         } catch (IOException e) {
             e.printStackTrace();
         }

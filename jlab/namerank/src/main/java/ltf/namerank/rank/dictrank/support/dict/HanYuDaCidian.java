@@ -82,59 +82,82 @@ public class HanYuDaCidian extends MdxtDict implements WordExistChecker {
             return super.isValid();
         }
 
+
+        private void info(String word, double delta) {
+
+        }
+
         @Override
         public double rank(@NotNull RankItem target) {
             Rtc.begin();
+
+//            if (goodSet.contains(target.getKey())) {
+//                delta += 1 * rate;
+//            } else if (badSet.contains(target.getKey())) {
+//                delta -= 5 * rate;
+//            } else if (butySet.contains(target.getKey())) {
+//                delta += 5 * rate;
+//            }
+
             String means = "";
-            Set<String> words = new HashSet<>();
+            Map<String, Integer> words = new HashMap<>();
             for (String explain : explains) {
-                means += explain;
+                means += explain + "\n";
                 segment(explain, words);
             }
 
             double rk = target.getScore();
             double delta;
-            for (String word : words) {
+            for (String word : words.keySet()) {
                 delta = 0;
-                double rate = Math.sqrt(Cipin.get(word));
-                if (positiveSet.contains(word)) {
+                double rate = Math.cbrt(words.get(word) * Cipin.get(word)) / words.size();
+                if (goodSet.contains(word)) {
                     delta += 1 * rate;
                 }
-                if (negativeSet.contains(word)) {
+                if (badSet.contains(word)) {
                     delta -= 5 * rate;
                 }
                 if (butySet.contains(word)) {
                     delta += 5 * rate;
                 }
-                if (RankSettings.reportMode) addInfo(word).append(String.format("%.1f", delta));
+                if (RankSettings.reportMode) {
+                    if (delta < 0) {
+                        addInfo("<font color=red>").append(word).append(String.format("%.1f</font> ", delta));
+                    } else if (delta > 0) {
+                        addInfo(word).append(String.format("%.1f ", delta));
+                    } else {
+                        addInfo(word).append(" ");
+                    }
+                }
                 rk += delta;
             }
-
             if (RankSettings.reportMode) addInfo("\n");
 
-            StringBuilder infoBuilder = null;
-            if (RankSettings.reportMode) infoBuilder = new StringBuilder();
-            double childRk = existsRank(means, positiveSet, infoBuilder);
-            if (childRk > 0) {
-                rk += childRk;
-                if (RankSettings.reportMode) addInfo(String.format("P1x%.1f:%s; ", childRk, infoBuilder.toString()));
-            }
+//            StringBuilder infoBuilder = null;
+//            if (RankSettings.reportMode) infoBuilder = new StringBuilder();
+//            double childRk = existsRank(means, goodSet, infoBuilder);
+//            if (childRk > 0) {
+//                rk += childRk;
+//                if (RankSettings.reportMode) addInfo(String.format("P1x%.1f:%s; ", childRk, infoBuilder.toString()));
+//            }
+//
+//
+//            childRk = existsRank(means, badSet, infoBuilder) * (-5);
+//            if (childRk > 0) {
+//                rk += childRk * (-5);
+//                if (RankSettings.reportMode) addInfo(String.format("N5x%.1f:%s; ", childRk, infoBuilder.toString()));
+//            }
+//
+//            childRk = existsRank(means, butySet, infoBuilder) * 5;
+//            if (childRk > 0) {
+//                rk += childRk * 5;
+//                if (RankSettings.reportMode) addInfo(String.format("B5x%.1f:%s; ", childRk, infoBuilder.toString()));
+//            }
+//            if (RankSettings.reportMode) addInfo("\n");
 
 
-            childRk = existsRank(means, negativeSet, infoBuilder) * (-5);
-            if (childRk > 0) {
-                rk += childRk * (-5);
-                if (RankSettings.reportMode) addInfo(String.format("N5x%.1f:%s; ", childRk, infoBuilder.toString()));
-            }
-
-            childRk = existsRank(means, butySet, infoBuilder) * 5;
-            if (childRk > 0) {
-                rk += childRk * 5;
-                if (RankSettings.reportMode) addInfo(String.format("B5x%.1f:%s; ", childRk, infoBuilder.toString()));
-            }
-
-            if (RankSettings.reportMode) addInfo("\n");
             if (RankSettings.reportMode) addInfo(means);
+            //if (RankSettings.reportMode) addInfo(getValue());
             if (RankSettings.reportMode) addInfo("\n");
 
             Rtc.end();
@@ -187,7 +210,7 @@ public class HanYuDaCidian extends MdxtDict implements WordExistChecker {
             return rk;
         }
 
-        private void segment(String sentence, Collection<String> out) {
+        private void segment(String sentence, Map<String, Integer> out) {
             //System.out.println("\t\t\t\t" + sentence);
             sentence = cleanLink(sentence);
             //System.out.println("\t\t\t\t" + sentence);
@@ -204,7 +227,7 @@ public class HanYuDaCidian extends MdxtDict implements WordExistChecker {
                     .replaceAll("</a>”", "");
         }
 
-        private void pickTerms(Collection<Term> terms, Collection<String> out) {
+        private void pickTerms(Collection<Term> terms, Map<String, Integer> out) {
             for (Term term : terms) {
                 switch (term.nature) {
                     //case bg:// 区别语素
@@ -353,7 +376,10 @@ public class HanYuDaCidian extends MdxtDict implements WordExistChecker {
                         //case wp:// 破折号，全角：——   －－   ——－   半角：---  ----
                         //case wb:// 百分号千分号，全角：％ ‰   半角：%
                         //case wh:// 单位符号，全角：￥ ＄ ￡  °  ℃  半角：$
-                        out.add(term.word);
+                        Integer count = out.get(term.word);
+                        if (count != null) count++;
+                        else count = 1;
+                        out.put(term.word, count);
                         break;
                     default:
 

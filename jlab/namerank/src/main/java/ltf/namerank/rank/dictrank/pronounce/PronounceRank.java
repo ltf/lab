@@ -31,26 +31,39 @@ public class PronounceRank extends WrappedRanker {
         double childRk;
         if (RankSettings.reportMode) acquireBuilder();
         Set<String> words = PinyinMap.getWords(target.getKey());
+        if (RankSettings.reportMode) addInfo("\n同声: ");
         for (String word : words) {
             if (target.getKey().equals(word)) continue;
 
-            childRk = super.rank(new RankItem(word));
+            childRk = super.rank(new RankItem(word)) / words.size();
             rk += childRk;
-            if (RankSettings.reportMode) addInfo(String.format("%s: %.1f; ", word, childRk));
+            if (RankSettings.reportMode) info(word, childRk);
         }
 
+        if (RankSettings.reportMode) addInfo("\n异声: ");
         Set<String> wordsNoTone = PinyinMap.getWordsNoTone(target.getKey());
         for (String word : wordsNoTone) {
             if (target.getKey().equals(word) || words.contains(word)) continue;
 
-            childRk = super.rank(new RankItem(word)) * 0.2;
+            childRk = super.rank(new RankItem(word)) * 0.2 / wordsNoTone.size();
             rk += childRk;
-            if (RankSettings.reportMode) addInfo(String.format("%s: %.1fx0.2; ", word, childRk));
+            if (RankSettings.reportMode) info(word, childRk);
         }
 
-        if (RankSettings.reportMode) flushResult(target, rk); else target.setScore(rk);
+        if (RankSettings.reportMode) flushResult(target, rk);
+        else target.setScore(rk);
 
         return rk;
+    }
+
+    private void info(String word, double delta) {
+
+        if (delta < 0)
+            addInfo(String.format("<font color=red>%s: %.1f</font>; ", word, delta));
+        else if (delta > 0)
+            addInfo(String.format("%s: %.1f; ", word, delta));
+        else
+            addInfo(String.format("%s; ", word));
     }
 
 }

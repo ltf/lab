@@ -18,14 +18,14 @@ public class Runner {
         Rtc.begin();
 
 
-        new DataCleaner();
+        //new DataCleaner();
         //new WugeDataCollect();
         //new ChoseWords();
         //new NameDataProcessor().go();
         //new DictNameCollecter();
         //new HanziWuxing().run();
         //new WordFeelings().go();
-        //new RankingTest().go();
+        new RankingTest().go();
         //new NewDictTest();
         //new PinyinTest().go();
         //new HanYuDaCidian().listKeys();

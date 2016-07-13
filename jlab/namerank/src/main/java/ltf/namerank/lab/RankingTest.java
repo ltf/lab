@@ -208,7 +208,7 @@ public class RankingTest {
 
     private void doRanking() throws IOException {
 
-        RankSettings.reportMode = true;
+        //RankSettings.reportMode = true;
 
         if (RankSettings.reportMode && exists(PICKED_LIST)) file2Lines(PICKED_LIST, picked);
 

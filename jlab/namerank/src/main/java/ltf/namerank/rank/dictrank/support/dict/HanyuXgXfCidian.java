@@ -52,7 +52,7 @@ public class HanyuXgXfCidian extends MdxtDict {
                 double score = 0;
                 StringBuilder sb = new StringBuilder();
                 for (String key : words) {
-                    int count = existsCount(((XgXfItem) item).tongyi, key);
+                    int count = existsCount(((XgXfItem) item).xiangguan, key);
                     if (count > 0) {
                         score += count;
                         usedKeywords.add(key, count);
@@ -81,7 +81,7 @@ public class HanyuXgXfCidian extends MdxtDict {
 
     private static class XgXfItem extends MdxtItem {
 
-        private String tongyi = "";
+        private String xiangguan = "";
         private String fanyi = "";
 
 
@@ -93,7 +93,7 @@ public class HanyuXgXfCidian extends MdxtDict {
         protected void addValue(String valueLine) {
             super.addValue(valueLine);
             if (valueLine.startsWith("`6`<相关>┐`4`"))
-                tongyi += valueLine.replace("`6`<相关>┐`4`", "") + "\n";
+                xiangguan += valueLine.replace("`6`<相关>┐`4`", "") + "\n";
             if (valueLine.startsWith("`1`<相反>┐`4`"))
                 fanyi += valueLine.replace("`1`<相反>┐`4`", "") + "\n";
         }
@@ -106,7 +106,7 @@ public class HanyuXgXfCidian extends MdxtDict {
         @Override
         public String toString() {
             return String.format("%s\t%d\t%d", getKey(),
-                    existsCount(tongyi, "、") + 1,
+                    existsCount(xiangguan, "、") + 1,
                     existsCount(fanyi, "、") + 1
             );
         }

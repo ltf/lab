@@ -1,12 +1,16 @@
 package ltf.namerank.lab;
 
+import ltf.namerank.rank.RankItem;
+import ltf.namerank.rank.dictrank.support.dict.HanYuDaCidian;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
-import static ltf.namerank.utils.FileUtils.file2Lines;
-import static ltf.namerank.utils.FileUtils.lines2File;
+import static ltf.namerank.utils.FileUtils.*;
+import static ltf.namerank.utils.PathUtils.getRawHome;
 import static ltf.namerank.utils.PathUtils.getWordsHome;
 
 /**
@@ -16,10 +20,66 @@ import static ltf.namerank.utils.PathUtils.getWordsHome;
 public class DataCleaner {
     public DataCleaner() {
         try {
-            clean();
+            cleanWords();
+            //autoCleanByDistance();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void cleanWords() throws IOException {
+        distinct(getWordsHome() + "/badwords.txt");
+        distinct(getWordsHome() + "/goodwords.txt");
+    }
+
+
+    private void autoCleanByDistance() throws IOException {
+
+        List<String> list = new ArrayList<>();
+        Scanner sc = new Scanner(System.in);
+        file2Lines(getWordsHome() + "/positive.txt", list);
+
+        HanYuDaCidian cidian = new HanYuDaCidian();
+        List<RankItem> rankItems = new LinkedList<>();
+
+        for (String s : list) {
+            RankItem item = new RankItem(s);
+            //item.setScore();
+        }
+        rankItems.sort(RankItem::descOrder);
+
+        StringBuilder sb = new StringBuilder();
+        for (RankItem item : rankItems) {
+            System.out.println(String.format("%s: %f", item.getKey(), item.getScore()));
+            sb.append(String.format("%s: %f", item.getKey(), item.getScore())).append("\n");
+        }
+        str2File(sb.toString(), getRawHome() + "/wordsClean.txt");
+
+    }
+
+    private void autoCleanByDict() throws IOException {
+
+        List<String> list = new ArrayList<>();
+        Scanner sc = new Scanner(System.in);
+        file2Lines(getWordsHome() + "/positive.txt", list);
+
+        HanYuDaCidian cidian = new HanYuDaCidian();
+        List<RankItem> rankItems = new LinkedList<>();
+
+        for (String s : list) {
+            RankItem item = new RankItem(s);
+            cidian.rank(item);
+            rankItems.add(item);
+        }
+        rankItems.sort(RankItem::descOrder);
+
+        StringBuilder sb = new StringBuilder();
+        for (RankItem item : rankItems) {
+            System.out.println(String.format("%s: %f", item.getKey(), item.getScore()));
+            sb.append(String.format("%s: %f", item.getKey(), item.getScore())).append("\n");
+        }
+        str2File(sb.toString(), getRawHome() + "/wordsClean.txt");
+
     }
 
     private void clean() throws IOException {

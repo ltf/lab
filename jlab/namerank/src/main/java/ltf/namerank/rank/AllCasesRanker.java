@@ -27,16 +27,16 @@ public class AllCasesRanker extends WrappedRanker {
             if (getFamilyName() != null) {
                 result.add(new Case(getFamilyName() + "" + chars[0], 1));
             }
-            result.add(new Case("" + chars[0], 1));
+            result.add(new Case("" + chars[0], 2));
         } else if (fullLen == 2) {
             if (getFamilyName() != null) {
                 result.add(new Case(getFamilyName() + "" + chars[0] + chars[1], 1));
-                result.add(new Case("" + chars[0] + chars[1], 1));
+                result.add(new Case("" + chars[0] + chars[1], 2));
                 result.add(new Case("" + chars[0], 0.6));
                 result.add(new Case("" + chars[1], 0.6));
                 result.add(new Case(getFamilyName() + "" + chars[0], 0.2));
             } else {
-                result.add(new Case("" + chars[0] + chars[1], 1));
+                result.add(new Case("" + chars[0] + chars[1], 2));
                 result.add(new Case("" + chars[0], 0.6));
                 result.add(new Case("" + chars[1], 0.6));
             }
