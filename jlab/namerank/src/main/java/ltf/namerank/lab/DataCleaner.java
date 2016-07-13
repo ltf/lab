@@ -4,10 +4,7 @@ import ltf.namerank.rank.RankItem;
 import ltf.namerank.rank.dictrank.support.dict.HanYuDaCidian;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 import static ltf.namerank.utils.FileUtils.*;
 import static ltf.namerank.utils.PathUtils.getRawHome;
@@ -20,10 +17,21 @@ import static ltf.namerank.utils.PathUtils.getWordsHome;
 public class DataCleaner {
     public DataCleaner() {
         try {
-            cleanWords();
+            testWords();
             //autoCleanByDistance();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void testWords() throws IOException {
+        Set<String> good = new HashSet<>();
+        Set<String> bad = new HashSet<>();
+        file2Lines(getWordsHome() + "/badwords.txt", bad);
+        file2Lines(getWordsHome() + "/goodwords.txt", good);
+        for(String s:good){
+            if(bad.contains(s))
+                System.out.println(s);
         }
     }
 

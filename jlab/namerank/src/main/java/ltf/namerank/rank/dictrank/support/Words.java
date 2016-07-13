@@ -14,7 +14,7 @@ import static ltf.namerank.utils.PathUtils.getWordsHome;
 public class Words {
     //    public final static Set<String> negativeSet = new HashSet<>();
 //    public final static Set<String> positiveSet = new HashSet<>();
-    public final static Set<String> butySet = new HashSet<>();
+//    public final static Set<String> butySet = new HashSet<>();
     public final static Set<String> goodSet = new HashSet<>();
     public final static Set<String> badSet = new HashSet<>();
 
@@ -23,7 +23,7 @@ public class Words {
         try {
 //            file2Lines(getWordsHome() + "/positive.txt", positiveSet);
 //            file2Lines(getWordsHome() + "/negative.txt", negativeSet);
-            file2Lines(getWordsHome() + "/buty.txt", butySet);
+//            file2Lines(getWordsHome() + "/buty.txt", butySet);
 
             file2Lines(getWordsHome() + "/goodwords.txt", goodSet);
             file2Lines(getWordsHome() + "/badwords.txt", badSet);

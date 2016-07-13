@@ -3,16 +3,15 @@ package ltf.namerank.rank.dictrank.support.dict;
 import com.hankcs.hanlp.seg.common.Term;
 import com.hankcs.hanlp.tokenizer.StandardTokenizer;
 import com.sun.istack.internal.NotNull;
-import ltf.namerank.rank.RankItem;
-import ltf.namerank.rank.RankSettings;
-import ltf.namerank.rank.WordExistChecker;
+import ltf.namerank.rank.*;
 import ltf.namerank.rank.dictrank.support.Cipin;
 import ltf.namerank.utils.Rtc;
 
 import java.util.*;
 
 import static ltf.namerank.rank.RankItemHelper.addInfo;
-import static ltf.namerank.rank.dictrank.support.Words.*;
+import static ltf.namerank.rank.dictrank.support.Words.badSet;
+import static ltf.namerank.rank.dictrank.support.Words.goodSet;
 import static ltf.namerank.utils.PathUtils.getRawHome;
 import static ltf.namerank.utils.StrUtils.existsCount;
 
@@ -98,7 +97,8 @@ public class HanYuDaCidian extends MdxtDict implements WordExistChecker {
 //            } else if (butySet.contains(target.getKey())) {
 //                delta += 5 * rate;
 //            }
-
+            double rk = 0;
+            double delta;
             String means = "";
             Map<String, Integer> words = new HashMap<>();
             for (String explain : explains) {
@@ -106,32 +106,47 @@ public class HanYuDaCidian extends MdxtDict implements WordExistChecker {
                 segment(explain, words);
             }
 
-            double rk = target.getScore();
-            double delta;
-            for (String word : words.keySet()) {
-                delta = 0;
-                double rate = Math.cbrt(words.get(word) * Cipin.get(word)) / words.size();
-                if (goodSet.contains(word)) {
-                    delta += 1 * rate;
+            if (goodSet.contains(target.getKey()) || badSet.contains(target.getKey())) {
+                if (goodSet.contains(target.getKey())) {
+                    rk = 10;
                 }
-                if (badSet.contains(word)) {
-                    delta -= 5 * rate;
+                if (badSet.contains(target.getKey())) {
+                    rk = -10;
                 }
-                if (butySet.contains(word)) {
-                    delta += 5 * rate;
+                if (rk < 0) {
+                    addInfo("<font color=red>").append(target.getKey()).append("-10</font> ");
+                } else if (rk > 0) {
+                    addInfo(target.getKey()).append("10 ");
+                } else {
+                    addInfo(target.getKey()).append(" ");
                 }
-                if (RankSettings.reportMode) {
-                    if (delta < 0) {
-                        addInfo("<font color=red>").append(word).append(String.format("%.1f</font> ", delta));
-                    } else if (delta > 0) {
-                        addInfo(word).append(String.format("%.1f ", delta));
-                    } else {
-                        addInfo(word).append(" ");
+
+            } else {
+
+
+                FreqRankList freqList = new FreqRankList();
+                for (String word : words.keySet()) freqList.add(word, words.get(word));
+
+                for (FreqRankItem item : freqList.prepare()) {
+                    delta = 0;
+                    if (goodSet.contains(item.getWord())) {
+                        delta += 10 * item.getRate();
                     }
+                    if (badSet.contains(item.getWord())) {
+                        delta -= 10 * item.getRate();
+                    }
+                    if (RankSettings.reportMode) {
+                        if (delta < 0) {
+                            addInfo("<font color=red>").append(item.getWord()).append(String.format("%.1f</font> ", delta));
+                        } else if (delta > 0) {
+                            addInfo(item.getWord()).append(String.format("%.1f ", delta));
+                        } else {
+                            addInfo(item.getWord()).append(" ");
+                        }
+                    }
+                    rk += delta;
                 }
-                rk += delta;
-            }
-            if (RankSettings.reportMode) addInfo("\n");
+                if (RankSettings.reportMode) addInfo("\n");
 
 //            StringBuilder infoBuilder = null;
 //            if (RankSettings.reportMode) infoBuilder = new StringBuilder();
@@ -155,6 +170,7 @@ public class HanYuDaCidian extends MdxtDict implements WordExistChecker {
 //            }
 //            if (RankSettings.reportMode) addInfo("\n");
 
+            }
 
             if (RankSettings.reportMode) addInfo(means);
             //if (RankSettings.reportMode) addInfo(getValue());

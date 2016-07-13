@@ -25,20 +25,22 @@ public class AllCasesRanker extends WrappedRanker {
 
         if (fullLen == 1) {
             if (getFamilyName() != null) {
-                result.add(new Case(getFamilyName() + "" + chars[0], 1));
+                result.add(new Case(getFamilyName() + "" + chars[0], 5));
+                result.add(new Case("" + chars[0], 5));
+                return result;
             }
-            result.add(new Case("" + chars[0], 2));
+            result.add(new Case("" + chars[0], 10));
         } else if (fullLen == 2) {
             if (getFamilyName() != null) {
-                result.add(new Case(getFamilyName() + "" + chars[0] + chars[1], 1));
-                result.add(new Case("" + chars[0] + chars[1], 2));
-                result.add(new Case("" + chars[0], 0.6));
-                result.add(new Case("" + chars[1], 0.6));
-                result.add(new Case(getFamilyName() + "" + chars[0], 0.2));
+                result.add(new Case(getFamilyName() + "" + chars[0] + chars[1], 2));
+                result.add(new Case("" + chars[0] + chars[1], 3));
+                result.add(new Case("" + chars[0], 2));
+                result.add(new Case("" + chars[1], 2));
+                result.add(new Case(getFamilyName() + "" + chars[0], 1));
             } else {
-                result.add(new Case("" + chars[0] + chars[1], 2));
-                result.add(new Case("" + chars[0], 0.6));
-                result.add(new Case("" + chars[1], 0.6));
+                result.add(new Case("" + chars[0] + chars[1], 3.69));
+                result.add(new Case("" + chars[0], 2.46));
+                result.add(new Case("" + chars[1], 2.46));
             }
         }
         return result;

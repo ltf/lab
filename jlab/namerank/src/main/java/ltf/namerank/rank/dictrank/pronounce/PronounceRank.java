@@ -1,9 +1,6 @@
 package ltf.namerank.rank.dictrank.pronounce;
 
-import ltf.namerank.rank.RankItem;
-import ltf.namerank.rank.RankSettings;
-import ltf.namerank.rank.Ranker;
-import ltf.namerank.rank.WrappedRanker;
+import ltf.namerank.rank.*;
 import ltf.namerank.rank.dictrank.support.PinyinMap;
 
 import java.util.Set;
@@ -31,23 +28,31 @@ public class PronounceRank extends WrappedRanker {
         double childRk;
         if (RankSettings.reportMode) acquireBuilder();
         Set<String> words = PinyinMap.getWords(target.getKey());
+
+        FreqRankList freqList = new FreqRankList();
+
         if (RankSettings.reportMode) addInfo("\n同声: ");
         for (String word : words) {
             if (target.getKey().equals(word)) continue;
-
-            childRk = super.rank(new RankItem(word)) / words.size();
+            freqList.add(word);
+        }
+        for (FreqRankItem item : freqList.prepare()) {
+            childRk = super.rank(new RankItem(item.getWord())) * item.getRate() * 8;
             rk += childRk;
-            if (RankSettings.reportMode) info(word, childRk);
+            if (RankSettings.reportMode) info(item.getWord(), childRk);
         }
 
         if (RankSettings.reportMode) addInfo("\n异声: ");
         Set<String> wordsNoTone = PinyinMap.getWordsNoTone(target.getKey());
+        freqList.clear();
         for (String word : wordsNoTone) {
             if (target.getKey().equals(word) || words.contains(word)) continue;
-
-            childRk = super.rank(new RankItem(word)) * 0.2 / wordsNoTone.size();
+            freqList.add(word);
+        }
+        for (FreqRankItem item : freqList.prepare()) {
+            childRk = super.rank(new RankItem(item.getWord())) * item.getRate() * 2;
             rk += childRk;
-            if (RankSettings.reportMode) info(word, childRk);
+            if (RankSettings.reportMode) info(item.getWord(), childRk);
         }
 
         if (RankSettings.reportMode) flushResult(target, rk);
