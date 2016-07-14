@@ -174,8 +174,8 @@ public class HanYuDaCidian extends MdxtDict implements WordExistChecker {
 
             }
 
-            if (RankSettings.reportMode) addInfo(means);
-            //if (RankSettings.reportMode) addInfo(getValue());
+            //if (RankSettings.reportMode) addInfo(means);
+            if (RankSettings.reportMode) addInfo(getValue());
             if (RankSettings.reportMode) addInfo("\n");
 
             Rtc.end();

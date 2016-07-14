@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.hankcs.hanlp.dictionary.CoreSynonymDictionary;
 import ltf.namerank.entity.WordFeeling;
 import ltf.namerank.rank.*;
+import ltf.namerank.rank.dictrank.meaning.SameMeaningFilter;
 import ltf.namerank.rank.dictrank.meaning.SameMeaningRanker;
 import ltf.namerank.rank.dictrank.pronounce.PronounceRank;
 import ltf.namerank.rank.dictrank.pronounce.YinYunFilter;
@@ -12,7 +13,6 @@ import ltf.namerank.rank.dictrank.support.dict.MdxtDict;
 import ltf.namerank.rank.filter.BlacklistCharsFilter;
 import ltf.namerank.rank.filter.ChainedFilter;
 import ltf.namerank.rank.filter.LengthFilter;
-import ltf.namerank.rank.wuxing.WugeFilter;
 import ltf.namerank.utils.LinesInFile;
 
 import java.io.IOException;
@@ -45,6 +45,58 @@ public class RankingTest {
 
     private void testNewDict() {
 
+    }
+
+
+    private void testWordFeeling() {
+        List<WordFeeling> wordFeelingList = null;
+        try {
+            wordFeelingList = JSON.parseArray(file2Str(getJsonHome() + "/wordfeeling"), WordFeeling.class);
+        } catch (IOException e) {
+        }
+        List<String> list = new ArrayList<>();
+        for (WordFeeling feeling : wordFeelingList) {
+
+            if (!( //"noun".equals(feeling.getProperty()) ||
+                    // "verb".equals(feeling.getProperty()) ||
+                    "adj".equals(feeling.getProperty()) ||
+                            "adv".equals(feeling.getProperty())))
+                continue;
+
+
+            if (feeling.getPolar() == 1) {
+                //System.out.println(feeling.getWord());
+                list.add(feeling.getWord());
+            }
+        }
+
+        testWordUnion(list);
+    }
+
+
+    private void testWordUnion(List<String> list) {
+        //List<String> list = new ArrayList<>();
+        List<String> keys = new ArrayList<>();
+
+        try {
+            RankRecordList result = new RankRecordList();
+            //file2Lines(getRawHome() + "/buty-keywords.txt", list);
+            file2Lines(getRawHome() + "/buty-keywords.txt", keys);
+            for (String s : list) {
+                double score = CoreSynonymDictionary.distance(s, "美丽") * 100000;
+                score += CoreSynonymDictionary.distance(s, "漂亮") * 100000;
+                score += CoreSynonymDictionary.distance(s, "可爱") * 100000;
+                for (String k : keys) {
+                    score += CoreSynonymDictionary.distance(s, k);
+                }
+                result.add(s, score);
+            }
+            result.sortAsc();
+            result.listDetails();
+            lines2File(result.getWordList(), getRawHome() + "/buty-keywords2.txt");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void go() {
@@ -119,8 +171,8 @@ public class RankingTest {
 
             AllCasesRanker allCasesRanker = new AllCasesRanker(
                     new SumRankers()
-                            .addRanker(cache(sameMeaningRanker), 4)
-                            .addRanker(cachedHanyuCidian, 6)
+                            .addRanker(cache(sameMeaningRanker), 8)
+                            .addRanker(cachedHanyuCidian, 4)
                             .addRanker(cache(new PronounceRank(cachedHanyuCidian)), 1)
             );
 
@@ -137,15 +189,16 @@ public class RankingTest {
 
             BlacklistCharsFilter blacklistCharsFilter = new BlacklistCharsFilter()
                     .addChars(getWordsHome() + "/fyignore.txt")
-                    .addChars(getWordsHome() + "/taboo_girl.txt")
-                    .addChars(getWordsHome() + "/gaopinzi.txt")
+                    //.addChars(getWordsHome() + "/taboo_girl.txt")
+                    //.addChars(getWordsHome() + "/gaopinzi.txt")
                     .addChars(getWordsHome() + "/badchars.txt");
 
             filter = new ChainedFilter()
                     .add(new LengthFilter())
-                    //.add(new WugeFilter())
+                            //.add(new WugeFilter())
                     .add(blacklistCharsFilter)
                     .add(new YinYunFilter())
+                    .add(new SameMeaningFilter())
             ;
 
             doRanking();
@@ -156,68 +209,17 @@ public class RankingTest {
         }
     }
 
-
-    private void testWordFeeling() {
-        List<WordFeeling> wordFeelingList = null;
-        try {
-            wordFeelingList = JSON.parseArray(file2Str(getJsonHome() + "/wordfeeling"), WordFeeling.class);
-        } catch (IOException e) {
-        }
-        List<String> list = new ArrayList<>();
-        for (WordFeeling feeling : wordFeelingList) {
-
-            if (!( //"noun".equals(feeling.getProperty()) ||
-                    // "verb".equals(feeling.getProperty()) ||
-                    "adj".equals(feeling.getProperty()) ||
-                            "adv".equals(feeling.getProperty())))
-                continue;
-
-
-            if (feeling.getPolar() == 1) {
-                //System.out.println(feeling.getWord());
-                list.add(feeling.getWord());
-            }
-        }
-
-        testWordUnion(list);
-    }
-
-
-    private void testWordUnion(List<String> list) {
-        //List<String> list = new ArrayList<>();
-        List<String> keys = new ArrayList<>();
-
-        try {
-            RankRecordList result = new RankRecordList();
-            //file2Lines(getRawHome() + "/buty-keywords.txt", list);
-            file2Lines(getRawHome() + "/buty-keywords.txt", keys);
-            for (String s : list) {
-                double score = CoreSynonymDictionary.distance(s, "美丽") * 100000;
-                score += CoreSynonymDictionary.distance(s, "漂亮") * 100000;
-                score += CoreSynonymDictionary.distance(s, "可爱") * 100000;
-                for (String k : keys) {
-                    score += CoreSynonymDictionary.distance(s, k);
-                }
-                result.add(s, score);
-            }
-            result.sortAsc();
-            result.listDetails();
-            lines2File(result.getWordList(), getRawHome() + "/buty-keywords2.txt");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     private Set<String> picked = new HashSet<>();
     private static final String PICKED_LIST = getRawHome() + "/picked.txt";
 
     private void doRanking() throws IOException {
 
-        //RankSettings.reportMode = true;
+        RankSettings.reportMode = true;
 
         if (RankSettings.reportMode && exists(PICKED_LIST)) file2Lines(PICKED_LIST, picked);
 
         new LinesInFile(getNamesHome() + "/givenNames.txt").each(this::nameRanking);
+        //new LinesInFile(getWordsHome() + "/allWords.txt").each(this::nameRanking);
 
         rankItems.sort(RankItem::descOrder);
 
@@ -228,14 +230,14 @@ public class RankingTest {
         }
         str2File(sb.toString(), getRawHome() + "/ranking.txt");
         List<RankItem> genHtmlItems = new ArrayList<>();
-        for (int i = 0; i < (rankItems.size() < 1000 ? rankItems.size() : 1000); i++) {
+        for (int i = 0; i < (rankItems.size() < 2000 ? rankItems.size() : 2000); i++) {
             genHtmlItems.add(rankItems.get(i));
         }
         if (RankSettings.reportMode) HtmlGenerator.gen(genHtmlItems, getRawHome() + "/test.htm");
     }
 
     private void nameRanking(String givenName) {
-        if (filter.banned(givenName)) return;
+        //if (filter.banned(givenName)) return;
         if (RankSettings.reportMode && !picked.contains(givenName)) return;
         //if (!"钰琦".equals(givenName)) return;
         //if (givenName.length() == 2 && givenName.substring(0, 1).equals(givenName.substring(1))) {
