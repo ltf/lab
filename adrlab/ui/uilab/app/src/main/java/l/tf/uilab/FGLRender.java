@@ -1,7 +1,10 @@
 package l.tf.uilab;
 
+import android.app.Application;
+import android.graphics.Canvas;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.widget.TextView;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -19,8 +22,7 @@ public class FGLRender implements GLSurfaceView.Renderer {
     private Square mSquare;
 
 
-
-    public static int loadShader(int type, String shaderCode){
+    public static int loadShader(int type, String shaderCode) {
 
         // 创建一个vertex shader类型(GLES20.GL_VERTEX_SHADER)
         // 或fragment shader类型(GLES20.GL_FRAGMENT_SHADER)
@@ -56,18 +58,33 @@ public class FGLRender implements GLSurfaceView.Renderer {
         mTriangle.draw();
     }
 
+
+    private void drawText(String content) {
+        TextView tv = new TextView(null);
+        Canvas canvas=new Canvas();
+        //canvas.drawText();
+
+        tv.setText(content);
+
+        //tv.draw();
+
+
+
+        //GLES20.gltex;
+    }
+
     private static class Triangle {
         private final int mProgram;
         private FloatBuffer vertexBuffer;
         // 数组中每个顶点的坐标数
         static final int COORDS_PER_VERTEX = 3;
         static float triangleCoords[] = { // 按逆时针方向顺序:
-                0.0f,  0.622008459f, 0.0f,   // top
+                0.0f, 0.622008459f, 0.0f,   // top
                 -0.5f, -0.311004243f, 0.0f,   // bottom left
                 0.5f, -0.311004243f, 0.0f    // bottom right
         };
         // 设置颜色，分别为red, green, blue 和alpha (opacity)
-        float color[] = { 0.63671875f, 0.76953125f, 0.22265625f, 1.0f };
+        float color[] = {0.63671875f, 0.76953125f, 0.22265625f, 1.0f};
         private int mPositionHandle;
         private int mColorHandle;
 
@@ -147,11 +164,12 @@ public class FGLRender implements GLSurfaceView.Renderer {
         private ShortBuffer drawListBuffer;
         // 每个顶点的坐标数
         static final int COORDS_PER_VERTEX = 3;
-        static float squareCoords[] = { -0.5f,  0.5f, 0.0f,   // top left
+        static float squareCoords[] = {-0.5f, 0.5f, 0.0f,   // top left
                 -0.5f, -0.5f, 0.0f,   // bottom left
                 0.5f, -0.5f, 0.0f,   // bottom right
-                0.5f,  0.5f, 0.0f }; // top right
-        private short drawOrder[] = { 0, 1, 2, 0, 2, 3 }; // 顶点的绘制顺序
+                0.5f, 0.5f, 0.0f}; // top right
+        private short drawOrder[] = {0, 1, 2, 0, 2, 3}; // 顶点的绘制顺序
+
         public Square() {
             // initialize vertex byte buffer for shape coordinates
             ByteBuffer bb = ByteBuffer.allocateDirect(
