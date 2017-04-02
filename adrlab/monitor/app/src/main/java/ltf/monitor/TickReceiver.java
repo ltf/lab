@@ -14,11 +14,8 @@ import android.widget.Toast;
 public class TickReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Intent it = new Intent(context, MainActivity.class);
-        context.startActivity(it);
-        //vibrate(context);
-        //String msg = intent.getStringExtra("msg");
-        //Toast.makeText(context,msg, Toast.LENGTH_SHORT).show();
+        Intent it = new Intent(context, MonitorService.class);
+        context.startService(it);
     }
 
 
