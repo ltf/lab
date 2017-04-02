@@ -21,11 +21,21 @@ public class MonitorService extends Service {
     PowerManager.WakeLock mWakeLock = null;
     Handler handler = new Handler();
     MediaPlayer mMediaPlayer;
+    NotificationManager mNm;
     Runnable check = new Runnable() {
         @Override
         public void run() {
             checkLater();
             volleyReq();
+        }
+    };
+
+    Runnable closeLed = new Runnable() {
+        @Override
+        public void run() {
+            if (mNm != null)
+                mNm.cancel(1);
+
         }
     };
 
@@ -80,9 +90,10 @@ public class MonitorService extends Service {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        if (response != null && response.hashCode() == 1084823173) {
+                        if (response != null && response.hashCode() != 1084823173) {
                             alert();
                         }
+                        ledShow();
                     }
                 }, null);
         // Add the request to the mQueue
@@ -135,6 +146,34 @@ public class MonitorService extends Service {
 //设置闹钟从当前时间开始，每隔5s执行一次PendingIntent对象pi，注意第一个参数与第二个参数的关系
 // 5秒后通过PendingIntent pi对象发送广播
         am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 60000, pi);
+    }
+
+    private void ledShow() {
+
+
+        try {
+
+        if(mNm == null) mNm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        Notification notification = new Notification();
+        notification.ledARGB = 0xFF00FF;  //这里是颜色，我们可以尝试改变，理论上0xFF0000是红色，0x00FF00是绿色
+        notification.ledOnMS = 100;
+        notification.ledOffMS = 100;
+        notification.flags = Notification.FLAG_SHOW_LIGHTS;
+        mNm.notify(1, notification);
+
+            handler.postDelayed(closeLed, 500);
+
+//            Notification.Builder builder = new Notification.Builder(this);
+//            builder.setSmallIcon(R.mipmap.ic_launcher)
+//                    .setPriority(Notification.PRIORITY_HIGH)
+//                    .setOngoing(true);
+//            builder.setLights(0xff00ff00, 300, 100);
+//            NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+//            manager.notify(1, builder.build());
+
+        } catch (Exception e){
+
+        }
     }
 
 
