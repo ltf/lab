@@ -1,5 +1,6 @@
 package ltf.monitor;
 
+import android.annotation.TargetApi;
 import android.app.*;
 import android.content.Context;
 import android.content.Intent;
@@ -34,7 +35,7 @@ public class MonitorService extends Service {
         @Override
         public void run() {
             if (mNm != null)
-                mNm.cancel(1);
+                mNm.cancel(2);
 
         }
     };
@@ -53,6 +54,7 @@ public class MonitorService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (!started) {
             started = true;
+
             start();
         }
         return super.onStartCommand(intent, flags, startId);
@@ -81,6 +83,7 @@ public class MonitorService extends Service {
         check.run();
         awake();
         keepAlive();
+        holdNotify();
     }
 
     private void volleyReq() {
@@ -148,6 +151,21 @@ public class MonitorService extends Service {
         am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 60000, pi);
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    private void holdNotify(){
+
+        try {
+
+            Notification.Builder builder = new Notification.Builder(this);
+            builder.setSmallIcon(R.mipmap.ic_launcher)
+                    .setPriority(Notification.PRIORITY_MAX)
+                    .setOngoing(true);
+
+            startForeground(1, builder.build());
+        } catch (Exception e){
+        }
+    }
+
     private void ledShow() {
 
 
@@ -159,7 +177,7 @@ public class MonitorService extends Service {
         notification.ledOnMS = 100;
         notification.ledOffMS = 100;
         notification.flags = Notification.FLAG_SHOW_LIGHTS;
-        mNm.notify(1, notification);
+        mNm.notify(2, notification);
 
             handler.postDelayed(closeLed, 500);
 

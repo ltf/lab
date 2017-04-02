@@ -32,6 +32,7 @@
         </receiver>
 
         <service
+                android:process=":monitor"
                 android:name=".MonitorService"
                 android:enabled="true">
         </service>
