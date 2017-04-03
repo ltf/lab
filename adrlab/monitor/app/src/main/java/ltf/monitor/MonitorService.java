@@ -67,7 +67,7 @@ public class MonitorService extends Service {
 
 
     private void checkLater() {
-        handler.postDelayed(check, 3000);
+        handler.postDelayed(check, 10000);
     }
 
     private void awake() {

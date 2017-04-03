@@ -14,7 +14,7 @@ public class SasOid implements  Target {
 
     @Override
     public boolean verify(String response) {
-        Log.e("l","oid");
+        //Log.e("l","oid");
         return response != null && response.hashCode() != 1084823173;
     }
 }

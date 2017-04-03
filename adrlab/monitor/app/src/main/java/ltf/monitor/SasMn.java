@@ -14,7 +14,7 @@ public class SasMn implements  Target {
 
     @Override
     public boolean verify(String response) {
-        Log.e("l","mn");
+        //Log.e("l","mn");
 
         return response != null &&  response.hashCode() != -1682924287;
     }
