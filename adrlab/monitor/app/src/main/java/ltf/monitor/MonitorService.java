@@ -15,6 +15,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class MonitorService extends Service {
     private boolean started;
@@ -40,9 +42,12 @@ public class MonitorService extends Service {
         }
     };
 
+    ArrayList<Target> mTargets = new ArrayList<>();
+    Random rand = new Random();
 
     public MonitorService() {
-
+        mTargets.add(new SasOid());
+        mTargets.add(new SasMn());
     }
 
     @Override
@@ -86,14 +91,21 @@ public class MonitorService extends Service {
         holdNotify();
     }
 
+    private int mId = 0;
+    private Target pickTarget(){
+        if (mId <0) mId =0;
+        if (mId >=mTargets.size()) mId =0;
+        return mTargets.get(mId++);
+        //return mTargets.get(rand.nextInt(mTargets.size()));
+    }
+
     private void volleyReq() {
-        String url = "http://www.saskatchewan.ca/residents/moving-to-saskatchewan/immigrating-to-saskatchewan/saskatchewan-immigrant-nominee-program/applicants-international-skilled-workers/international-skilled-worker-occupations-in-demand";
-        // Request a string response
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+        final Target target = pickTarget();
+       StringRequest stringRequest = new StringRequest(Request.Method.GET, target.url(),
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        if (response != null && response.hashCode() != 1084823173) {
+                        if (target.verify(response)) {
                             alert();
                         }
                         ledShow();
