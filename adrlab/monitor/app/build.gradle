@@ -1,9 +1,20 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            //加载资源
+            Properties props = new Properties()
+            props.load( project.rootProject.file('local.properties').newDataInputStream() )
+
+            keyAlias props.getProperty( 'ks_keyAlias' )
+            keyPassword props.getProperty( 'ks_keyPwd' )
+            storeFile file(props.getProperty('ks_path'))
+            storePassword props.getProperty( 'ks_Pwd' )
+        }
+    }
     compileSdkVersion 24
     buildToolsVersion "24.0.2"
-
     defaultConfig {
         applicationId "ltf.monitor"
         minSdkVersion 8
@@ -14,15 +25,15 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     //compile 'com.squareup.retrofit2:retrofit:2.2.0'
-
-    compile group: 'com.mcxiaoke.volley', name: 'library', version: '1.0.19'
+    compile 'com.mcxiaoke.volley:library:1.0.19'
     compile 'com.android.support:appcompat-v7:24.0.0-beta1'
 }
