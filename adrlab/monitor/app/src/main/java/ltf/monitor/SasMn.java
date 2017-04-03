@@ -14,8 +14,15 @@ public class SasMn implements  Target {
 
     @Override
     public boolean verify(String response) {
-        //Log.e("l","mn");
-
-        return response != null &&  response.hashCode() != -1682924287;
+        if(response==null)  return false;
+        int iBegin = response.indexOf(">Express Entry<");
+        int iEnd = response.indexOf( "</tbody>",iBegin);
+        if (iEnd>iBegin){
+            String s = response.substring(iBegin, iEnd);
+            int x = response.hashCode();
+            //Log.e("",""+x);
+            return x != 1073054175;
+        }
+        return false;
     }
 }
