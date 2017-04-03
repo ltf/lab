@@ -2,15 +2,11 @@ apply plugin: 'com.android.application'
 
 android {
     signingConfigs {
-        config {
-            //加载资源
-            Properties props = new Properties()
-            props.load( project.rootProject.file('local.properties').newDataInputStream() )
-
-            keyAlias props.getProperty( 'ks_keyAlias' )
-            keyPassword props.getProperty( 'ks_keyPwd' )
-            storeFile file(props.getProperty('ks_path'))
-            storePassword props.getProperty( 'ks_Pwd' )
+        release {
+            keyAlias 'ltf_app'
+            keyPassword '.HkmA]VE'
+            storeFile file(System.properties['user.home'] + '/.ssh/ltf_app_ks')
+            storePassword '.HkmA]VE'
         }
     }
     compileSdkVersion 24
@@ -25,7 +21,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
