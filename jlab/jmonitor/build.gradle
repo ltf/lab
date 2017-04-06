@@ -12,3 +12,20 @@ dependencies {
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
     testCompile 'junit:junit:4.12'
 }
+
+
+task exejar(type: Jar, dependsOn: build) {
+    archiveName "jmonitor.jar";
+    from files(sourceSets.main.output.classesDir)
+    from files(sourceSets.main.resources)
+    from configurations.runtime.asFileTree.files.collect {
+        zipTree(it)
+    }
+
+    def gitRevision = 'git rev-parse --short HEAD'.execute().text.trim() ?: 'deb89'
+
+    manifest {
+        attributes (['Main-Class': 'ltf.jmonitor.Loader',
+                     'Revision': "$gitRevision"])
+    }
+}
