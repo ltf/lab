@@ -31,8 +31,8 @@ public class Account {
 
     private String un;
     private String pwd;
-    private int itvBase = 10;
-    private int itvRnd = 8;
+    private int itvBase = 15;
+    private int itvRnd = 15;
 
     public void checkOrRun() {
         long tc = System.currentTimeMillis();
