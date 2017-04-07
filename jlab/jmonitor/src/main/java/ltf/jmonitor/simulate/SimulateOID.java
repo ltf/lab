@@ -19,7 +19,7 @@ public class SimulateOID extends SimulateOASIS {
             submitReq();
             continueReq();
             try {
-                Thread.sleep(1000 * 60*2);
+                Thread.sleep(1000 * 30);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
