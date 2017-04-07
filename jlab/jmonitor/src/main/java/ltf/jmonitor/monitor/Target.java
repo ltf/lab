@@ -37,9 +37,9 @@ public class Target {
                 result = true;
             } else {
                 if (lastContent == null)
-                    log.info("%s inited", name);
+                    log.info(name + " inited");
                 else
-                    log.info("%s not changed", name);
+                    log.info(name + " not changed");
             }
             lastContent = content;
         } catch (Exception e) {

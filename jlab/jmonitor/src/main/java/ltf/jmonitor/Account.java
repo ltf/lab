@@ -76,7 +76,7 @@ public class Account {
                 m = itvBase + random.nextInt(itvRnd);
         }
         willRun = currentMillis + 1000 * 60 * 60 * m;
-        log.info("%s will submit after %d minutes later", un, m);
+        log.info(String.format("%s will submit after %d minutes later", un, m));
     }
 
     public void notifyPageChanged() {
