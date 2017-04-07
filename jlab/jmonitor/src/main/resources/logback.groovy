@@ -3,6 +3,7 @@ import ch.qos.logback.core.ConsoleAppender
 
 import static ch.qos.logback.classic.Level.DEBUG
 import static ch.qos.logback.classic.Level.WARN
+import static ch.qos.logback.classic.Level.INFO
 
 appender("STDOUT", ConsoleAppender) {
     encoder(PatternLayoutEncoder) {
@@ -10,5 +11,5 @@ appender("STDOUT", ConsoleAppender) {
     }
 }
 
-logger('ltf.jmonitor', WARN)
-root(DEBUG, ["STDOUT"])
+logger('ltf.jmonitor', INFO)
+root(WARN, ["STDOUT"])

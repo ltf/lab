@@ -29,10 +29,10 @@ public class Account {
     @JSONField(serialize = false)
     private int pageChangedMode = 0;
 
-    private String un;
-    private String pwd;
-    private int itvBase = 15;
-    private int itvRnd = 15;
+    public String un;
+    public String pwd;
+    public int itvBase = 15;
+    public int itvRnd = 15;
 
     public void checkOrRun() {
         long tc = System.currentTimeMillis();
