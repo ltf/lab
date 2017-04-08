@@ -10,9 +10,8 @@ $i = 0;
 if (is_int((int)$_GET['i'])) {
 	$i = (int)$_GET['i'] % $len;
 }
-echo $i; 
 $url=$urls[$i];
 $html = file_get_contents($url); 
 $hash = hash('crc32b', $html); 
-echo $url; 
+echo $hash; 
 ?>
