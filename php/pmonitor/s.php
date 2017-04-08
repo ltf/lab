@@ -6,8 +6,13 @@ $urls = array(
 	'http://www.saskatchewan.ca'
 );
 $len = count($urls);
-if (is_int($_GET['i'])) $i = $_GET['i'];
-else $i = rand();
+if (is_int($_GET['i'])) {
+	$i = $_GET['i'];
+} else { 
+	$i = rand();
+}
+echo $i; 
+echo $url; 
 $url=$urls[$i % $len];
 $html = file_get_contents($url); 
 $hash = hash('crc32b', $html); 
