@@ -6,10 +6,9 @@ $urls = array(
 	'http://www.saskatchewan.ca'
 );
 $len = count($urls);
+$i = 0;
 if (is_int((int)$_GET['i'])) {
 	$i = (int)$_GET['i'] % $len;
-} else { 
-	$i = rand(0, len-1);
 }
 echo $i; 
 $url=$urls[$i];
