@@ -75,7 +75,7 @@ public class Account {
             default:
                 m = itvBase + random.nextInt(itvRnd);
         }
-        willRun = currentMillis + 1000 * 60 * 60 * m;
+        willRun = currentMillis + 1000 * 60 * m;
         log.info(String.format("%s will submit after %d minutes later", un, m));
     }
 
