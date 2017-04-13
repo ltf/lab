@@ -31,8 +31,7 @@ public class WxVoteThread extends Thread {
 
     @Override
     public void run() {
-
-
+        voteLoop();
     }
 
     private String randSession() {
@@ -61,7 +60,7 @@ public class WxVoteThread extends Thread {
                 while ((line = reader.readLine()) != null) result += line + "\n";
                 long v = count.incrementAndGet();
 
-                if (result.indexOf("oauth2/authorize?appid=wxd5e206b2f3a8e8d") <= 0) {
+                if (!result.contains("oauth2/authorize?appid=wxd5e206b2f3a8e8d") && !result.contains("4006598598")) {
                     System.out.println("success at " + Long.toString(v));
                 }
             } catch (IOException e) {
