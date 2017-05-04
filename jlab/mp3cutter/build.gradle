@@ -1,0 +1,20 @@
+apply plugin: 'java'
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // logging
+    compile 'org.slf4j:slf4j-parent:1.7.21'
+    compile 'org.slf4j:jcl-over-slf4j:1.7.21'
+    compile 'ch.qos.logback:logback-classic:1.1.7'
+    // test
+    testCompile 'org.testng:testng:6.8'
+    testCompile 'org.codehaus.groovy:groovy-testng:2.4.7'
+}
