@@ -8,6 +8,7 @@ package li.tf.mp3cutter.section;
  * @since 17/5/5, 上午10:15
  */
 public class Mp3Frame extends Section {
+
     private static final int[][] bitrateTable = {
             {-1, -1, -1, -1, -1},
             {32, 32, 32, 32, 8},
@@ -32,12 +33,17 @@ public class Mp3Frame extends Section {
             {32000, 16000, 8000},
             {-1, -1, -1}
     };
+    protected double timeLength;  // time length in second
     private int versionID;
     private int layerID;
     private boolean hasCrc;
     private int bitrateID;
     private int sampleRateID;
     private boolean padded;
+
+    public double getTimeLength() {
+        return timeLength;
+    }
 
     @Override
     protected boolean parseHeadData(byte[] head) {
@@ -55,6 +61,7 @@ public class Mp3Frame extends Section {
         int sampleRate = getSampleRate(sampleRateID, versionID);
         if (bitRate < 0 || sampleRate < 0) return false;
 
+        timeLength = calculateTimeLength(layerID, sampleRate);
         length = calculateLength(bitRate, sampleRate, layerID, hasCrc, padded);
         return true;
     }
@@ -90,7 +97,7 @@ public class Mp3Frame extends Section {
             }
         }
 
-        return vl < 0 ? -1 : bitrateTable[bitrateID][vl];
+        return vl < 0 ? -1 : bitrateTable[bitrateID][vl] * 1000;
     }
 
     /**
@@ -142,6 +149,20 @@ public class Mp3Frame extends Section {
                 break;
         }
 
+        return len;
+    }
+
+    private double calculateTimeLength(int layerID, int sampleRate) {
+        double len = 0;
+        switch (layerID) {
+            case 1:
+            case 2:
+                len = 1152.0 / sampleRate;
+                break;
+            case 3:
+                len = 384.0 / sampleRate;
+                break;
+        }
         return len;
     }
 
