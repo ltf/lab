@@ -15,7 +15,7 @@ public class TagID3v2Section extends Section {
     public static int SynchsafeInt2Integer(byte[] data, int offset) {
         int v = 0;
         for (int i = 0; i < 4; i++) {
-            v = (v << 7) & (data[offset + i] & 0x7f);   // big endian
+            v = (v << 7) | (data[offset + i] & 0x7f);   // big endian
         }
         return v;
     }
@@ -24,7 +24,7 @@ public class TagID3v2Section extends Section {
     protected boolean parseHeadData(byte[] head) {
         if (head.length < 10) throw new RuntimeException("need at least 10 bytes for parsing");
 
-        length = SynchsafeInt2Integer(head, 6);
+        length = SynchsafeInt2Integer(head, 6) + 10;
         return true;
     }
 
