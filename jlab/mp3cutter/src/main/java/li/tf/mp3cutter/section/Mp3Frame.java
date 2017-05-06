@@ -53,7 +53,7 @@ public class Mp3Frame extends Section {
         layerID = ((head[1] >> 1) & 0x3);
         hasCrc = (head[1] & 0x1) == 0;
 
-        bitrateID = ((head[2] >> 4) & 0x7);
+        bitrateID = ((head[2] >> 4) & 0xF);
         sampleRateID = ((head[2] >> 2) & 0x3);
         padded = ((head[2] >> 1) & 0x1) == 1;
 
@@ -73,7 +73,7 @@ public class Mp3Frame extends Section {
     private int getBitrate(int bitrateID, int versionID, int layerID) {
         if (bitrateID == 0 || bitrateID == 0xF) return -1; //not support Bitrate index
         int vl = -1;
-        if (versionID == 1) {
+        if (versionID == 3) {  // V1
             switch (layerID) {
                 case 1:
                     vl = 2;
@@ -85,7 +85,7 @@ public class Mp3Frame extends Section {
                     vl = 0;
                     break;
             }
-        } else if (versionID == 2) {
+        } else if (versionID == 2) {  // V2
             switch (layerID) {
                 case 1:
                 case 2:
