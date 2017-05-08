@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 public class Mp3CutterTest {
     @Test
     public void testCut() throws Exception {
-        Mp3Cutter.cut("/Users/f/tmp/mp3/Greensleeves.mp3",
+        Mp3Cutter.cut("D:\\share\\mp3\\test-vbr.mp3",
                 "", 0, 0);
 
 

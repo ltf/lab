@@ -124,17 +124,17 @@ public class Mp3Frame extends Section {
      */
     private int calculateLength(int bitRate, int sampleRate, int layerID,
                                 boolean hasCrc, boolean padded) {
-        int len = 4; // 4byte header
-        if (hasCrc) len += 2;  // CRC
+        int len = 0; // header  are included in total length
+        //if (hasCrc) len += 2;  // CRC
         int padding = 0;
         if (padded) {
             switch (layerID) {
                 case 1:
                 case 2:
-                    padding = 4;
+                    padding = 1;   // layer 2\3
                     break;
                 case 3:
-                    padding = 1;
+                    padding = 4;   // layer 1
                     break;
             }
         }
@@ -142,10 +142,10 @@ public class Mp3Frame extends Section {
         switch (layerID) {
             case 1:
             case 2:
-                len += (12 * bitRate / sampleRate + padding) * 4;
+                len += 144 * bitRate / sampleRate + padding;
                 break;
             case 3:
-                len += 144 * bitRate / sampleRate + padding;
+                len += (12 * bitRate / sampleRate + padding) * 4;
                 break;
         }
 

@@ -1,6 +1,7 @@
 package li.tf.mp3cutter;
 
 import li.tf.mp3cutter.section.Mp3Frame;
+import li.tf.mp3cutter.section.Mp3VbrIndex;
 import li.tf.mp3cutter.section.Section;
 import li.tf.mp3cutter.section.SectionDetector;
 
@@ -20,29 +21,41 @@ public class Mp3Cutter {
         this.inFile = new RandomAccessFile(inFile, "r");
     }
 
-    public static void cut(String inFile, String outFile, int start, int end) throws IOException {
+    public static void cut(String inFile, String outFile, double start, double end) throws IOException {
         new Mp3Cutter(inFile).cutTo(start, end, outFile);
     }
 
-    public void cutTo(int start, int end, String outFile) throws IOException {
+    public void cutTo(double start, double end, String outFile) throws IOException {
         byte[] head = new byte[10];
         int size;
+        int offset = head.length;
         size = inFile.read(head);
         SectionDetector detector = new SectionDetector();
         Section sec = null;
+        double timeLen = 0.0;
 
         while (size > 0) {
             if ((sec = detector.detect(head)) != null) {
-                System.out.println(sec.getClass().getSimpleName());
-                if (sec instanceof Mp3Frame) {
+                if (sec instanceof Mp3VbrIndex) {
                     inFile.skipBytes(sec.getLength() - head.length);
-
+                    offset += sec.getLength() - head.length;
+                    timeLen += ((Mp3Frame) sec).getTimeLength();
+                    System.out.println(String.format("%s - %f", sec.getClass().getSimpleName(), timeLen));
+                } else if (sec instanceof Mp3Frame) {
+                    inFile.skipBytes(sec.getLength() - head.length);
+                    offset += sec.getLength() - head.length;
+                    timeLen += ((Mp3Frame) sec).getTimeLength();
+                    System.out.println(String.format("%s - %f", sec.getClass().getSimpleName(), timeLen));
                 } else {
                     inFile.skipBytes(sec.getLength() - head.length);
+                    offset += sec.getLength() - head.length;
+                    System.out.println(sec.getClass().getSimpleName());
                 }
-                size = inFile.read(head);
+            } else {
+                System.out.println("Error data: " + Integer.toHexString(offset));
             }
-
+            size = inFile.read(head);
+            offset += head.length;
         }
     }
 }

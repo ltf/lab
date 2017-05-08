@@ -9,6 +9,7 @@ public class SectionDetector {
             new TagID3v2Section(),
             new TagID3v2Footer(),
             new TagID3v1Section(),
+            new Mp3VbrIndex(),
             new Mp3Frame()
     };
 
