@@ -5,9 +5,7 @@ import li.tf.mp3cutter.section.Mp3VbrIndex;
 import li.tf.mp3cutter.section.Section;
 import li.tf.mp3cutter.section.SectionDetector;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
 
 /**
  * @author ltf
@@ -21,17 +19,28 @@ public class Mp3Cutter {
         this.inFile = new RandomAccessFile(inFile, "r");
     }
 
+    /**
+     * cut part from mp3
+     *
+     * @param inFile  in
+     * @param outFile out
+     * @param start   start (s)
+     * @param end     end(s)
+     * @throws IOException
+     */
     public static void cut(String inFile, String outFile, double start, double end) throws IOException {
         new Mp3Cutter(inFile).cutTo(start, end, outFile);
     }
 
     public void cutTo(double start, double end, String outFile) throws IOException {
         byte[] head = new byte[10];
+        byte[] buf = new byte[1024 * 16];
         int size;
         int offset = head.length;
         size = inFile.read(head);
         SectionDetector detector = new SectionDetector();
         Section sec = null;
+        BufferedOutputStream out = null;
         double timeLen = 0.0;
 
         while (size > 0) {
@@ -42,7 +51,15 @@ public class Mp3Cutter {
                     timeLen += ((Mp3Frame) sec).getTimeLength();
                     System.out.println(String.format("%s - %f", sec.getClass().getSimpleName(), timeLen));
                 } else if (sec instanceof Mp3Frame) {
-                    inFile.skipBytes(sec.getLength() - head.length);
+                    if (timeLen >= start && timeLen < end) {
+                        if (out == null) {
+                            out = new BufferedOutputStream(new FileOutputStream(outFile));
+                        }
+                        out.write(head, 0, size);
+                        copyData(inFile, out, sec.getLength() - head.length, buf);
+                    } else {
+                        inFile.skipBytes(sec.getLength() - head.length);
+                    }
                     offset += sec.getLength() - head.length;
                     timeLen += ((Mp3Frame) sec).getTimeLength();
                     System.out.println(String.format("%s - %f", sec.getClass().getSimpleName(), timeLen));
@@ -56,6 +73,18 @@ public class Mp3Cutter {
             }
             size = inFile.read(head);
             offset += head.length;
+        }
+
+        if (out != null) {
+            out.close();
+        }
+    }
+
+    private void copyData(RandomAccessFile in, OutputStream out, int len, byte[] buf) throws IOException {
+        int size = 0;
+        while ((size = in.read(buf, 0, len < buf.length ? len : buf.length)) > 0) {
+            out.write(buf, 0, size);
+            len -= size;
         }
     }
 }

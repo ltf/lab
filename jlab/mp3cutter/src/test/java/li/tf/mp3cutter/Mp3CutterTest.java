@@ -10,8 +10,8 @@ import org.testng.annotations.Test;
 public class Mp3CutterTest {
     @Test
     public void testCut() throws Exception {
-        Mp3Cutter.cut("D:\\share\\mp3\\test-vbr.mp3",
-                "", 0, 0);
+        Mp3Cutter.cut("D:\\share\\mp3\\庞龙 - 兄弟抱一下.mp3",
+                "D:\\share\\mp3\\庞龙 - 兄弟抱一下-part.mp3", 239, 242);
 
 
     }
