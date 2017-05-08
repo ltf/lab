@@ -36,7 +36,6 @@ public class Mp3Cutter {
         byte[] head = new byte[10];
         byte[] buf = new byte[1024 * 16];
         int size;
-        int offset = head.length;
         size = inFile.read(head);
         SectionDetector detector = new SectionDetector();
         Section sec = null;
@@ -47,9 +46,7 @@ public class Mp3Cutter {
             if ((sec = detector.detect(head)) != null) {
                 if (sec instanceof Mp3VbrIndex) {
                     inFile.skipBytes(sec.getLength() - head.length);
-                    offset += sec.getLength() - head.length;
                     timeLen += ((Mp3Frame) sec).getTimeLength();
-                    System.out.println(String.format("%s - %f", sec.getClass().getSimpleName(), timeLen));
                 } else if (sec instanceof Mp3Frame) {
                     if (timeLen >= start && timeLen < end) {
                         if (out == null) {
@@ -60,19 +57,12 @@ public class Mp3Cutter {
                     } else {
                         inFile.skipBytes(sec.getLength() - head.length);
                     }
-                    offset += sec.getLength() - head.length;
                     timeLen += ((Mp3Frame) sec).getTimeLength();
-                    System.out.println(String.format("%s - %f", sec.getClass().getSimpleName(), timeLen));
                 } else {
                     inFile.skipBytes(sec.getLength() - head.length);
-                    offset += sec.getLength() - head.length;
-                    System.out.println(sec.getClass().getSimpleName());
                 }
-            } else {
-                System.out.println("Error data: " + Integer.toHexString(offset));
             }
             size = inFile.read(head);
-            offset += head.length;
         }
 
         if (out != null) {
