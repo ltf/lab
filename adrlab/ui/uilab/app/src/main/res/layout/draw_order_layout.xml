@@ -18,7 +18,6 @@
             android:layout_height="100dp"
             android:text="2"
             android:layout_gravity="center"
-            android:translationZ="1dp"
             android:background="#ff00ff00"/>
 
 
