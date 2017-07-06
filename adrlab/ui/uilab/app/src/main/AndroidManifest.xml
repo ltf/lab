@@ -66,12 +66,12 @@
                 android:process=":spService"/>
 
         <activity android:name=".AnimationDrawableActivity">
-        </activity>
-        <activity android:name=".RelativeLayoutDrawOrderActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity android:name=".RelativeLayoutDrawOrderActivity">
         </activity>
     </application>
 

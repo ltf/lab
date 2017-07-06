@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/diamondstar_apngasm_opt_0091" android:duration="100"/>
+    <item android:drawable="@drawable/diamondstar_apngasm_opt_0092" android:duration="100"/>
+    <item android:drawable="@drawable/diamondstar_apngasm_opt_0093" android:duration="100"/>
+    <item android:drawable="@drawable/diamondstar_apngasm_opt_0094" android:duration="100"/>
+    <item android:drawable="@drawable/diamondstar_apngasm_opt_0095" android:duration="100"/>
+    <item android:drawable="@drawable/diamondstar_apngasm_opt_0096" android:duration="100"/>
+    <item android:drawable="@drawable/diamondstar_apngasm_opt_0097" android:duration="100"/>
+    <item android:drawable="@drawable/diamondstar_apngasm_opt_0098" android:duration="100"/>
+    <item android:drawable="@drawable/diamondstar_apngasm_opt_0099" android:duration="100"/>
+    <item android:drawable="@drawable/diamondstar_apngasm_opt_0100" android:duration="100"/>
+    <item android:drawable="@drawable/diamondstar_apngasm_opt_0101" android:duration="100"/>
+    <item android:drawable="@drawable/diamondstar_apngasm_opt_0102" android:duration="100"/>
+    <item android:drawable="@drawable/diamondstar_apngasm_opt_0103" android:duration="100"/>
+    <item android:drawable="@drawable/diamondstar_apngasm_opt_0104" android:duration="100"/>
+    <item android:drawable="@drawable/diamondstar_apngasm_opt_0105" android:duration="100"/>
+    <item android:drawable="@drawable/diamondstar_apngasm_opt_0106" android:duration="100"/>
+</animation-list>
