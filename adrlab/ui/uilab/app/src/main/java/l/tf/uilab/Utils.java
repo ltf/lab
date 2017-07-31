@@ -12,6 +12,4 @@ public class Utils {
         StackTraceElement stack = stacks[3];
         Log.d("METHOD_CALLED", stack.getClassName() + "->" + stack.getMethodName());
     }
-
-
 }
