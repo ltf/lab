@@ -20,7 +20,7 @@ import android.widget.EditText;
  */
 
 public class TestEditTextDrawActivity extends Activity implements TextWatcher {
-    private int mStrokeColor;
+    private int mStrokeColor = 0x99999900;
     private String mLastText;
     protected EditText mEditTextContent;
 
@@ -39,15 +39,15 @@ public class TestEditTextDrawActivity extends Activity implements TextWatcher {
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        int selectionStart = mEditTextContent.getSelectionStart();
-        int selectionEnd = mEditTextContent.getSelectionEnd();
-        String txt = s.toString();
-        if (txt.equals(mLastText)) return;
-        mLastText = txt;
-        SpannableStringBuilder ss = SpannableStringBuilder.valueOf(txt);
-        ss.setSpan(new StrokeSpan(mStrokeColor), 0, s.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-        mEditTextContent.setText(ss);
-        mEditTextContent.setSelection(selectionStart, selectionEnd);
+//        int selectionStart = mEditTextContent.getSelectionStart();
+//        int selectionEnd = mEditTextContent.getSelectionEnd();
+//        String txt = s.toString();
+//        if (txt.equals(mLastText)) return;
+//        mLastText = txt;
+//        SpannableStringBuilder ss = SpannableStringBuilder.valueOf(txt);
+//        ss.setSpan(new StrokeSpan(mStrokeColor), 0, s.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+//        mEditTextContent.setText(ss);
+//        mEditTextContent.setSelection(selectionStart, selectionEnd);
     }
 
     @Override
@@ -61,12 +61,24 @@ public class TestEditTextDrawActivity extends Activity implements TextWatcher {
         private Paint mPaint;
         private Rect mRect = new Rect();
         private int mStrokeWidth;
+        private Paint mPaintR;
+        private Paint mPaintG;
+        private Paint mPaintB;
 
         public StrokeSpan(int color) {
             super(0);
             mStrokeWidth = 20;
             mPaint = new Paint();
+            mPaintR = new Paint();
+            mPaintG = new Paint();
+            mPaintB = new Paint();
             mPaint.setColor(color);
+            mPaintR.setColor(0xffff0000);
+            mPaintR.setStyle(Paint.Style.STROKE);
+            mPaintG.setColor(0xff00ff00);
+            mPaintG.setStyle(Paint.Style.STROKE);
+            mPaintB.setColor(0xff0000ff);
+            mPaintB.setStyle(Paint.Style.STROKE);
             mPaint.setStrokeWidth(mStrokeWidth);
             mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
             mPaint.setAntiAlias(true);
@@ -78,16 +90,19 @@ public class TestEditTextDrawActivity extends Activity implements TextWatcher {
             p.getTextBounds(text.toString(), start, end, mRect);
             c.save();
             try {
-                int l = left + mStrokeWidth;
-                int t = top + mStrokeWidth;
-                int r = l + mStrokeWidth + mRect.width();
-                int b = t + mStrokeWidth + mRect.height();
+                int l = left + mRect.left + mStrokeWidth;
+                int t = baseline + mRect.top + mStrokeWidth;
+                int r = l + mRect.width();
+                int b = t + mRect.height();
                 c.translate(-mStrokeWidth, -mStrokeWidth);
-                c.clipRect(0, 0, r + mStrokeWidth, b + mStrokeWidth, Region.Op.REPLACE);
+                c.clipRect(0, 0, r + mStrokeWidth * 2, b + mStrokeWidth * 2, Region.Op.REPLACE);
                 c.drawRect(l, t, r, b, mPaint);
             } finally {
                 c.restore();
             }
+            c.drawRect(left, top, right, bottom, mPaintG);
+            c.drawLine(left, baseline, right, baseline, mPaintR);
+            c.drawRect(left, baseline + mRect.top, mRect.right, baseline + mRect.bottom, mPaintB);
         }
     }
 
