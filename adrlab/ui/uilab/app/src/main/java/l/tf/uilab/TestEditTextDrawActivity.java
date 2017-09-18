@@ -127,11 +127,18 @@ public class TestEditTextDrawActivity extends Activity implements TextWatcher {
 
         @Override
         public CharSequence getTransformation(CharSequence source, View view) {
-           if (source == null) return "";
-            String txt = source.toString();
-            SpannableStringBuilder ssb = SpannableStringBuilder.valueOf(txt);
-            ssb.setSpan(new StrokeSpan(mStrokeColor), 0, txt.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            if (source instanceof SpannableStringBuilder) {
+                SpannableStringBuilder ssb = (SpannableStringBuilder) source;
+                ssb.setSpan(new StrokeSpan(mStrokeColor), 0, ssb.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+            }
             return source;
+//            ///// this implementation will cause exception (because mText and mTransformed, and they have no sync in use input-method update,
+//            /////  see wiki in evernote)
+//            if (source == null) return "";
+//            String txt = source.toString();
+//            SpannableStringBuilder ssb = SpannableStringBuilder.valueOf(txt);
+//            ssb.setSpan(new StrokeSpan(mStrokeColor), 0, txt.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+//            return source;
         }
 
         @Override
