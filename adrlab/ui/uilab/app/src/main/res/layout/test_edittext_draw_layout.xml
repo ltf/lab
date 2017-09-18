@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
+
+
+    <EditText
+            android:layout_width="165dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/cover_sticker_content"
+            android:background="@null"
+            android:cursorVisible="false"
+            android:minHeight="45dp"
+            android:layout_marginTop="10dp"
+            android:textIsSelectable="false"
+            android:padding="8dp"
+            android:hint="点击编辑封面标题"
+            android:text="点击编辑封面标题"
+            android:maxLength="15"
+            android:textSize="18sp"
+            android:maxLines="2"
+            android:textColor="@android:color/white"
+            android:lineSpacingMultiplier="1.5"
+            android:alpha="0.8"/>
+</FrameLayout>
