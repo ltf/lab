@@ -29,7 +29,8 @@ public class TestEditTextDrawActivity extends Activity implements TextWatcher {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.test_edittext_draw_layout);
         mEditTextContent = (EditText) findViewById(R.id.cover_sticker_content);
-        mEditTextContent.setTransformationMethod(new Trans());
+        mEditTextContent.addTextChangedListener(this);
+        //mEditTextContent.setTransformationMethod(new Trans());
     }
 
     @Override
@@ -39,15 +40,18 @@ public class TestEditTextDrawActivity extends Activity implements TextWatcher {
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-//        int selectionStart = mEditTextContent.getSelectionStart();
-//        int selectionEnd = mEditTextContent.getSelectionEnd();
-//        String txt = s.toString();
-//        if (txt.equals(mLastText)) return;
-//        mLastText = txt;
-//        SpannableStringBuilder ss = SpannableStringBuilder.valueOf(txt);
-//        ss.setSpan(new StrokeSpan(mStrokeColor), 0, s.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
-//        mEditTextContent.setText(ss);
-//        mEditTextContent.setSelection(selectionStart, selectionEnd);
+        SpannableStringBuilder ssb;
+        if (s instanceof SpannableStringBuilder) {
+            ssb = (SpannableStringBuilder) s;
+            StrokeSpan[] spans = ssb.getSpans(0, count, StrokeSpan.class);
+            StrokeSpan sp;
+            if (spans.length == 0) sp = new StrokeSpan(mStrokeColor);
+            else sp =spans[0];
+            ssb.setSpan(sp, 0, ssb.length(), Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+        } else {
+            ssb = SpannableStringBuilder.valueOf(s);
+            mEditTextContent.setText(ssb);
+        }
     }
 
     @Override
