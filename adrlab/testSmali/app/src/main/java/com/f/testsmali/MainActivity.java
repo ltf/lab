@@ -1,8 +1,11 @@
 package com.f.testsmali;
 
 import android.app.Activity;
+import android.os.Bundle;
+import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
@@ -50,4 +53,14 @@ public class MainActivity extends Activity {
         }
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        
+        
+//        new File("/sdcard/Android/data/com.f.testsmali/x").mkdirs();
+//        Log.e("sig-0", TestInjectPackageManager.getMySig(this, "com.f.testsmali"));
+//        Log.e("sig-1", TestInjectPackageManager.getSig(this, "/mnt/shell/emulated/0/Android/data/com.f.testsmali/app-debug.apk"));
+//        Log.e("sig-2", TestInjectPackageManager.getSig(this, "/mnt/shell/emulated/0/Android/data/com.f.testsmali/liulishuo.apk"));
+    }
 }
