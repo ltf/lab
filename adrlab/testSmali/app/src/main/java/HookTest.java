@@ -1,7 +1,5 @@
 import android.content.Context;
 import android.content.pm.PackageInfo;
-import android.content.pm.Signature;
-import android.net.VpnService;
 import android.util.Log;
 
 import java.util.Arrays;
@@ -16,6 +14,7 @@ import static android.content.pm.PackageManager.GET_SIGNATURES;
 
 public class HookTest {
     private int[] mInts = new int[10];
+
     public void testGetSig() {
 
     }
@@ -30,6 +29,7 @@ public class HookTest {
         }
         return null;
     }
+
     public static String getMySig2(Context paramContext, String paramString) {
         Iterator<PackageInfo> it = paramContext.getPackageManager().getInstalledPackages(GET_SIGNATURES).iterator();
         while (it.hasNext()) {
@@ -41,15 +41,15 @@ public class HookTest {
         return null;
     }
 
-    private void updateIntArrays(){
+    private void updateIntArrays() {
         Arrays.fill(mInts, 100);
     }
 
-    private void logIntArray(){
+    private void logIntArray() {
         Log.e(Hook.TAG, Arrays.toString(mInts));
     }
 
-    private void logStr(){
+    private void logStr() {
         String x = "xxxx";
         Log.e(Hook.TAG, x);
     }
@@ -80,4 +80,7 @@ public class HookTest {
     }
 
 
+    private String testHackJson() {
+        return Hook.hookReport(Hook.DEFAULT_REPORT);
+    }
 }

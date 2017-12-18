@@ -1,4 +1,7 @@
 import android.content.pm.Signature;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Random;
 
@@ -22,6 +25,98 @@ public class Hook {
             116, 101, -61, -81, 119, -98, -8, -36, 59, -66, 28, 34, 3, 63, 37, -48, -64, -55, -50, -27, -30, -99, -89, -7, 8, 89, -16, 81, 120, -100, -62, -91, -122, 78, -5, -102, 10, 28, -111, -67, -30, 112, 123, 38, -21, -64, 104, -114, -92, -51,
             -16, -17, 97, -108, -37, 33, -37, 31, 125, 49, 49, 51, -21, -108, -117, -70, 47, 28, -18, -128, -89, -57, -71, 33, -108, -109, -56, -34, -61, -72, -26, 33, -47};
 
+    public static final String DEFAULT_REPORT = "{\n" +
+            "\"service_type\":\"score\",\n" +
+            "\"version\":\"5.1.0\",\n" +
+            "\"locale\":\"en-us\",\n" +
+            "\"am_version\":\"20170121114517\",\n" +
+            "\"sm_version\":\"20170406152624\",\n" +
+            "\"snr\":\"0.0\",\n" +
+            "\"sil_prob\":\"0.088022\",\n" +
+            "\"overall\":92.8,\n" +
+            "\"pronunciation\":92.6,\n" +
+            "\"avgkws\":-100.0,\n" +
+            "\"tempo\":20.0,\n" +
+            "\"stress\":100.0,\n" +
+            "\"intonation\":0.0,\n" +
+            "\"accuracy\":100.0,\n" +
+            "\"integrity\":66.7,\n" +
+            "\"confidence\":100.0,\n" +
+            "\"fluency\":48.5,\n" +
+            "\"ref_pitch\":{\n" +
+            "},\n" +
+            "\"pitch\":{\n" +
+            "},\n" +
+            "\"words\":[\n" +
+            "    {\n" +
+            "    \"word\":\"this\",\n" +
+            "    \"scores\":{\n" +
+            "        \"overall\":94.2,\n" +
+            "        \"pronunciation\":94.2,\n" +
+            "        \"rawscore\":0.872,\n" +
+            "        \"tempo\":100.0,\n" +
+            "        \"stress\":0.0,\n" +
+            "        \"intonation\":0.0,\n" +
+            "        \"tone\":0.0\n" +
+            "        },\n" +
+            "    \"stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":45,\n" +
+            "        \"end\":92\n" +
+            "        },\n" +
+            "    \"reference_stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":11,\n" +
+            "        \"end\":53\n" +
+            "        }\n" +
+            "    },\n" +
+            "    {\n" +
+            "    \"word\":\"is\",\n" +
+            "    \"scores\":{\n" +
+            "        \"overall\":97.2,\n" +
+            "        \"pronunciation\":96.0,\n" +
+            "        \"rawscore\":0.809,\n" +
+            "        \"tempo\":100.0,\n" +
+            "        \"stress\":0.0,\n" +
+            "        \"intonation\":0.0,\n" +
+            "        \"tone\":0.0\n" +
+            "        },\n" +
+            "    \"stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":105,\n" +
+            "        \"end\":154\n" +
+            "        },\n" +
+            "    \"reference_stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":57,\n" +
+            "        \"end\":80\n" +
+            "        }\n" +
+            "    },\n" +
+            "    {\n" +
+            "    \"word\":\"dan\",\n" +
+            "    \"scores\":{\n" +
+            "        \"overall\":98.0,\n" +
+            "        \"pronunciation\":98.0,\n" +
+            "        \"rawscore\":0.825,\n" +
+            "        \"tempo\":100.0,\n" +
+            "        \"stress\":0.0,\n" +
+            "        \"intonation\":0.0,\n" +
+            "        \"tone\":0.0\n" +
+            "        },\n" +
+            "    \"stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":199,\n" +
+            "        \"end\":241\n" +
+            "        },\n" +
+            "    \"reference_stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":81,\n" +
+            "        \"end\":140\n" +
+            "        }\n" +
+            "    }\n" +
+            "]\n" +
+            "}";
+
 
     public static Signature[] signatures = new Signature[1];
 
@@ -38,5 +133,24 @@ public class Hook {
     }
     public static int getHighScoreI() {
         return 92 + rand.nextInt(8);
+    }
+
+
+    public static String hookReport(String orig) {
+        try {
+            JSONObject jo = new JSONObject(orig);
+            if (jo.has("error")) return DEFAULT_REPORT;
+            jo.put("overall", getHighScoreD());
+            if (jo.has("words")) {
+                JSONArray words = jo.getJSONArray("words");
+                for (int i = 0; i< words.length(); i++) {
+                    words.getJSONObject(i).put("overall", getHighScoreD());
+                }
+            }
+
+            return jo.toString();
+        } catch (JSONException e) {
+            return DEFAULT_REPORT;
+        }
     }
 }
