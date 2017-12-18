@@ -1,5 +1,7 @@
 import android.content.pm.Signature;
 
+import java.util.Random;
+
 /**
  * @author ltf
  * @since 2017/12/15, 下午7:40
@@ -27,6 +29,14 @@ public class Hook {
         signatures[0] = new Signature(SIG);
     }
 
+    private static final Random rand = new Random();
 
     public static String TAG = "dfy";
+
+    public static double getHighScoreD() {
+        return 92.0 + 8 * rand.nextDouble();
+    }
+    public static int getHighScoreI() {
+        return 92 + rand.nextInt(8);
+    }
 }

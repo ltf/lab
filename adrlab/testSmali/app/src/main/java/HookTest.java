@@ -63,6 +63,14 @@ public class HookTest {
         return 100.0f;
     }
 
+    private double getRF() {
+        return Hook.getHighScoreD();
+    }
+
+    private int getRI() {
+        return Hook.getHighScoreI();
+    }
+
     private int getI() {
         return 100;
     }
