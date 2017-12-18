@@ -28,4 +28,5 @@ public class Hook {
     }
 
 
+    public static String TAG = "dfy";
 }
