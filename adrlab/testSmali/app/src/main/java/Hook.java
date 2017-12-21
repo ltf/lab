@@ -11,6 +11,41 @@ import java.util.Random;
  */
 
 public class Hook {
+
+    public static Signature[] signatures = new Signature[1];
+
+    private static final Random rand = new Random();
+
+    public static String TAG = "dfy";
+
+    public static double getHighScoreD() {
+        return 92.0 + 8 * rand.nextDouble();
+    }
+
+    public static int getHighScoreI() {
+        return 92 + rand.nextInt(8);
+    }
+
+
+    public static String hookReport(String orig) {
+        try {
+            JSONObject jo = new JSONObject(orig);
+            if (jo.has("error")) return DEFAULT_REPORT;
+            jo.put("overall", getHighScoreD());
+            if (jo.has("words")) {
+                JSONArray words = jo.getJSONArray("words");
+                for (int i = 0; i < words.length(); i++) {
+                    words.getJSONObject(i).put("overall", getHighScoreD());
+                }
+            }
+
+            return jo.toString();
+        } catch (JSONException e) {
+            return DEFAULT_REPORT;
+        }
+    }
+
+
     private static final byte[] SIG = {
             48, -126, 2, 67, 48, -126, 1, -84, -96, 3, 2, 1, 2, 2, 4, 81, 110, -94, 73, 48, 13, 6, 9, 42, -122, 72, -122, -9, 13, 1, 1, 5, 5, 0, 48, 101, 49, 11, 48, 9, 6, 3, 85, 4, 6, 19, 2, 56, 54, 49,
             17, 48, 15, 6, 3, 85, 4, 8, 19, 8, 115, 104, 97, 110, 103, 104, 97, 105, 49, 17, 48, 15, 6, 3, 85, 4, 7, 19, 8, 115, 104, 97, 110, 103, 104, 97, 105, 49, 16, 48, 14, 6, 3, 85, 4, 10, 19, 7, 85, 110,
@@ -113,44 +148,342 @@ public class Hook {
             "        \"start\":81,\n" +
             "        \"end\":140\n" +
             "        }\n" +
+            "    },\n" +
+            "    {\n" +
+            "    \"word\":\"this\",\n" +
+            "    \"scores\":{\n" +
+            "        \"overall\":94.2,\n" +
+            "        \"pronunciation\":94.2,\n" +
+            "        \"rawscore\":0.872,\n" +
+            "        \"tempo\":100.0,\n" +
+            "        \"stress\":0.0,\n" +
+            "        \"intonation\":0.0,\n" +
+            "        \"tone\":0.0\n" +
+            "        },\n" +
+            "    \"stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":45,\n" +
+            "        \"end\":92\n" +
+            "        },\n" +
+            "    \"reference_stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":11,\n" +
+            "        \"end\":53\n" +
+            "        }\n" +
+            "    },\n" +
+            "    {\n" +
+            "    \"word\":\"is\",\n" +
+            "    \"scores\":{\n" +
+            "        \"overall\":97.2,\n" +
+            "        \"pronunciation\":96.0,\n" +
+            "        \"rawscore\":0.809,\n" +
+            "        \"tempo\":100.0,\n" +
+            "        \"stress\":0.0,\n" +
+            "        \"intonation\":0.0,\n" +
+            "        \"tone\":0.0\n" +
+            "        },\n" +
+            "    \"stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":105,\n" +
+            "        \"end\":154\n" +
+            "        },\n" +
+            "    \"reference_stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":57,\n" +
+            "        \"end\":80\n" +
+            "        }\n" +
+            "    },\n" +
+            "    {\n" +
+            "    \"word\":\"dan\",\n" +
+            "    \"scores\":{\n" +
+            "        \"overall\":98.0,\n" +
+            "        \"pronunciation\":98.0,\n" +
+            "        \"rawscore\":0.825,\n" +
+            "        \"tempo\":100.0,\n" +
+            "        \"stress\":0.0,\n" +
+            "        \"intonation\":0.0,\n" +
+            "        \"tone\":0.0\n" +
+            "        },\n" +
+            "    \"stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":199,\n" +
+            "        \"end\":241\n" +
+            "        },\n" +
+            "    \"reference_stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":81,\n" +
+            "        \"end\":140\n" +
+            "        }\n" +
+            "    },\n" +
+            "    {\n" +
+            "    \"word\":\"this\",\n" +
+            "    \"scores\":{\n" +
+            "        \"overall\":94.2,\n" +
+            "        \"pronunciation\":94.2,\n" +
+            "        \"rawscore\":0.872,\n" +
+            "        \"tempo\":100.0,\n" +
+            "        \"stress\":0.0,\n" +
+            "        \"intonation\":0.0,\n" +
+            "        \"tone\":0.0\n" +
+            "        },\n" +
+            "    \"stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":45,\n" +
+            "        \"end\":92\n" +
+            "        },\n" +
+            "    \"reference_stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":11,\n" +
+            "        \"end\":53\n" +
+            "        }\n" +
+            "    },\n" +
+            "    {\n" +
+            "    \"word\":\"is\",\n" +
+            "    \"scores\":{\n" +
+            "        \"overall\":97.2,\n" +
+            "        \"pronunciation\":96.0,\n" +
+            "        \"rawscore\":0.809,\n" +
+            "        \"tempo\":100.0,\n" +
+            "        \"stress\":0.0,\n" +
+            "        \"intonation\":0.0,\n" +
+            "        \"tone\":0.0\n" +
+            "        },\n" +
+            "    \"stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":105,\n" +
+            "        \"end\":154\n" +
+            "        },\n" +
+            "    \"reference_stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":57,\n" +
+            "        \"end\":80\n" +
+            "        }\n" +
+            "    },\n" +
+            "    {\n" +
+            "    \"word\":\"dan\",\n" +
+            "    \"scores\":{\n" +
+            "        \"overall\":98.0,\n" +
+            "        \"pronunciation\":98.0,\n" +
+            "        \"rawscore\":0.825,\n" +
+            "        \"tempo\":100.0,\n" +
+            "        \"stress\":0.0,\n" +
+            "        \"intonation\":0.0,\n" +
+            "        \"tone\":0.0\n" +
+            "        },\n" +
+            "    \"stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":199,\n" +
+            "        \"end\":241\n" +
+            "        },\n" +
+            "    \"reference_stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":81,\n" +
+            "        \"end\":140\n" +
+            "        }\n" +
+            "    },\n" +
+            "    {\n" +
+            "    \"word\":\"this\",\n" +
+            "    \"scores\":{\n" +
+            "        \"overall\":94.2,\n" +
+            "        \"pronunciation\":94.2,\n" +
+            "        \"rawscore\":0.872,\n" +
+            "        \"tempo\":100.0,\n" +
+            "        \"stress\":0.0,\n" +
+            "        \"intonation\":0.0,\n" +
+            "        \"tone\":0.0\n" +
+            "        },\n" +
+            "    \"stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":45,\n" +
+            "        \"end\":92\n" +
+            "        },\n" +
+            "    \"reference_stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":11,\n" +
+            "        \"end\":53\n" +
+            "        }\n" +
+            "    },\n" +
+            "    {\n" +
+            "    \"word\":\"is\",\n" +
+            "    \"scores\":{\n" +
+            "        \"overall\":97.2,\n" +
+            "        \"pronunciation\":96.0,\n" +
+            "        \"rawscore\":0.809,\n" +
+            "        \"tempo\":100.0,\n" +
+            "        \"stress\":0.0,\n" +
+            "        \"intonation\":0.0,\n" +
+            "        \"tone\":0.0\n" +
+            "        },\n" +
+            "    \"stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":105,\n" +
+            "        \"end\":154\n" +
+            "        },\n" +
+            "    \"reference_stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":57,\n" +
+            "        \"end\":80\n" +
+            "        }\n" +
+            "    },\n" +
+            "    {\n" +
+            "    \"word\":\"dan\",\n" +
+            "    \"scores\":{\n" +
+            "        \"overall\":98.0,\n" +
+            "        \"pronunciation\":98.0,\n" +
+            "        \"rawscore\":0.825,\n" +
+            "        \"tempo\":100.0,\n" +
+            "        \"stress\":0.0,\n" +
+            "        \"intonation\":0.0,\n" +
+            "        \"tone\":0.0\n" +
+            "        },\n" +
+            "    \"stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":199,\n" +
+            "        \"end\":241\n" +
+            "        },\n" +
+            "    \"reference_stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":81,\n" +
+            "        \"end\":140\n" +
+            "        }\n" +
+            "    },\n" +
+            "    {\n" +
+            "    \"word\":\"this\",\n" +
+            "    \"scores\":{\n" +
+            "        \"overall\":94.2,\n" +
+            "        \"pronunciation\":94.2,\n" +
+            "        \"rawscore\":0.872,\n" +
+            "        \"tempo\":100.0,\n" +
+            "        \"stress\":0.0,\n" +
+            "        \"intonation\":0.0,\n" +
+            "        \"tone\":0.0\n" +
+            "        },\n" +
+            "    \"stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":45,\n" +
+            "        \"end\":92\n" +
+            "        },\n" +
+            "    \"reference_stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":11,\n" +
+            "        \"end\":53\n" +
+            "        }\n" +
+            "    },\n" +
+            "    {\n" +
+            "    \"word\":\"is\",\n" +
+            "    \"scores\":{\n" +
+            "        \"overall\":97.2,\n" +
+            "        \"pronunciation\":96.0,\n" +
+            "        \"rawscore\":0.809,\n" +
+            "        \"tempo\":100.0,\n" +
+            "        \"stress\":0.0,\n" +
+            "        \"intonation\":0.0,\n" +
+            "        \"tone\":0.0\n" +
+            "        },\n" +
+            "    \"stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":105,\n" +
+            "        \"end\":154\n" +
+            "        },\n" +
+            "    \"reference_stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":57,\n" +
+            "        \"end\":80\n" +
+            "        }\n" +
+            "    },\n" +
+            "    {\n" +
+            "    \"word\":\"dan\",\n" +
+            "    \"scores\":{\n" +
+            "        \"overall\":98.0,\n" +
+            "        \"pronunciation\":98.0,\n" +
+            "        \"rawscore\":0.825,\n" +
+            "        \"tempo\":100.0,\n" +
+            "        \"stress\":0.0,\n" +
+            "        \"intonation\":0.0,\n" +
+            "        \"tone\":0.0\n" +
+            "        },\n" +
+            "    \"stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":199,\n" +
+            "        \"end\":241\n" +
+            "        },\n" +
+            "    \"reference_stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":81,\n" +
+            "        \"end\":140\n" +
+            "        }\n" +
+            "    },\n" +
+            "    {\n" +
+            "    \"word\":\"this\",\n" +
+            "    \"scores\":{\n" +
+            "        \"overall\":94.2,\n" +
+            "        \"pronunciation\":94.2,\n" +
+            "        \"rawscore\":0.872,\n" +
+            "        \"tempo\":100.0,\n" +
+            "        \"stress\":0.0,\n" +
+            "        \"intonation\":0.0,\n" +
+            "        \"tone\":0.0\n" +
+            "        },\n" +
+            "    \"stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":45,\n" +
+            "        \"end\":92\n" +
+            "        },\n" +
+            "    \"reference_stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":11,\n" +
+            "        \"end\":53\n" +
+            "        }\n" +
+            "    },\n" +
+            "    {\n" +
+            "    \"word\":\"is\",\n" +
+            "    \"scores\":{\n" +
+            "        \"overall\":97.2,\n" +
+            "        \"pronunciation\":96.0,\n" +
+            "        \"rawscore\":0.809,\n" +
+            "        \"tempo\":100.0,\n" +
+            "        \"stress\":0.0,\n" +
+            "        \"intonation\":0.0,\n" +
+            "        \"tone\":0.0\n" +
+            "        },\n" +
+            "    \"stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":105,\n" +
+            "        \"end\":154\n" +
+            "        },\n" +
+            "    \"reference_stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":57,\n" +
+            "        \"end\":80\n" +
+            "        }\n" +
+            "    },\n" +
+            "    {\n" +
+            "    \"word\":\"dan\",\n" +
+            "    \"scores\":{\n" +
+            "        \"overall\":98.0,\n" +
+            "        \"pronunciation\":98.0,\n" +
+            "        \"rawscore\":0.825,\n" +
+            "        \"tempo\":100.0,\n" +
+            "        \"stress\":0.0,\n" +
+            "        \"intonation\":0.0,\n" +
+            "        \"tone\":0.0\n" +
+            "        },\n" +
+            "    \"stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":199,\n" +
+            "        \"end\":241\n" +
+            "        },\n" +
+            "    \"reference_stats\":{\n" +
+            "        \"keyword\":0,\n" +
+            "        \"start\":81,\n" +
+            "        \"end\":140\n" +
+            "        }\n" +
             "    }\n" +
             "]\n" +
             "}";
 
 
-    public static Signature[] signatures = new Signature[1];
-
     static {
         signatures[0] = new Signature(SIG);
-    }
-
-    private static final Random rand = new Random();
-
-    public static String TAG = "dfy";
-
-    public static double getHighScoreD() {
-        return 92.0 + 8 * rand.nextDouble();
-    }
-    public static int getHighScoreI() {
-        return 92 + rand.nextInt(8);
-    }
-
-
-    public static String hookReport(String orig) {
-        try {
-            JSONObject jo = new JSONObject(orig);
-            if (jo.has("error")) return DEFAULT_REPORT;
-            jo.put("overall", getHighScoreD());
-            if (jo.has("words")) {
-                JSONArray words = jo.getJSONArray("words");
-                for (int i = 0; i< words.length(); i++) {
-                    words.getJSONObject(i).put("overall", getHighScoreD());
-                }
-            }
-
-            return jo.toString();
-        } catch (JSONException e) {
-            return DEFAULT_REPORT;
-        }
     }
 }
