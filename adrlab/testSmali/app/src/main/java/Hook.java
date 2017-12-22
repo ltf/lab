@@ -1,4 +1,9 @@
+import android.app.Application;
+import android.content.Context;
 import android.content.pm.Signature;
+import android.os.Handler;
+import android.util.Log;
+import android.view.View;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,6 +22,7 @@ public class Hook {
     private static final Random rand = new Random();
 
     public static String TAG = "dfy";
+    public static String TAGAUTO = "dfyauto";
 
     public static double getHighScoreD() {
         return 92.0 + 8 * rand.nextDouble();
@@ -43,6 +49,25 @@ public class Hook {
         } catch (JSONException e) {
             return DEFAULT_REPORT;
         }
+    }
+
+    public static void autoStartRecord(final View btnV) {
+        Handler handler = new Handler();
+        Log.e(TAGAUTO, "set auto click");
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                btnV.performClick();
+                Log.e(TAGAUTO, "auto 1st click");
+            }
+        }, 200);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                btnV.performClick();
+                Log.e(TAGAUTO, "auto 2nd click");
+            }
+        }, 1000);
     }
 
 

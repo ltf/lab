@@ -1,6 +1,7 @@
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.util.Log;
+import android.widget.ImageView;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -82,5 +83,9 @@ public class HookTest {
 
     private String testHackJson() {
         return Hook.hookReport(Hook.DEFAULT_REPORT);
+    }
+
+    private void testCallAutoRec() {
+        Hook.autoStartRecord(new ImageView(null));
     }
 }
