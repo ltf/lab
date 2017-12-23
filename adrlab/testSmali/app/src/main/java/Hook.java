@@ -1,5 +1,3 @@
-import android.app.Application;
-import android.content.Context;
 import android.content.pm.Signature;
 import android.os.Handler;
 import android.util.Log;
@@ -22,6 +20,7 @@ public class Hook {
     private static final Random rand = new Random();
 
     public static String TAG = "dfy";
+    public static String TAGLOG = "dfylog";
     public static String TAGAUTO = "dfyauto";
 
     public static double getHighScoreD() {
@@ -70,6 +69,26 @@ public class Hook {
         }, 1000);
     }
 
+    private static String getStack() {
+        StackTraceElement[] stacks = Thread.currentThread().getStackTrace();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 7; i < stacks.length-5; i++) {
+            sb.append(stacks[i].getClassName());
+            sb.append("->");
+            sb.append(stacks[i].getMethodName());
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+
+    public static void log(int paramInt, String paramString, Object... paramVarArgs) {
+        try {
+            if (paramString ==null) return;
+            Log.i(TAGLOG, String.format("info: %d, %s \n stack: %s", paramInt, String.format(paramString, paramVarArgs), getStack()));
+            Log.i(TAGLOG, "--------------------------------------------------------------------------------------");
+        } catch (Exception e) {
+        }
+    }
 
     private static final byte[] SIG = {
             48, -126, 2, 67, 48, -126, 1, -84, -96, 3, 2, 1, 2, 2, 4, 81, 110, -94, 73, 48, 13, 6, 9, 42, -122, 72, -122, -9, 13, 1, 1, 5, 5, 0, 48, 101, 49, 11, 48, 9, 6, 3, 85, 4, 6, 19, 2, 56, 54, 49,

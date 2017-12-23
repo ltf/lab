@@ -55,6 +55,9 @@ public class HookTest {
         Log.e(Hook.TAG, x);
     }
 
+    private void testLog(int paramInt, Object paramObject, Throwable paramThrowable, String paramString, Object... paramVarArgs) {
+        Hook.log(paramInt, paramString, paramVarArgs);
+    }
 
     private double getD() {
         return 100.0;
