@@ -1,11 +1,15 @@
 import android.content.pm.Signature;
+import android.os.Build;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Field;
 import java.util.Random;
 
 /**
@@ -21,6 +25,7 @@ public class Hook {
 
     public static String TAG = "dfy";
     public static String TAGLOG = "dfylog";
+    public static String TAGFRAG = "dfyfrag";
     public static String TAGAUTO = "dfyauto";
 
     public static double getHighScoreD() {
@@ -51,28 +56,28 @@ public class Hook {
     }
 
     public static void autoStartRecord(final View btnV) {
-        Handler handler = new Handler();
-        Log.e(TAGAUTO, "set auto click");
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                btnV.performClick();
-                Log.e(TAGAUTO, "auto 1st click");
-            }
-        }, 200);
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                btnV.performClick();
-                Log.e(TAGAUTO, "auto 2nd click");
-            }
-        }, 1000);
+//        Handler handler = new Handler();
+//        Log.e(TAGAUTO, "set auto click");
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                btnV.performClick();
+//                Log.e(TAGAUTO, "auto 1st click");
+//            }
+//        }, 200);
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                btnV.performClick();
+//                Log.e(TAGAUTO, "auto 2nd click");
+//            }
+//        }, 1000);
     }
 
     private static String getStack() {
         StackTraceElement[] stacks = Thread.currentThread().getStackTrace();
         StringBuilder sb = new StringBuilder();
-        for (int i = 7; i < stacks.length-5; i++) {
+        for (int i = 7; i < stacks.length - 5; i++) {
             sb.append(stacks[i].getClassName());
             sb.append("->");
             sb.append(stacks[i].getMethodName());
@@ -83,10 +88,137 @@ public class Hook {
 
     public static void log(int paramInt, String paramString, Object... paramVarArgs) {
         try {
-            if (paramString ==null) return;
+            if (paramString == null) return;
             Log.i(TAGLOG, String.format("info: %d, %s \n stack: %s", paramInt, String.format(paramString, paramVarArgs), getStack()));
             Log.i(TAGLOG, "--------------------------------------------------------------------------------------");
         } catch (Exception e) {
+        }
+    }
+
+    public static void logFrag(Object obj, ViewGroup container) {
+        try {
+            //Log.i(TAGFRAG, String.format("logFrag called, stack: %s", getStack()));
+            //Log.i(TAGFRAG, "--------------------------------------------------------------------------------------");
+            if (obj == null) return;
+            Log.i(TAGFRAG, String.format("logFrag called, obj: %s", obj.toString()));
+            if (obj instanceof Fragment) {
+                Log.i(TAGFRAG, printViewTree(((Fragment) obj).getActivity().findViewById(android.R.id.content), 0));
+            }
+            Log.i(TAGFRAG, "--------------------------------------------------------------------------------------");
+        } catch (Exception e) {
+            Log.e(TAGFRAG, e.getMessage());
+        }
+    }
+
+    private static String printViewTree(View root, int ident) {
+        //Log.i(TAGFRAG, String.format("printViewTree called"));
+        if (root == null) return "";
+        //Log.i(TAGFRAG, String.format("printViewTree called, root: %s", root.toString()));
+        StringBuilder sb = new StringBuilder("");
+        for (int i = 0; i < ident; i++) sb.append("  ");
+        String identStr = sb.toString();
+        sb = new StringBuilder("");
+        sb.append(identStr).append(root.getClass().getName())
+                .append(" : ").append(root.getId())
+                .append(" : ").append(getOnClickListenerInfo(root));
+        sb.append("\n");
+        if (root instanceof ViewGroup) {
+            ViewGroup vs = (ViewGroup) root;
+            for (int i = 0; i < vs.getChildCount(); i++) {
+                sb.append(printViewTree(vs.getChildAt(i), ident + 1));
+            }
+        }
+        return sb.toString();
+    }
+
+    private static String getOnClickListenerInfo(final View view) {
+        final View.OnClickListener listener = getOnClickListener(view);
+        if (listener == null) return "";
+        if (listener instanceof OnClickListenerWrapper) {
+            return ((OnClickListenerWrapper) listener).mOrig.toString() + " [wrapped]";
+        } else {
+            view.setOnClickListener(new OnClickListenerWrapper(listener));
+            return listener.toString();
+        }
+    }
+
+    /**
+     * Returns the current View.OnClickListener for the given View
+     *
+     * @param view the View whose click listener to retrieve
+     * @return the View.OnClickListener attached to the view; null if it could not be retrieved
+     */
+    private static View.OnClickListener getOnClickListener(View view) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            return getOnClickListenerV14(view);
+        } else {
+            return getOnClickListenerV(view);
+        }
+    }
+
+    //Used for APIs lower than ICS (API 14)
+    private static View.OnClickListener getOnClickListenerV(View view) {
+        View.OnClickListener retrievedListener = null;
+        String viewStr = "android.view.View";
+        Field field;
+
+        try {
+            field = Class.forName(viewStr).getDeclaredField("mOnClickListener");
+            retrievedListener = (View.OnClickListener) field.get(view);
+        } catch (NoSuchFieldException ex) {
+            Log.e("Reflection", "No Such Field.");
+        } catch (IllegalAccessException ex) {
+            Log.e("Reflection", "Illegal Access.");
+        } catch (ClassNotFoundException ex) {
+            Log.e("Reflection", "Class Not Found.");
+        }
+
+        return retrievedListener;
+    }
+
+    //Used for new ListenerInfo class structure used beginning with API 14 (ICS)
+    private static View.OnClickListener getOnClickListenerV14(View view) {
+        View.OnClickListener retrievedListener = null;
+        String viewStr = "android.view.View";
+        String lInfoStr = "android.view.View$ListenerInfo";
+
+        try {
+            Field listenerField = Class.forName(viewStr).getDeclaredField("mListenerInfo");
+            Object listenerInfo = null;
+
+            if (listenerField != null) {
+                listenerField.setAccessible(true);
+                listenerInfo = listenerField.get(view);
+            }
+
+            Field clickListenerField = Class.forName(lInfoStr).getDeclaredField("mOnClickListener");
+
+            if (clickListenerField != null && listenerInfo != null) {
+                retrievedListener = (View.OnClickListener) clickListenerField.get(listenerInfo);
+            }
+        } catch (NoSuchFieldException ex) {
+            Log.e("Reflection", "No Such Field.");
+        } catch (IllegalAccessException ex) {
+            Log.e("Reflection", "Illegal Access.");
+        } catch (ClassNotFoundException ex) {
+            Log.e("Reflection", "Class Not Found.");
+        }
+
+        return retrievedListener;
+    }
+
+    private static class OnClickListenerWrapper implements View.OnClickListener {
+
+        private View.OnClickListener mOrig;
+
+        public OnClickListenerWrapper(View.OnClickListener mOrig) {
+            this.mOrig = mOrig;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Log.i(TAGFRAG, String.format("onClicked : %s", v.toString()));
+            if (mOrig != null) mOrig.onClick(v);
         }
     }
 

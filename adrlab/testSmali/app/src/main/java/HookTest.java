@@ -55,6 +55,10 @@ public class HookTest {
         Log.e(Hook.TAG, x);
     }
 
+    private void testLogView() {
+        Hook.logFrag(null, null);
+    }
+
     private void testLog(int paramInt, Object paramObject, Throwable paramThrowable, String paramString, Object... paramVarArgs) {
         Hook.log(paramInt, paramString, paramVarArgs);
     }
