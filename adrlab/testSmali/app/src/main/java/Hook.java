@@ -1,3 +1,4 @@
+import android.app.Activity;
 import android.content.pm.Signature;
 import android.os.Build;
 import android.os.Handler;
@@ -9,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.util.Random;
 
@@ -95,19 +97,65 @@ public class Hook {
         }
     }
 
-    public static void logFrag(Object obj, ViewGroup container) {
+    private static WeakReference<Handler> sWeakRef;
+    public static void initAutoRcord(Object obj) {
         try {
-            //Log.i(TAGFRAG, String.format("logFrag called, stack: %s", getStack()));
-            //Log.i(TAGFRAG, "--------------------------------------------------------------------------------------");
-            if (obj == null) return;
-            Log.i(TAGFRAG, String.format("logFrag called, obj: %s", obj.toString()));
-            if (obj instanceof Fragment) {
-                Log.i(TAGFRAG, printViewTree(((Fragment) obj).getActivity().findViewById(android.R.id.content), 0));
+            if (obj != null && obj instanceof Fragment) {
+                Log.i(TAGAUTO, "auto click init  " + obj.toString());
+                Activity activity = ((Fragment) obj).getActivity();
+                Handler handler = null;
+                if (sWeakRef != null) {
+                    handler = sWeakRef.get();
+                }
+                if (handler == null) {
+                    handler = new Handler();
+                    sWeakRef = new WeakReference<>(handler);
+                }
+
+                handler.removeCallbacksAndMessages(null);
+
+                View player = activity.findViewById(0x7f110269);
+                if (player != null  && player.isEnabled() && player.getVisibility() == View.VISIBLE) {
+                    handler.postDelayed(new AutoClickRunnable(player), 1500);
+                }
+
+                View recorder = activity.findViewById(0x7f11026a);
+                if (recorder != null && recorder.isEnabled() && recorder.getVisibility() == View.VISIBLE) {
+                    handler.postDelayed(new AutoClickRunnable(recorder), 3000);
+                    handler.postDelayed(new AutoClickRunnable(recorder), 7000);
+                }
             }
-            Log.i(TAGFRAG, "--------------------------------------------------------------------------------------");
         } catch (Exception e) {
-            Log.e(TAGFRAG, e.getMessage());
         }
+    }
+
+    private static class AutoClickRunnable implements Runnable{
+        private final View mView;
+
+        public AutoClickRunnable(View mView) {
+            this.mView = mView;
+        }
+
+        @Override
+        public void run() {
+            mView.performClick();
+            Log.i(TAGAUTO, "auto click : " + mView.toString());
+        }
+    }
+
+    public static void logFrag(Object obj, ViewGroup container) {
+//        try {
+//            //Log.i(TAGFRAG, String.format("logFrag called, stack: %s", getStack()));
+//            //Log.i(TAGFRAG, "--------------------------------------------------------------------------------------");
+//            if (obj == null) return;
+//            Log.i(TAGFRAG, String.format("logFrag called, obj: %s", obj.toString()));
+//            if (obj instanceof Fragment) {
+//                Log.i(TAGFRAG, printViewTree(((Fragment) obj).getActivity().findViewById(android.R.id.content), 0));
+//            }
+//            Log.i(TAGFRAG, "--------------------------------------------------------------------------------------");
+//        } catch (Exception e) {
+//            Log.e(TAGFRAG, e.getMessage());
+//        }
     }
 
     private static String printViewTree(View root, int ident) {
