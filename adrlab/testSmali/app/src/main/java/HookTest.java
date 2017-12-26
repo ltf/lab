@@ -59,6 +59,9 @@ public class HookTest {
         Hook.logFrag(null, null);
         Hook.initAutoRcord(null);
     }
+    private void testLogPlay() {
+        Hook.logPlay();
+    }
 
     private void testLog(int paramInt, Object paramObject, Throwable paramThrowable, String paramString, Object... paramVarArgs) {
         Hook.log(paramInt, paramString, paramVarArgs);

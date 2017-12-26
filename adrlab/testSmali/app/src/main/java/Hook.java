@@ -28,6 +28,7 @@ public class Hook {
     public static String TAG = "dfy";
     public static String TAGLOG = "dfylog";
     public static String TAGFRAG = "dfyfrag";
+    public static String TAGPLAY = "dfyplay";
     public static String TAGAUTO = "dfyauto";
 
     public static double getHighScoreD() {
@@ -89,12 +90,12 @@ public class Hook {
     }
 
     public static void log(int paramInt, String paramString, Object... paramVarArgs) {
-        try {
-            if (paramString == null) return;
-            Log.i(TAGLOG, String.format("info: %d, %s \n stack: %s", paramInt, String.format(paramString, paramVarArgs), getStack()));
-            Log.i(TAGLOG, "--------------------------------------------------------------------------------------");
-        } catch (Exception e) {
-        }
+//        try {
+//            if (paramString == null) return;
+//            Log.i(TAGLOG, String.format("info: %d, %s \n stack: %s", paramInt, String.format(paramString, paramVarArgs), getStack()));
+//            Log.i(TAGLOG, "--------------------------------------------------------------------------------------");
+//        } catch (Exception e) {
+//        }
     }
 
     private static WeakReference<Handler> sWeakRef;
@@ -115,12 +116,12 @@ public class Hook {
                 handler.removeCallbacksAndMessages(null);
 
                 View player = activity.findViewById(0x7f110269);
-                if (player != null  && player.isEnabled() && player.getVisibility() == View.VISIBLE) {
+                if (player != null  && player.getVisibility() == View.VISIBLE) {
                     handler.postDelayed(new AutoClickRunnable(player), 1500);
                 }
 
                 View recorder = activity.findViewById(0x7f11026a);
-                if (recorder != null && recorder.isEnabled() && recorder.getVisibility() == View.VISIBLE) {
+                if (recorder != null && recorder.getVisibility() == View.VISIBLE) {
                     handler.postDelayed(new AutoClickRunnable(recorder), 3000);
                     handler.postDelayed(new AutoClickRunnable(recorder), 7000);
                 }
@@ -140,6 +141,28 @@ public class Hook {
         public void run() {
             mView.performClick();
             Log.i(TAGAUTO, "auto click : " + mView.toString());
+        }
+    }
+
+
+    private static String getPlayStack() {
+        StackTraceElement[] stacks = Thread.currentThread().getStackTrace();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i < stacks.length - 3; i++) {
+            sb.append(stacks[i].getClassName());
+            sb.append("->");
+            sb.append(stacks[i].getMethodName());
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
+
+    public static void logPlay() {
+        try {
+            Log.i(TAGPLAY, String.format("logPlay stack: %s", getPlayStack()));
+            Log.i(TAGPLAY, "--------------------------------------------------------------------------------------");
+
+        } catch (Exception e) {
         }
     }
 
