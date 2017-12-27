@@ -29,6 +29,7 @@ public class Hook {
     public static String TAGLOG = "dfylog";
     public static String TAGFRAG = "dfyfrag";
     public static String TAGPLAY = "dfyplay";
+    public static String TAGRESULT_SOUND = "dfyresultSound";
     public static String TAGAUTO = "dfyauto";
 
     public static double getHighScoreD() {
@@ -162,6 +163,13 @@ public class Hook {
             Log.i(TAGPLAY, String.format("logPlay stack: %s", getPlayStack()));
             Log.i(TAGPLAY, "--------------------------------------------------------------------------------------");
 
+        } catch (Exception e) {
+        }
+    }
+    public static void logResultSound(int result) {
+        try {
+            Log.i(TAGRESULT_SOUND, String.format("logResultSound result %d stack: %s", result, getPlayStack()));
+            Log.i(TAGRESULT_SOUND, "--------------------------------------------------------------------------------------");
         } catch (Exception e) {
         }
     }

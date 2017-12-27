@@ -62,6 +62,9 @@ public class HookTest {
     private void testLogPlay() {
         Hook.logPlay();
     }
+    private void testLogResSound() {
+        Hook.logResultSound(1);
+    }
 
     private void testLog(int paramInt, Object paramObject, Throwable paramThrowable, String paramString, Object... paramVarArgs) {
         Hook.log(paramInt, paramString, paramVarArgs);
