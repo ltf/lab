@@ -100,6 +100,7 @@ public class Hook {
     }
 
     private static WeakReference<Handler> sWeakRef;
+
     public static void initAutoRcord(Object obj) {
         try {
             if (obj != null && obj instanceof Fragment) {
@@ -117,7 +118,7 @@ public class Hook {
                 handler.removeCallbacksAndMessages(null);
 
                 View player = activity.findViewById(0x7f110269);
-                if (player != null  && player.getVisibility() == View.VISIBLE) {
+                if (player != null && player.getVisibility() == View.VISIBLE) {
                     handler.postDelayed(new AutoClickRunnable(player), 1500);
                 }
 
@@ -131,7 +132,7 @@ public class Hook {
         }
     }
 
-    private static class AutoClickRunnable implements Runnable{
+    private static class AutoClickRunnable implements Runnable {
         private final View mView;
 
         public AutoClickRunnable(View mView) {
@@ -166,11 +167,59 @@ public class Hook {
         } catch (Exception e) {
         }
     }
+
     public static void logResultSound(int result) {
         try {
             Log.i(TAGRESULT_SOUND, String.format("logResultSound result %d stack: %s", result, getPlayStack()));
             Log.i(TAGRESULT_SOUND, "--------------------------------------------------------------------------------------");
         } catch (Exception e) {
+        }
+    }
+
+    public static void autoClickPic(ViewGroup viewGroup, int anserIdx) {
+        try {
+            Log.i("dfyclickpic", String.format("autoClickPic anser id: %d, stack: %s", anserIdx, getPlayStack()));
+            Log.i("dfyclickpic", "--------------------------------------------------------------------------------------");
+            new Handler().postDelayed(new AutoIndexClickRunnable(viewGroup, anserIdx), 3000);
+        } catch (Exception e) {
+        }
+    }
+
+
+    private static class AutoIndexClickRunnable implements Runnable {
+        private final ViewGroup mViewGroup;
+        private final int mIndex;
+
+        public AutoIndexClickRunnable(ViewGroup mViewGroup, int mIndex) {
+            this.mViewGroup = mViewGroup;
+            this.mIndex = mIndex;
+        }
+
+        @Override
+        public void run() {
+            try {
+                Log.i(TAGAUTO, "auto click run");
+                Log.i(TAGAUTO, mViewGroup.toString());
+                Log.i(TAGAUTO, ""+mViewGroup.getChildCount());
+                mViewGroup.getChildAt(mIndex).performClick();
+                Log.i(TAGAUTO, "auto click by index %d" + mIndex);
+//                boolean clicked = false;
+//                for (int i = 0; i < mViewGroup.getChildCount(); i++) {
+//                    if ((Integer) mViewGroup.getChildAt(i).getTag() == mIndex) {
+//                        mViewGroup.getChildAt(i).performClick();
+//                        Log.i(TAGAUTO, "auto click by tag %d" + mIndex);
+//                        clicked = true;
+//                    }
+//                }
+//
+//                if (!clicked) {
+//                    if (mIndex < mViewGroup.getChildCount()) {
+//                        mViewGroup.getChildAt(mIndex).performClick();
+//                        Log.i(TAGAUTO, "auto click by index %d" + mIndex);
+//                    }
+//                }
+            } catch (Exception e) {
+            }
         }
     }
 

@@ -65,6 +65,11 @@ public class HookTest {
     private void testLogResSound() {
         Hook.logResultSound(1);
     }
+    private void testAutoClickPic() {
+
+        Hook.autoClickPic(null, 0);
+
+    }
 
     private void testLog(int paramInt, Object paramObject, Throwable paramThrowable, String paramString, Object... paramVarArgs) {
         Hook.log(paramInt, paramString, paramVarArgs);
