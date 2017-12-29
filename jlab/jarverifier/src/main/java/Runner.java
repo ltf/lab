@@ -14,11 +14,17 @@ public class Runner {
 //                new File("/Users/f/tmp/lls/cert/app-debug.apk"),
 //                new File("/Users/f/tmp/lls/cert")
 //        );
+//        JarVerifier jarVerifier = JarVerifier.create(
+//                new URL("file:///Users/f/tmp/lls/cert/liulishuo.apk"),
+//                null,
+//                new File("/Users/f/tmp/lls/cert/liulishuo.apk"),
+//                new File("/Users/f/tmp/lls/cert")
+//        );
         JarVerifier jarVerifier = JarVerifier.create(
-                new URL("file:///Users/f/tmp/lls/cert/liulishuo.apk"),
+                new URL("file:///Users/f/tmp/inke/cert/inke5.1.10.apk"),
                 null,
-                new File("/Users/f/tmp/lls/cert/liulishuo.apk"),
-                new File("/Users/f/tmp/lls/cert")
+                new File("/Users/f/tmp/inke/cert/inke5.1.10.apk"),
+                new File("/Users/f/tmp/inke/cert")
         );
 
         jarVerifier.validate(null);
