@@ -20,6 +20,7 @@ repositories {
 
 dependencies{
     compile 'org.slf4j:slf4j-api:1.7.21'
+    compile group: 'org.json', name: 'json', version: '20171018'
     // this dependency is only required when using UserJvmOptionsService
     // when using Oracle JDK
     // compile files("${System.properties['java.home']}/../lib/packager.jar")

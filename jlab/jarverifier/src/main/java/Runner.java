@@ -21,10 +21,10 @@ public class Runner {
 //                new File("/Users/f/tmp/lls/cert")
 //        );
         JarVerifier jarVerifier = JarVerifier.create(
-                new URL("file:///Users/f/tmp/inke/cert/inke5.1.10.apk"),
+                new URL("file:////Users/f/tmp/dd/sig/dingding_4.2.6.apk"),
                 null,
-                new File("/Users/f/tmp/inke/cert/inke5.1.10.apk"),
-                new File("/Users/f/tmp/inke/cert")
+                new File("/Users/f/tmp/dd/sig/dingding_4.2.6.apk"),
+                new File("/Users/f/tmp/dd/sig")
         );
 
         jarVerifier.validate(null);
