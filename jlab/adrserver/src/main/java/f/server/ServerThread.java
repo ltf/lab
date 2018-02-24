@@ -11,6 +11,6 @@ public class ServerThread extends Thread {
 
     @Override
     public void run() {
-        serverSocket = new ServerSocket(58888);
+        //serverSocket = new ServerSocket(58888);
     }
 }
