@@ -41,7 +41,7 @@
     <string name="secret_saved" msgid="2201025202465443226">"密钥已保存"</string>
     <string name="save_key_message" msgid="4427138629791380096">"保存以下帐户的密钥："</string>
     <string name="error_empty_secret" msgid="1889970426144134666">"无法保存空密钥"</string>
-    <string name="enter_pin" msgid="2238539410253130912">"在登录帐户期间，如果提示输入验证码，请输入此验证码："</string>
+    <string name="enter_pin" msgid="2238539410253130912">"在登录帐户期间，如果提示输入验证码，请输入此验证码（长按添加新账号）："</string>
     <string name="check_code_title" msgid="6308604727562833139">"完整性校验值"</string>
     <string name="check_code_menu_item" msgid="6851230890695316742">"检查密钥值"</string>
     <string name="install_dialog_title" msgid="6389833865110438047">"要安装条形码扫描器吗？"</string>

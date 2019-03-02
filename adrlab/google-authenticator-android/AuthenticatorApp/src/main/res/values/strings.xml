@@ -104,7 +104,7 @@
 
   <!-- Instruction message displayed on the main screen -->
   <string name="enter_pin">
-    Enter this verification code if prompted during account sign-in:
+    Enter this verification code if prompted during account sign-in(Long click for add new):
   </string>
 
   <!-- Label displayed before the integrity check, used to verify key was entered correctly -->
