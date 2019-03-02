@@ -66,6 +66,7 @@
     <string name="rename_message" msgid="5929955206098259018">"重命名 <xliff:g id="ACCOUNT">%1$s</xliff:g>"</string>
     <string name="error_exists" msgid="9037595140877350695">"抱歉，此名称已在使用。"</string>
     <string name="copy_to_clipboard" msgid="9220543434521756454">"复制到剪贴板"</string>
+    <string name="copy_secret_to_clipboard" msgid="9220543434521756454">"复制密钥到剪贴板（危险）"</string>
     <string name="counter_pin" msgid="6520222181829297474">"获取代码"</string>
     <string name="empty_pin" msgid="2123950169339395812">"_ _ _ _ _ _"</string>
     <string name="ok" msgid="6406800116409689723">"确定"</string>

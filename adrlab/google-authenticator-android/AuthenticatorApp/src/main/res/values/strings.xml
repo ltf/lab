@@ -227,7 +227,8 @@
 
   <!-- Long-press menu item for an account, copies current OTP code for that account
        to the phone clipboard -->
-  <string name="copy_to_clipboard">Copy to clipboard</string>
+    <string name="copy_to_clipboard">Copy to clipboard</string>
+    <string name="copy_secret_to_clipboard">Copy Secret to clipboard （Dangerous）</string>
 
   <!-- Text reported to the accessibility system (e.g., on screen reader)
        when the user selects a counter-based account (from the account list)

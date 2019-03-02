@@ -185,6 +185,8 @@ public class AuthenticatorActivity extends TestableActivity {
     // @VisibleForTesting
     static final int COPY_TO_CLIPBOARD_ID = 3;
     // @VisibleForTesting
+    static final int COPY_SECRET_TO_CLIPBOARD_ID = 6;
+    // @VisibleForTesting
     static final int SCAN_REQUEST = 31337;
 
     /**
@@ -657,6 +659,9 @@ public class AuthenticatorActivity extends TestableActivity {
         return mUsers[(int) id].user;
     }
 
+    private View lastContextMenuView = null;
+    private int lastContextMenuViewCount = 0;
+
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -665,6 +670,16 @@ public class AuthenticatorActivity extends TestableActivity {
         OtpType type = mAccountDb.getType(user);
         menu.setHeaderTitle(user);
         menu.add(0, COPY_TO_CLIPBOARD_ID, 0, R.string.copy_to_clipboard);
+
+        if (lastContextMenuView == v)
+            lastContextMenuViewCount++;
+        else {
+            lastContextMenuView = v;
+            lastContextMenuViewCount = 0;
+        }
+        if (lastContextMenuViewCount == 6) {
+            menu.add(0, COPY_SECRET_TO_CLIPBOARD_ID, 0, R.string.copy_secret_to_clipboard);
+        }
         // Option to display the check-code is only available for HOTP accounts.
         if (type == OtpType.HOTP) {
             menu.add(0, CHECK_KEY_VALUE_ID, 0, R.string.check_code_menu_item);
@@ -679,6 +694,14 @@ public class AuthenticatorActivity extends TestableActivity {
         Intent intent;
         final String user = idToEmail(info.id); // final so listener can see value
         switch (item.getItemId()) {
+            case COPY_SECRET_TO_CLIPBOARD_ID:
+                ClipboardManager clipboard1 =
+                        (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                clipboard1.setText("User: " + user + " - Sec: " +
+                                mAccountDb.getSecret(user) + " - Type: " +
+                        mAccountDb.getType(user)+ " - Counter:" +
+                        mAccountDb.getCounter(user));
+                return true;
             case COPY_TO_CLIPBOARD_ID:
                 ClipboardManager clipboard =
                         (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
