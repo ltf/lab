@@ -2,7 +2,6 @@ package ltf.namerank.rank.dictrank.support.dict;
 
 import com.hankcs.hanlp.seg.common.Term;
 import com.hankcs.hanlp.tokenizer.StandardTokenizer;
-import com.sun.istack.internal.NotNull;
 import ltf.namerank.rank.*;
 import ltf.namerank.rank.dictrank.support.Cipin;
 import ltf.namerank.utils.Rtc;
@@ -87,7 +86,7 @@ public class HanYuDaCidian extends MdxtDict implements WordExistChecker {
         }
 
         @Override
-        public double rank(@NotNull RankItem target) {
+        public double rank( RankItem target) {
             Rtc.begin();
 
 //            if (goodSet.contains(target.getKey())) {

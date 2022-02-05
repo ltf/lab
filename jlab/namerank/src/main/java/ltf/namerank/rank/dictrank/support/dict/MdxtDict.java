@@ -1,6 +1,5 @@
 package ltf.namerank.rank.dictrank.support.dict;
 
-import com.sun.istack.internal.NotNull;
 import ltf.namerank.rank.RankItem;
 import ltf.namerank.rank.RankSettings;
 import ltf.namerank.rank.Ranker;
@@ -83,7 +82,7 @@ abstract public class MdxtDict implements Ranker {
     }
 
     @Override
-    public double rank(@NotNull RankItem target) {
+    public double rank(RankItem target) {
         initItems();
         double rk = 0;
         List<MdxtItem> items = itemsMap.get(target.getKey());

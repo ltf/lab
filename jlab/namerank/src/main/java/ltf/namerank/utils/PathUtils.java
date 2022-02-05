@@ -17,7 +17,7 @@ public class PathUtils {
     }
 
     private static String getDataHome() {
-        return getUserHome() + "/xdata/namerank";
+        return "C:\\namerankdata";
     }
 
     public static String getDefaultPath() {

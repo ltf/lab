@@ -1,7 +1,6 @@
 package ltf.namerank.rank.dictrank.support;
 
 import com.alibaba.fastjson.JSON;
-import com.sun.istack.internal.NotNull;
 import ltf.namerank.entity.WordFeeling;
 import ltf.namerank.rank.RankItem;
 import ltf.namerank.rank.RankSettings;
@@ -59,7 +58,7 @@ public class WordFeelingRank implements Ranker {
     }
 
     @Override
-    public double rank(@NotNull RankItem target) {
+    public double rank(RankItem target) {
         initWordFeelings();
         double rk = 0;
         if (RankSettings.reportMode) acquireBuilder();

@@ -1,7 +1,5 @@
 package ltf.namerank.rank;
 
-import com.sun.istack.internal.NotNull;
-
 import static ltf.namerank.rank.RankItemHelper.*;
 
 /**
@@ -18,7 +16,7 @@ public class ExistWordRanker implements Ranker {
 
 
     @Override
-    public double rank(@NotNull RankItem target) {
+    public double rank(RankItem target) {
         double rk = 0;
         if (RankSettings.reportMode) acquireBuilder();
         if (checker.exists(target.getKey())) {

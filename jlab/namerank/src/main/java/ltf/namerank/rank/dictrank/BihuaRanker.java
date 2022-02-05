@@ -1,6 +1,5 @@
 package ltf.namerank.rank.dictrank;
 
-import com.sun.istack.internal.NotNull;
 import ltf.namerank.rank.RankItem;
 import ltf.namerank.rank.RankSettings;
 import ltf.namerank.rank.Ranker;
@@ -37,7 +36,7 @@ public class BihuaRanker implements Ranker {
     }
 
     @Override
-    public double rank(@NotNull RankItem target) {
+    public double rank(RankItem target) {
         double rk = 0;
         if (RankSettings.reportMode) acquireBuilder();
 

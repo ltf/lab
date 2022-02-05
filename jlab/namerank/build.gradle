@@ -1,14 +1,17 @@
-apply plugin: 'java'
-
 buildscript {
     repositories {
-        jcenter();
+        jcenter()
     }
     dependencies {
-        classpath "com.github.jengelman.gradle.plugins:shadow:1.2.3"
+
     }
 }
-apply plugin: 'com.github.johnrengelman.shadow'
+
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.plugin-shadow' version '2.0.3'
+}
+//apply plugin: 'com.github.johnrengelman.shadow'
 
 repositories {
     jcenter()
@@ -31,12 +34,18 @@ dependencies {
     compile 'com.hankcs:hanlp:portable-1.2.10'
 }
 
+apply plugin: 'com.github.johnrengelman.plugin-shadow'
+
+
 shadowJar {
-    archiveName "namerank.jar";
+    archiveName "namerank.jar"
     append("META-INF/spring.schemas")
     append("META-INF/spring.handlers")
 
     manifest {
         attributes("Main-Class": "ltf.namerank.Runner")
     }
+}
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }

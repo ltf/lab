@@ -1,6 +1,5 @@
 package ltf.namerank.rank.dictrank.meaning;
 
-import com.sun.istack.internal.NotNull;
 import ltf.namerank.rank.RankItem;
 import ltf.namerank.rank.RankSettings;
 import ltf.namerank.rank.Ranker;
@@ -14,7 +13,7 @@ import static ltf.namerank.rank.dictrank.support.Words.*;
  */
 public class SameMeaningRanker implements Ranker {
     @Override
-    public double rank(@NotNull RankItem target) {
+    public double rank(RankItem target) {
         double rk = 0;
         double childRk;
         if (RankSettings.reportMode) acquireBuilder();

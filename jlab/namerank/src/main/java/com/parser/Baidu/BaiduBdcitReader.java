@@ -1,6 +1,5 @@
-package com.parser.Baidu; /**
- * 功能：解析百度词库文件(bdict)，返回存储词语的list
- */
+package com.parser.Baidu;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
