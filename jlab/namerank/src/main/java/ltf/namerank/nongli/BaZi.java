@@ -139,7 +139,7 @@ public class BaZi {
 
         offset = (offset % 5) * 2;
         //求得时辰的干支
-        h = Gan[(offset + hour) % 10] + Zhi[hour];
+        h = Gan[(offset + hour-1) % 10] + Zhi[hour-1];
         //在此处输出我们的年月日时的天干地支
         return y + "," + m + "," + d + "," + h;
     }
