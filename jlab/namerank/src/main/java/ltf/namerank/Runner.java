@@ -9,6 +9,8 @@ import ltf.namerank.rank.dictrank.support.dict.HanYuDaCidian;
 import ltf.namerank.service.EvenManager;
 import ltf.namerank.utils.Rtc;
 
+import java.io.IOException;
+
 /**
  * @author ltf
  * @since 16/6/12, 下午5:26
@@ -28,8 +30,12 @@ public class Runner {
         //new RankingTest().go();
         //new NewDictTest();
         //new PinyinTest().go();
-        new HanYuDaCidian().listKeys();
-
+        //new HanYuDaCidian().listKeys();
+        try {
+            new CombineDictItems().combine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
         EvenManager.notifyTeardown();
