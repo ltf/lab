@@ -1,7 +1,6 @@
 #!flask/bin/python
 from flask import Flask, jsonify, make_response, abort, request
 from wuxingData import wuxingDic
-import main
 import characters
 import metaphysic
 import readDic
