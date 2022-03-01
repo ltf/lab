@@ -39,10 +39,13 @@ public class WugeDataCollect {
     }
 
 
-    private static class WuxingBihua {
+    public static class WuxingBihua {
         public String wx;
         public Integer bh;
 
+        public WuxingBihua() {
+        }
+        
         public WuxingBihua(String wx, Integer bh) {
             this.wx = wx;
             this.bh = bh;
@@ -164,16 +167,5 @@ public class WugeDataCollect {
             System.out.println(String.format("%s  xmx:%d  web:%d  dict:%d",
                     c, bihuashu, itm.getStrokes(), bihua.char2Bihua(c).length()));
         }
-    }
-
-    private void saveWugeStrokeFromPipiname() throws IOException {
-        ArrayList<String> lines = new ArrayList<>();
-        fromLinesData("pipiname_wuge_stroke", lines);
-        Map<String, Integer> c2sMap = lines.stream().map(l -> l.split(" ")).collect(Collectors.toMap(a -> a[0], a -> Integer.parseInt(a[1])));
-        toJsData(c2sMap, "pipiname_wuge_char2stroke");
-    }
-
-    public static void main(String[] args) throws IOException {
-        new WugeDataCollect().saveWugeStrokeFromPipiname();
     }
 }

@@ -45,6 +45,12 @@ def get_stroke_number(word):
             total += 9
         elif "十" in i:
             total += 10
+        elif "百" in i:
+            total += 6
+        elif "千" in i:
+            total += 3
+        elif "万" in i:
+            total += 15
         else:
             total += stroke_dic[i]
     return get_final_number(word, total)
