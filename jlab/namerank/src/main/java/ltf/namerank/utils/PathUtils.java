@@ -32,6 +32,9 @@ public class PathUtils {
     public static String getJsonHome() {
         return getDataHome() + "/json";
     }
+    public static String getLinesHome() {
+        return getDataHome() + "/lines";
+    }
     public static String getNamesHome() {
         return getDataHome() + "/names";
     }

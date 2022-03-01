@@ -7,13 +7,14 @@ import ltf.namerank.rank.dictrank.support.Bihua;
 import ltf.namerank.utils.LinesInFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
-import static ltf.namerank.utils.FileUtils.file2Str;
-import static ltf.namerank.utils.FileUtils.str2File;
+import static ltf.namerank.utils.FileUtils.*;
 import static ltf.namerank.utils.PathUtils.getJsonHome;
 import static ltf.namerank.utils.PathUtils.getRawHome;
 
@@ -58,7 +59,7 @@ public class WugeDataCollect {
     private void collectXingmingxue_Wuxing() throws IOException {
         wuge_bihuashu = 0;
         new LinesInFile(getRawHome() + "/xingmingxue_pdf_wuxing.txt").each(s -> {
-            if (s.trim().endsWith("五行")||s.trim().endsWith("五行")) {
+            if (s.trim().endsWith("五行") || s.trim().endsWith("五行")) {
                 flushWuxing(wuxing);
                 wuxing = s.substring(0, 1);
                 if ("2".equals(s.substring(1, 2))) wuxing += "(2)";
@@ -165,4 +166,14 @@ public class WugeDataCollect {
         }
     }
 
+    private void saveWugeStrokeFromPipiname() throws IOException {
+        ArrayList<String> lines = new ArrayList<>();
+        fromLinesData("pipiname_wuge_stroke", lines);
+        Map<String, Integer> c2sMap = lines.stream().map(l -> l.split(" ")).collect(Collectors.toMap(a -> a[0], a -> Integer.parseInt(a[1])));
+        toJsData(c2sMap, "pipiname_wuge_char2stroke");
+    }
+
+    public static void main(String[] args) throws IOException {
+        new WugeDataCollect().saveWugeStrokeFromPipiname();
+    }
 }

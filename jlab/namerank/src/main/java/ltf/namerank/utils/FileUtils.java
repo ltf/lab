@@ -10,6 +10,7 @@ import java.util.List;
 
 import static com.alibaba.fastjson.serializer.SerializerFeature.PrettyFormat;
 import static ltf.namerank.utils.PathUtils.getJsonHome;
+import static ltf.namerank.utils.PathUtils.getLinesHome;
 
 /**
  * @author ltf
@@ -104,4 +105,13 @@ public class FileUtils {
     public static <T> T fromJsData(String shortFileName, TypeReference<T> type) throws IOException {
         return (T) JSON.parseObject(file2Str(getJsonHome() + "/" + shortFileName + ".json"), type);
     }
+
+    public static void toLinesData(Iterable<String> lines, String shortFileName) throws IOException {
+        lines2File(lines, getLinesHome() + "/" + shortFileName + ".txt");
+    }
+
+    public static void fromLinesData(String shortFileName, Collection<String> lines) throws IOException {
+        file2Lines(getLinesHome() + "/" + shortFileName + ".txt", lines);
+    }
+
 }
