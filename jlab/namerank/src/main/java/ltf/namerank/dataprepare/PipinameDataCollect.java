@@ -6,6 +6,7 @@ import ltf.namerank.entity.DictItem_Bm8;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -20,9 +21,9 @@ public class PipinameDataCollect {
 
     private void saveWugeStrokeFromPipiname() throws IOException {
         ArrayList<String> lines = new ArrayList<>();
-        fromLinesData(PIPI_WUGE_STROKES_SHORT, lines);
+        fromLinesData("pipiname_wuge_stroke", lines);
         Map<String, Integer> c2sMap = lines.stream().map(l -> l.split(" ")).collect(Collectors.toMap(a -> a[0], a -> Integer.parseInt(a[1])));
-        toJsData(c2sMap, "pipiname_wuge_char2stroke");
+        toJsData(c2sMap, PIPI_WUGE_STROKES_SHORT);
     }
 
     private void checkData() throws IOException {
@@ -55,20 +56,33 @@ public class PipinameDataCollect {
 
         ArrayList<String> diff = new ArrayList<>();
         ppC2s.forEach((k, v) -> {
-            if (dict.containsKey(k) && !v.equals(dict.get(k).getStrokes())) {
+            Character c = k.charAt(0);
+            if (dict.containsKey(k) && (!v.equals(dict.get(k).getStrokes()) || "凶".equals(dict.get(k).getLuckyornot()))) {
                 diff.add(k);
-            } else if (xmx_bihua.containsKey(k.charAt(0)) && !v.equals(xmx_bihua.get(k.charAt(0)))) {
+            } else if (xmx_bihua.containsKey(c) && !v.equals(xmx_bihua.get(c))) {
                 diff.add(k);
-            } else if (xmx_wuxing.containsKey(k.charAt(0)) && !v.equals(xmx_wuxing.get(k.charAt(0)))) {
+            } else if (xmx_wuxing.containsKey(c) && !v.equals(xmx_wuxing.get(c).bh)) {
                 diff.add(k);
             }
         });
-        toLinesData(diff, "diff");
+        diff.forEach(ppC2s::remove);
+
+        toJsData(ppC2s, "selected_wuge_char2stroke");
+
+        HashMap<Integer, List<String>> ppS2c = new HashMap<>();
+        ppC2s.forEach((k, v) -> {
+            ppS2c.putIfAbsent(v, new ArrayList<>());
+            ppS2c.get(v).add(k);
+        });
+        toJsData(ppS2c, "selected_wuge_stroke2char");
+
+
+
+        //toLinesData(diff, "diff");
     }
 
     public static void main(String[] args) throws IOException {
         //new PipinameDataCollect().saveWugeStrokeFromPipiname();
         new PipinameDataCollect().checkData();
-
     }
 }
