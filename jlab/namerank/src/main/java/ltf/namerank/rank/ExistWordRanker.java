@@ -8,11 +8,13 @@ import static ltf.namerank.rank.RankItemHelper.*;
  */
 public class ExistWordRanker implements Ranker {
 
-    public ExistWordRanker(WordExistChecker checker) {
+    public ExistWordRanker(WordExistChecker checker, double rankDelta) {
         this.checker = checker;
+        this.rankDelta = rankDelta;
     }
 
     private WordExistChecker checker;
+    private double rankDelta;
 
 
     @Override
@@ -20,8 +22,8 @@ public class ExistWordRanker implements Ranker {
         double rk = 0;
         if (RankSettings.reportMode) acquireBuilder();
         if (checker.exists(target.getKey())) {
-            rk += -200;
-            if (RankSettings.reportMode) addInfo(String.format("%s: normal word -200 ", target.getKey()));
+            rk += rankDelta;
+            if (RankSettings.reportMode) addInfo(String.format("%s: normal word %.1f ", target.getKey(), rankDelta));
         }
 
         if (RankSettings.reportMode) flushResult(target, rk);

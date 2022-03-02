@@ -14,6 +14,7 @@ import ltf.namerank.rank.dictrank.support.dict.MdxtDict;
 import ltf.namerank.rank.filter.BlacklistCharsFilter;
 import ltf.namerank.rank.filter.ChainedFilter;
 import ltf.namerank.rank.filter.LengthFilter;
+import ltf.namerank.rank.wuxing.ExistsNameChecker;
 import ltf.namerank.utils.LinesInFile;
 
 import java.io.IOException;
@@ -172,12 +173,14 @@ public class RankingTest {
 
             AllCasesRanker allCasesRanker = new AllCasesRanker(
                     new SumRankers()
-                            .addRanker(cache(sameMeaningRanker), 80)
+                            .addRanker(cache(sameMeaningRanker), 8)
                             .addRanker(cachedHanyuCidian, 4)
-                            .addRanker(cache(new PronounceRank(cachedHanyuCidian)), 1)
+                            .addRanker(cache(new PronounceRank(cachedHanyuCidian)), 2)
             );
 
-            ExistWordRanker existWordRanker = new ExistWordRanker(hanYuDaCidian);
+            // 已经以名字形式存在的词，加分
+            ExistWordRanker existWordRanker = new ExistWordRanker(
+                    new ExistsNameChecker(getNamesHome() + "/givenNames.txt"), 500);
 
 //            BihuaRanker bihuaRanker = new BihuaRanker()
 //                    .addWantedChar('金', 100)
