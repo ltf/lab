@@ -26,6 +26,9 @@ public class SameMeaningRanker implements Ranker {
         if (RankSettings.reportMode) addInfo(String.format(" Happy: %.1f", childRk));
         rk += childRk;
 
+        childRk = isSame(target.getKey(), goodSet) * 3;
+        if (RankSettings.reportMode) addInfo(String.format("Good: %.1f", childRk));
+        rk += childRk;
 
         if (RankSettings.reportMode) flushResult(target, rk);
         else target.setScore(rk);

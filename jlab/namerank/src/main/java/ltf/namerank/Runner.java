@@ -27,15 +27,17 @@ public class Runner {
         //new DictNameCollecter();
         //new HanziWuxing().run();
         //new WordFeelings().go();
-        //new RankingTest().go();
+        new RankingTest().go();
         //new NewDictTest();
         //new PinyinTest().go();
         //new HanYuDaCidian().listKeys();
-        try {
-            new CombineDictItems().combine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        
+//        try {
+//            new CombineDictItems().combine();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
 
         EvenManager.notifyTeardown();

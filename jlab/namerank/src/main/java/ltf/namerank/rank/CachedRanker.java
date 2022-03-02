@@ -7,13 +7,12 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.lang.ref.SoftReference;
-import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
 import static com.alibaba.fastjson.serializer.SerializerFeature.PrettyFormat;
 import static com.alibaba.fastjson.serializer.SerializerFeature.WriteClassName;
-import static ltf.namerank.service.EvenManager.add;
+import static ltf.namerank.service.EvenManager.addTeardownListener;
 import static ltf.namerank.utils.FileUtils.str2File;
 import static ltf.namerank.utils.PathUtils.getCacheHome;
 
@@ -84,7 +83,7 @@ public class CachedRanker extends WrappedRanker implements TeardownListener {
 
     public static CachedRanker cache(Ranker ranker) {
         CachedRanker cachedRanker = new CachedRanker(ranker);
-        add(cachedRanker);
+        addTeardownListener(cachedRanker);
         return cachedRanker;
     }
 

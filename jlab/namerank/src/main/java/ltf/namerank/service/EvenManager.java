@@ -10,7 +10,7 @@ import java.util.List;
 public class EvenManager {
     private static List<TeardownListener> teardownListeners = new ArrayList<>();
 
-    public static void add(TeardownListener listener) {
+    public static void addTeardownListener(TeardownListener listener) {
         teardownListeners.add(listener);
     }
 

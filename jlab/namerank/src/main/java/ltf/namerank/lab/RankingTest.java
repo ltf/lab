@@ -2,6 +2,7 @@ package ltf.namerank.lab;
 
 import com.alibaba.fastjson.JSON;
 import com.hankcs.hanlp.dictionary.CoreSynonymDictionary;
+import ltf.namerank.dataprepare.PipinameDataCollect;
 import ltf.namerank.entity.WordFeeling;
 import ltf.namerank.rank.*;
 import ltf.namerank.rank.dictrank.meaning.SameMeaningFilter;
@@ -101,7 +102,7 @@ public class RankingTest {
 
     public void go() {
 
-        testNewDict();
+        //testNewDict();
         //new HanYuDaCidian().listKeys();
 
         //testWordFeeling();
@@ -171,7 +172,7 @@ public class RankingTest {
 
             AllCasesRanker allCasesRanker = new AllCasesRanker(
                     new SumRankers()
-                            .addRanker(cache(sameMeaningRanker), 8)
+                            .addRanker(cache(sameMeaningRanker), 80)
                             .addRanker(cachedHanyuCidian, 4)
                             .addRanker(cache(new PronounceRank(cachedHanyuCidian)), 1)
             );
@@ -188,17 +189,17 @@ public class RankingTest {
                     .addRanker(existWordRanker, 1);
 
             BlacklistCharsFilter blacklistCharsFilter = new BlacklistCharsFilter()
-                    .addChars(getWordsHome() + "/fyignore.txt")
+                    //.addChars(getWordsHome() + "/fyignore.txt")
                     //.addChars(getWordsHome() + "/taboo_girl.txt")
                     //.addChars(getWordsHome() + "/gaopinzi.txt")
                     .addChars(getWordsHome() + "/badchars.txt");
 
             filter = new ChainedFilter()
                     .add(new LengthFilter())
-                            //.add(new WugeFilter())
+                    //.add(new WugeFilter())
                     .add(blacklistCharsFilter)
                     .add(new YinYunFilter())
-                    .add(new SameMeaningFilter())
+                    //.add(new SameMeaningFilter())
             ;
 
             doRanking();
@@ -214,12 +215,14 @@ public class RankingTest {
 
     private void doRanking() throws IOException {
 
-        RankSettings.reportMode = true;
+        //RankSettings.reportMode = true;
 
         if (RankSettings.reportMode && exists(PICKED_LIST)) file2Lines(PICKED_LIST, picked);
 
-        new LinesInFile(getNamesHome() + "/givenNames.txt").each(this::nameRanking);
+        //new LinesInFile(getNamesHome() + "/givenNames.txt").each(this::nameRanking);
         //new LinesInFile(getWordsHome() + "/allWords.txt").each(this::nameRanking);
+
+        new PipinameDataCollect().genCandidates().forEach(this::nameRanking);
 
         rankItems.sort(RankItem::descOrder);
 
@@ -237,7 +240,7 @@ public class RankingTest {
     }
 
     private void nameRanking(String givenName) {
-        //if (filter.banned(givenName)) return;
+        if (filter.banned(givenName)) return;
         if (RankSettings.reportMode && !picked.contains(givenName)) return;
         //if (!"钰琦".equals(givenName)) return;
         //if (givenName.length() == 2 && givenName.substring(0, 1).equals(givenName.substring(1))) {

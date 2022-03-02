@@ -15,8 +15,15 @@ import static ltf.namerank.utils.FileUtils.*;
  */
 public class PipinameDataCollect {
     private static final String PIPI_WUGE_STROKES_SHORT = "pipiname_wuge_char2stroke";
-
-    private static final int[] BEST_NUMS = {1, 3, 5, 7, 11, 13, 15, 16, 18, 21, 24, 25, 31, 32, 33, 35, 37, 39, 41, 45, 47, 48, 52, 57, 61, 63, 65, 67, 68, 81};
+    /**
+     * ARTICLE1:   1,3,5,6,7,8,11,13,15,16,17,18,21,23,24,25,29,31,32,33,35,37,39,41,45,47,48,52,55,57,61,63,65,67,68,81
+     * ARTICLE2:   1,3,5,6,7,  11,13,15,16,      21,23,24,   29,31,32,33,35,37,   41,45,47,48,52,   57,61,63,65,67,68,81
+     * PP BEST:    1,3,5,6,7,8,11,13,15,16,17,18,21,23,24,25,29,31,32,33,35,37,39,41,45,47,48,52,   57,61,63,65,67,68,81
+     *
+     * ALL BEST:   1,3,5,      11,13,15,16,      21,   24,      31,32,33,35,37,39,41,45,47,48,52,   57,61,63,65,67,68,81
+     * (remove normal for httpcn)
+     */
+    private static final int[] ALL_BEST_NUMS = {1, 3, 5, 11, 13, 15, 16, 21, 24, 31, 32, 33, 35, 37, 39, 41, 45, 47, 48, 52, 57, 61, 63, 65, 67, 68, 81};
     //private static final int[] BEST_NUMS = {1, 3, 5, 7, 8, 11, 13, 15, 16, 18, 21, 23, 24, 25, 31, 32, 33, 35, 37, 39, 41, 45, 47, 48, 52, 57, 61, 63, 65, 67, 68, 81};
 
     private static final int[] GOOD_NUMS = {1, 3, 5, 6, 7, 8, 11, 13, 15, 16, 18, 21, 23, 24, 25, 29, 31, 32, 33, 35, 37, 39, 41, 45, 47, 48, 52, 57, 61, 63, 65, 67, 68, 81};
@@ -34,6 +41,8 @@ public class PipinameDataCollect {
             "火木土", "火火木", "火火土", "火土火", "火土土", "火土金", "土火木", "土火火", "土火土", "土土火",
             "土土土", "土土金", "土金土", "土金金", "土金水", "金土火", "金土土", "金土金", "金金土", "金水木",
             "金水金", "水木木", "水木火", "水木土", "水木水", "水金土", "水金水", "水水木", "水水金"};
+
+    private static final StrokePicker picker = new StrokePicker();
 
 
     private void saveWugeStrokeFromPipiname() throws IOException {
@@ -127,27 +136,33 @@ public class PipinameDataCollect {
         toJsData(ppS2c, "selected_wuge_stroke2char");
     }
 
-    private void calculateBestStrokes() throws IOException {
-        StrokePicker picker = new StrokePicker();
+
+
+    public List<String> genCandidates() throws IOException {
         HashMap<Integer, List<String>> ppS2c = fromJsData("selected_wuge_stroke2char", new TypeReference<HashMap<Integer, List<String>>>() {
 
         });
 
         ArrayList<String> candidates = new ArrayList<>(1000000);
 
-        for (int ming1 : ppS2c.keySet()) {
-            for (int ming2 : ppS2c.keySet()) {
-                if (picker.isGood(ming1, ming2)) {
-                    int count = fullSetNames(ppS2c.get(ming1), ppS2c.get(ming2), candidates);
+        calculateBestStrokes(ppS2c, candidates);
 
-                    System.out.println(
+        //toLinesData(candidates, "candidates");
+        return candidates;
+    }
+
+    private void calculateBestStrokes(Map<Integer, List<String>> stroke2charMap, List<String> candidates) {
+        for (int ming1 : stroke2charMap.keySet()) {
+            for (int ming2 : stroke2charMap.keySet()) {
+                if (picker.isGood(ming1, ming2)) {
+                    int count = fullSetNames(stroke2charMap.get(ming1), stroke2charMap.get(ming2), candidates);
+
+                    System.out.println("calculateBestStrokes: " + 
                             Integer.toString(ming1) + " - " + Integer.toString(ming2)
-                                    + " : " + Integer.toString(count));
+                                    + " , " + Integer.toString(count));
                 }
             }
         }
-
-        toLinesData(candidates, "candidates");
     }
 
     private int fullSetNames(List<String> ming1, List<String> ming2, List<String> candidates) {
@@ -168,7 +183,7 @@ public class PipinameDataCollect {
         static final HashSet<String> GOOD_SANCAI = new HashSet<>();
 
         static {
-            Arrays.stream(BEST_NUMS).forEach(i -> GOOD_NUM[i] = true);
+            Arrays.stream(ALL_BEST_NUMS).forEach(i -> GOOD_NUM[i] = true);
             GOOD_SANCAI.addAll(Arrays.asList(SANCAI_GOOD));
         }
 
@@ -199,7 +214,7 @@ public class PipinameDataCollect {
     public static void main(String[] args) throws IOException {
         //new PipinameDataCollect().saveWugeStrokeFromPipiname();
         //new PipinameDataCollect().checkData();
-        new PipinameDataCollect().calculateBestStrokes();
+        new PipinameDataCollect().genCandidates();
         //new PipinameDataCollect().cleanSelectedCharacters();
     }
 }

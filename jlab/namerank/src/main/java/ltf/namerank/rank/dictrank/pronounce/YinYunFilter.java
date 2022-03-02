@@ -36,7 +36,7 @@ public class YinYunFilter implements RankFilter {
 
         if (!"仄平平".equals(pingze)) return true;
 
-        //if (!(checkYunTou() && checkYunFu() && checkYunWei() && checkShengmu())) return true;
+        if (!(checkYunTou() && checkYunFu() && checkYunWei() && checkShengmu())) return true;
 
 
         return false;

@@ -32,10 +32,10 @@ public class AllCasesRanker extends WrappedRanker {
             result.add(new Case("" + chars[0], 10));
         } else if (fullLen == 2) {
             if (getFamilyName() != null) {
-                result.add(new Case(getFamilyName() + "" + chars[0] + chars[1], 2));
-                result.add(new Case("" + chars[0] + chars[1], 3));
-                result.add(new Case("" + chars[0], 2));
-                result.add(new Case("" + chars[1], 2));
+                result.add(new Case(getFamilyName() + "" + chars[0] + chars[1], 3));
+                result.add(new Case("" + chars[0] + chars[1], 5));
+                result.add(new Case("" + chars[0], 3));
+                result.add(new Case("" + chars[1], 3));
                 result.add(new Case(getFamilyName() + "" + chars[0], 1));
             } else {
                 result.add(new Case("" + chars[0] + chars[1], 3.69));
