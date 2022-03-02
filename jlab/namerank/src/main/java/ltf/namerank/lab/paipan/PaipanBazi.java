@@ -343,15 +343,15 @@ public class PaipanBazi {
      * 申时16.00－18.00,酉时18.00－20.00,戌时20.00－22.00,亥时22.00－24.00
      */
     public static void main(String[] args) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
         Calendar cal = Calendar.getInstance();
         try {
             //设定此人的西元时间为1983-01-10
-            cal.setTime(sdf.parse("1983-01-10"));
+            cal.setTime(sdf.parse("2022-02-24 03:50"));
             PaipanBazi lunar = new PaipanBazi(cal);
             System.out.println("此人农历的日期【" + lunar.toString() + "】");
             //此处是为了获取时间在中国的八字学说上的显示，此人是午时生的
-            System.out.println("此人八字【" + lunar.getYearGanZhi(7) + "】");
+            System.out.println("此人八字【" + lunar.getYearGanZhi(2) + "】");
             //获取生肖
             System.out.println("此人的农历生肖【" + lunar.animalsYear() + "】");
         } catch (Exception e) {

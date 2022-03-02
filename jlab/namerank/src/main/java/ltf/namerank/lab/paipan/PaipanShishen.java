@@ -139,7 +139,7 @@ public class PaipanShishen {
      */
     public static void main(String[] args) throws ParseException {
         PaipanShishen my = new PaipanShishen();
-        my.paipan("2000-3-13 11", PaipanLvhehun.sex.man);
+        my.paipan("2022-2-24 04", PaipanLvhehun.sex.man);
 
     }
 }  

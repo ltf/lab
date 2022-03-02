@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -108,6 +109,12 @@ public class FileUtils {
 
     public static void toLinesData(Iterable<String> lines, String shortFileName) throws IOException {
         lines2File(lines, getLinesHome() + "/" + shortFileName + ".txt");
+    }
+
+    public static List<String> fromLinesData(String shortFileName) throws IOException {
+        ArrayList<String> lines = new ArrayList<>();
+        fromLinesData(shortFileName, lines);
+        return lines;
     }
 
     public static void fromLinesData(String shortFileName, Collection<String> lines) throws IOException {

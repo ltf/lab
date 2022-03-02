@@ -5,7 +5,6 @@ import com.hankcs.hanlp.dictionary.CoreSynonymDictionary;
 import ltf.namerank.dataprepare.PipinameDataCollect;
 import ltf.namerank.entity.WordFeeling;
 import ltf.namerank.rank.*;
-import ltf.namerank.rank.dictrank.meaning.SameMeaningFilter;
 import ltf.namerank.rank.dictrank.meaning.SameMeaningRanker;
 import ltf.namerank.rank.dictrank.pronounce.PronounceRank;
 import ltf.namerank.rank.dictrank.pronounce.YinYunFilter;
@@ -13,9 +12,9 @@ import ltf.namerank.rank.dictrank.support.dict.HanYuDaCidian;
 import ltf.namerank.rank.dictrank.support.dict.MdxtDict;
 import ltf.namerank.rank.filter.BlacklistCharsFilter;
 import ltf.namerank.rank.filter.ChainedFilter;
+import ltf.namerank.rank.filter.CharacterWuxingFilter;
 import ltf.namerank.rank.filter.LengthFilter;
-import ltf.namerank.rank.wuxing.ExistsNameChecker;
-import ltf.namerank.utils.LinesInFile;
+import ltf.namerank.rank.wuxing.ExistsWordsChecker;
 
 import java.io.IOException;
 import java.util.*;
@@ -179,8 +178,8 @@ public class RankingTest {
             );
 
             // 已经以名字形式存在的词，加分
-            ExistWordRanker existWordRanker = new ExistWordRanker(
-                    new ExistsNameChecker(getNamesHome() + "/givenNames.txt"), 500);
+            ExistWordRanker nameListed = new ExistWordRanker(
+                    new ExistsWordsChecker(getNamesHome() + "/givenNames.txt"), 500);
 
 //            BihuaRanker bihuaRanker = new BihuaRanker()
 //                    .addWantedChar('金', 100)
@@ -189,7 +188,7 @@ public class RankingTest {
 
             ranker = new SumRankers()
                     .addRanker(allCasesRanker, 1)
-                    .addRanker(existWordRanker, 1);
+                    .addRanker(nameListed, 1);
 
             BlacklistCharsFilter blacklistCharsFilter = new BlacklistCharsFilter()
                     //.addChars(getWordsHome() + "/fyignore.txt")
@@ -199,6 +198,7 @@ public class RankingTest {
 
             filter = new ChainedFilter()
                     .add(new LengthFilter())
+                    .add(new CharacterWuxingFilter())
                     //.add(new WugeFilter())
                     .add(blacklistCharsFilter)
                     .add(new YinYunFilter())

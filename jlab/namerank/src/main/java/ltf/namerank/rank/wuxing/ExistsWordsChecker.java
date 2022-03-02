@@ -6,20 +6,18 @@ import ltf.namerank.utils.LinesInFile;
 import java.io.IOException;
 import java.util.HashSet;
 
-import static ltf.namerank.utils.PathUtils.getNamesHome;
-
 /**
  * @author ltf
  * @since 2022/3/2, 16:54
  */
-public class ExistsNameChecker implements WordExistChecker {
+public class ExistsWordsChecker implements WordExistChecker {
 
-    private HashSet<String> givenNames;
+    private final HashSet<String> words;
 
-    public ExistsNameChecker(String file) {
-        givenNames = new HashSet<>();
+    public ExistsWordsChecker(String file) {
+        words = new HashSet<>();
         try {
-            new LinesInFile(file).each(givenNames::add);
+            new LinesInFile(file).each(words::add);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -27,6 +25,6 @@ public class ExistsNameChecker implements WordExistChecker {
     
     @Override
     public boolean exists(String word) {
-        return givenNames.contains(word);
+        return words.contains(word);
     }
 }
