@@ -2,6 +2,7 @@ package com.parser.QQ;/*
  * 功能：将QQ词库qpyd文件中包含的词语转为txt存储，一个词语占一行
  */
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.File;
 import java.util.*;
@@ -36,8 +37,12 @@ public class QQqpyd2Txt
     
 	public static void main(String[] args) throws Exception
 	{
-		String inputPath = "G:/各大输入法词库/QQ/单线程下载/QQ/城市地区/安徽/城市信息(安庆).qpyd";
-		String outputPath = "G:/各大输入法词库/QQ/单线程下载/test/城市信息(安庆).txt";
-		transBdict2Txt(inputPath, outputPath);
+        trans("中国历史名人");
 	}
+
+    private static void trans(String name) throws Exception {
+        transBdict2Txt(
+                "C:\\namerankdata\\raw\\dicts\\names\\"+name+".qpyd.unzipped",
+                "C:\\namerankdata\\raw\\dicts\\names\\"+name+".txt");
+    }
 }

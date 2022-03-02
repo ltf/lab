@@ -22,9 +22,19 @@ public class SogouScel2Txt
 {
 	
 	public static void main(String[] args)throws Exception 
-	{		
-   	 sogou("G:/各大输入法词库/搜狗/sogou/城市信息大全/安徽/安徽.scel","G:/各大输入法词库/搜狗/sogou/城市信息大全/安徽/安徽.txt",false);
+	{
+        trans("历史名人大全");
+        trans("古今中外各界名人词库");
+        trans("人名姓名大全");
+        trans("歌手人名大全【官方推荐】");
+        trans("历史名人大全");
 	}
+
+	private static void trans(String name) throws IOException {
+        sogou(
+                "C:\\namerankdata\\raw\\dicts\\names\\"+name+".scel",
+                "C:\\namerankdata\\raw\\dicts\\names\\"+name+".txt",false);
+    }
    
 	/**
 	 * 读取scel的词库文件,生成txt格式的文件
