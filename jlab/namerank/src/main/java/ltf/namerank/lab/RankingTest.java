@@ -5,6 +5,8 @@ import com.hankcs.hanlp.dictionary.CoreSynonymDictionary;
 import ltf.namerank.dataprepare.PipinameDataCollect;
 import ltf.namerank.entity.WordFeeling;
 import ltf.namerank.rank.*;
+import ltf.namerank.rank.dictrank.CharRateRanker;
+import ltf.namerank.rank.dictrank.PoemRanker;
 import ltf.namerank.rank.dictrank.meaning.SameMeaningRanker;
 import ltf.namerank.rank.dictrank.pronounce.PronounceRank;
 import ltf.namerank.rank.dictrank.pronounce.YinYunFilter;
@@ -179,7 +181,7 @@ public class RankingTest {
 
             // 已经以名字形式存在的词，加分
             ExistWordRanker nameListed = new ExistWordRanker(
-                    new ExistsWordsChecker(getNamesHome() + "/givenNames.txt"), 500);
+                    new ExistsWordsChecker(getNamesHome() + "/givenNames.txt"), 100);
 
 //            BihuaRanker bihuaRanker = new BihuaRanker()
 //                    .addWantedChar('金', 100)
@@ -188,10 +190,14 @@ public class RankingTest {
 
             ranker = new SumRankers()
                     .addRanker(allCasesRanker, 1)
-                    .addRanker(nameListed, 1);
+                    .addRanker(nameListed, 1)
+                    .addRanker(new PoemRanker(), 1)
+                    .addRanker(new CharRateRanker(), 1)
+            ;
 
             BlacklistCharsFilter blacklistCharsFilter = new BlacklistCharsFilter()
                     //.addChars(getWordsHome() + "/fyignore.txt")
+                    .addChars(getWordsHome() + "/ignore.txt")
                     //.addChars(getWordsHome() + "/taboo_girl.txt")
                     //.addChars(getWordsHome() + "/gaopinzi.txt")
                     .addChars(getWordsHome() + "/badchars.txt");
@@ -218,14 +224,17 @@ public class RankingTest {
 
     private void doRanking() throws IOException {
 
-        //RankSettings.reportMode = true;
+        RankSettings.reportMode = true;
 
         if (RankSettings.reportMode && exists(PICKED_LIST)) file2Lines(PICKED_LIST, picked);
 
         //new LinesInFile(getNamesHome() + "/givenNames.txt").each(this::nameRanking);
         //new LinesInFile(getWordsHome() + "/allWords.txt").each(this::nameRanking);
-
-        new PipinameDataCollect().genCandidates().forEach(this::nameRanking);
+        if (RankSettings.reportMode) {
+            picked.forEach(this::nameRanking);
+        } else {
+            new PipinameDataCollect().genCandidates().forEach(this::nameRanking);
+        }
 
         rankItems.sort(RankItem::descOrder);
 

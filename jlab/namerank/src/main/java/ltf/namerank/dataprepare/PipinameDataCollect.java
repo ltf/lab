@@ -54,6 +54,9 @@ public class PipinameDataCollect {
     private static final String[] SANCAI_NORMAL = {"木火火", "木土火", "火木水", "火火火", "土木木", "土木火", "土土木", "金土木", "金金金", "金金水",
             "金水水", "水火木", "水土火", "水土土", "水土金", "水金金", "水水水"};
 
+    private static final String EXCLUDE_CHARS =
+            "花蝶香瑶梅桃芳姣钅菲芹听芸蓉妡柔莹鸯刁阴";
+
     private static final StrokePicker picker = new StrokePicker();
 
 
@@ -153,6 +156,9 @@ public class PipinameDataCollect {
         HashMap<Integer, List<String>> ppS2c = fromJsData("selected_wuge_stroke2char", new TypeReference<HashMap<Integer, List<String>>>() {
 
         });
+        for (char c : EXCLUDE_CHARS.toCharArray()) {
+            ppS2c.remove(String.valueOf(c));
+        }
 
         ArrayList<String> candidates = new ArrayList<>(1000000);
 

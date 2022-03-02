@@ -23,7 +23,7 @@ public class ExistWordRanker implements Ranker {
         if (RankSettings.reportMode) acquireBuilder();
         if (checker.exists(target.getKey())) {
             rk += rankDelta;
-            if (RankSettings.reportMode) addInfo(String.format("%s: normal word %.1f ", target.getKey(), rankDelta));
+            if (RankSettings.reportMode) addInfo(String.format("%s: 常用名 %.1f ", target.getKey(), rankDelta));
         }
 
         if (RankSettings.reportMode) flushResult(target, rk);
@@ -34,6 +34,6 @@ public class ExistWordRanker implements Ranker {
 
     @Override
     public String getName() {
-        return "常用词分析";
+        return "常用名";
     }
 }
