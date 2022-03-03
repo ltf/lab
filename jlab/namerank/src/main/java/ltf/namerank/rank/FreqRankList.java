@@ -23,10 +23,10 @@ public class FreqRankList {
     }
 
     public List<FreqRankItem> prepare() {
-        int all = 0;
+        int all = 1;
         for (FreqRankItem item : list) all += item.count * item.freq;
-        for (FreqRankItem item : list) item.rate = item.count * item.freq / (double)all;
-        list.sort((a, b) -> a.rate > b.rate ? -1 : a.rate < b.rate ? 1 : 0);
+        for (FreqRankItem item : list) item.rate = Math.sqrt(item.count * item.freq / (double) all);
+        list.sort((a, b) -> Double.compare(b.rate, a.rate));
         return list;
     }
 }

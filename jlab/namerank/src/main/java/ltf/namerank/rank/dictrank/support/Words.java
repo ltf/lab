@@ -14,8 +14,8 @@ import static ltf.namerank.utils.PathUtils.getWordsHome;
  * @since 16/7/7, 下午4:55
  */
 public class Words {
-    //    public final static Set<String> negativeSet = new HashSet<>();
-//    public final static Set<String> positiveSet = new HashSet<>();
+    public final static Set<String> negativeSet = new HashSet<>();
+    public final static Set<String> positiveSet = new HashSet<>();
     public final static Set<String> butySet = new HashSet<>();
     public final static Set<String> happySet = new HashSet<>();
     public final static Set<String> goodSet = new HashSet<>();
@@ -24,8 +24,8 @@ public class Words {
 
     static {
         try {
-//            file2Lines(getWordsHome() + "/positive.txt", positiveSet);
-//            file2Lines(getWordsHome() + "/negative.txt", negativeSet);
+            file2Lines(getWordsHome() + "/positive.txt", positiveSet);
+            file2Lines(getWordsHome() + "/negative.txt", negativeSet);
             file2Lines(getWordsHome() + "/buty.txt", butySet);
             file2Lines(getWordsHome() + "/happy.txt", happySet);
 
@@ -38,11 +38,25 @@ public class Words {
     }
 
     public static double isSame(String word, Set<String> targetSet) {
-        double v = 0;
+        if (targetSet.contains(word)) return 1.0;
+        double delta = 0.0;
         for (String s : targetSet) {
-            v += CoreSynonymDictionary.similarity(word, s);
+            delta = CoreSynonymDictionary.similarity(word, s);
+            if (delta>0.7) {
+                break;
+            }
         }
-        return v / targetSet.size();
+        return delta;
+
+
+//        double v = 0;
+//        for (String s : targetSet) {
+//            double delta = CoreSynonymDictionary.similarity(word, s);
+//            if (delta>0.8) {
+//                v += delta;
+//            }
+//        }
+//        return v / targetSet.size();
     }
 
     /*

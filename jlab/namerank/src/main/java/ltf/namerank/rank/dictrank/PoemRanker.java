@@ -69,14 +69,81 @@ public class PoemRanker implements Ranker {
                 if (p1 >= 0 && p2 >= 0) break;
             }
 
-            if (sp1 == sp2 && p1 < p2) {
+            /**
+             * 悬弧日
+             * 福不尽
+             * 贵无敌
+             * 愿岁岁
+             * 见华席
+             *
+             * 关关雎鸠
+             * 在河之洲
+             * 窈窕淑女
+             * 君子好逑
+             *
+             * 桃之夭夭
+             * 灼灼其华
+             * 之子于归
+             *
+             * 千年恨未终
+             * 关山人去后
+             * 秋夜月明中
+             *
+             * 晴日孤舟好
+             * 溪流带岸斜
+             * 浮游忘世虑
+             * 烂熳乱春华
+             *
+             * 万古山如此
+             * 青青岁岁新
+             *
+             * 今日西川无子美
+             * 诗风又起浣花村
+             *
+             * 若比争名求利处
+             * 寻思此路却安宁
+             */
+            if (sp1 == sp2) {
                 // 在同一句
-                rk += 100;
-                if (RankSettings.reportMode) logInfo = String.format("%.1f : %s", rk, sentences.get(sp1));
-            } else if (p1 == p2 && sentences.get(sp1).length() == sentences.get(sp2).length()) {
+                String sentence = sentences.get(sp1);
+                switch (sentence.length()) {
+                    case 3:
+                        if (p2 - p1 == 1) rk = 100;
+                        break;
+                    case 4:
+                        if ((p1 == 0 && p2 == 1) || (p1 == 2 && p2 == 3)) rk = 100;
+                        break;
+                    case 5:
+                        if ((p1 == 0 && p2 == 1) || (p1 == 3 && p2 == 4)) rk = 100;
+                        break;
+                    case 7:
+                        if ((p1 == 0 && p2 == 1) || (p1 == 2 && p2 == 3) || (p1 == 5 && p2 == 6)) rk = 100;
+                        break;
+                    default:
+                        if (p2 - p1 == 1 || p2 - p1 == 2) rk = 10;
+                        break;
+                }
+
+                if (RankSettings.reportMode && rk > 0) logInfo = String.format("%.1f : %s", rk, sentence);
+            } else if (p1 == p2 && sentences.get(sp1).length() == sentences.get(sp2).length()
+                    && (sp2 - sp1 == 1 || sp2 - sp1 == 2)) {
                 // 在不同句的相同位置
-                rk += 1000;
-                if (RankSettings.reportMode)
+                switch (sentences.get(sp1).length()) {
+                    case 3:
+                        if (p1 == 0 || p1 == 2) rk = 1000;
+                        break;
+                    case 4:
+                        if (p1 == 0 || p1 == 3) rk = 1000;
+                        break;
+                    case 5:
+                        if (p1 == 0 || p1 == 4) rk = 1000;
+                        break;
+                    case 7:
+                        if (p1 == 0 || p1 == 6) rk = 1000;
+                        if (p1 == 2 || p1 == 4 || p1 == 5) rk = 200;
+                        break;
+                }
+                if (RankSettings.reportMode && rk > 0)
                     logInfo = String.format("%.1f : %s, %s", rk, sentences.get(sp1), sentences.get(sp2));
             }
 

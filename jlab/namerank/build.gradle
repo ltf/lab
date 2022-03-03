@@ -31,7 +31,7 @@ dependencies {
 
 
 
-    compile 'com.hankcs:hanlp:portable-1.2.10'
+    compile 'com.hankcs:hanlp:portable-1.8.3'
 }
 
 apply plugin: 'com.github.johnrengelman.plugin-shadow'

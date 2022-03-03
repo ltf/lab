@@ -174,14 +174,14 @@ public class RankingTest {
 
             AllCasesRanker allCasesRanker = new AllCasesRanker(
                     new SumRankers()
-                            .addRanker(cache(sameMeaningRanker), 8)
-                            .addRanker(cachedHanyuCidian, 4)
-                            .addRanker(cache(new PronounceRank(cachedHanyuCidian)), 2)
+                            .addRanker(cache(sameMeaningRanker), 1)
+                            .addRanker(cachedHanyuCidian, 1)
+                            .addRanker(cache(new PronounceRank(cachedHanyuCidian)), 1)
             );
 
             // 已经以名字形式存在的词，加分
             ExistWordRanker nameListed = new ExistWordRanker(
-                    new ExistsWordsChecker(getNamesHome() + "/givenNames.txt"), 100);
+                    new ExistsWordsChecker(getNamesHome() + "/givenNames.txt"), 1000);
 
 //            BihuaRanker bihuaRanker = new BihuaRanker()
 //                    .addWantedChar('金', 100)
@@ -191,8 +191,8 @@ public class RankingTest {
             ranker = new SumRankers()
                     .addRanker(allCasesRanker, 1)
                     .addRanker(nameListed, 1)
-                    .addRanker(new PoemRanker(), 1)
-                    .addRanker(new CharRateRanker(), 1)
+                    .addRanker(new PoemRanker(), 2)
+                    .addRanker(new CharRateRanker(), 2)
             ;
 
             BlacklistCharsFilter blacklistCharsFilter = new BlacklistCharsFilter()
@@ -204,11 +204,11 @@ public class RankingTest {
 
             filter = new ChainedFilter()
                     .add(new LengthFilter())
-                    .add(new CharacterWuxingFilter())
+                    //.add(new CharacterWuxingFilter())
                     //.add(new WugeFilter())
                     .add(blacklistCharsFilter)
-                    .add(new YinYunFilter())
-                    //.add(new SameMeaningFilter())
+                    //.add(new YinYunFilter())
+            //.add(new SameMeaningFilter())
             ;
 
             doRanking();
@@ -245,21 +245,25 @@ public class RankingTest {
         }
         str2File(sb.toString(), getRawHome() + "/ranking.txt");
         List<RankItem> genHtmlItems = new ArrayList<>();
-        for (int i = 0; i < (rankItems.size() < 2000 ? rankItems.size() : 2000); i++) {
+        for (int i = 0; i < (Math.min(rankItems.size(), 2000)); i++) {
             genHtmlItems.add(rankItems.get(i));
         }
         if (RankSettings.reportMode) HtmlGenerator.gen(genHtmlItems, getRawHome() + "/test.htm");
     }
 
     private void nameRanking(String givenName) {
-        if (filter.banned(givenName)) return;
-        if (RankSettings.reportMode && !picked.contains(givenName)) return;
-        //if (!"钰琦".equals(givenName)) return;
-        //if (givenName.length() == 2 && givenName.substring(0, 1).equals(givenName.substring(1))) {
-        RankItem item = new RankItem(givenName);
-        ranker.rank(item);
-        rankItems.add(item);
-        //for (MdxtDict dict : dictList) dict.rank(record);
-        //}
+        try {
+            if (filter.banned(givenName)) return;
+            if (RankSettings.reportMode && !picked.contains(givenName)) return;
+            //if (!"钰琦".equals(givenName)) return;
+            //if (givenName.length() == 2 && givenName.substring(0, 1).equals(givenName.substring(1))) {
+            RankItem item = new RankItem(givenName);
+            ranker.rank(item);
+            rankItems.add(item);
+            //for (MdxtDict dict : dictList) dict.rank(record);
+            //}
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 }

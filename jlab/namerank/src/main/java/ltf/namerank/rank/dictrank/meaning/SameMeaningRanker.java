@@ -18,20 +18,37 @@ public class SameMeaningRanker implements Ranker {
         double childRk;
         if (RankSettings.reportMode) acquireBuilder();
 
-        childRk = isSame(target.getKey(), butySet) * 6;
-        if (RankSettings.reportMode) addInfo(String.format("Buty: %.1f", childRk));
+        childRk = isSame(target.getKey(), positiveSet) * 20;
+        if (RankSettings.reportMode) addInfo(String.format("褒: %.1f\t", childRk));
         rk += childRk;
 
-        childRk = isSame(target.getKey(), happySet) * 4;
-        if (RankSettings.reportMode) addInfo(String.format(" Happy: %.1f", childRk));
+        childRk = isSame(target.getKey(), butySet) * 60;
+        if (RankSettings.reportMode) addInfo(String.format("Buty: %.1f\t", childRk));
         rk += childRk;
 
-        childRk = isSame(target.getKey(), goodSet) * 3;
-        if (RankSettings.reportMode) addInfo(String.format("Good: %.1f", childRk));
+        childRk = isSame(target.getKey(), happySet) * 60;
+        if (RankSettings.reportMode) addInfo(String.format("Happy: %.1f\t", childRk));
+        rk += childRk;
+
+        childRk = isSame(target.getKey(), goodSet) * 60;
+        if (RankSettings.reportMode) addInfo(String.format("Good: %.1f\t", childRk));
+        rk += childRk;
+
+        childRk = isSame(target.getKey(), badSet) * -20;
+        if (RankSettings.reportMode) addInfo(String.format("<font color=red>Bad: %.1f</font>", childRk));
+        rk += childRk;
+
+        childRk = isSame(target.getKey(), negativeSet) * -20;
+        if (RankSettings.reportMode) addInfo(String.format("<font color=red>贬: %.1f\t</font>", childRk));
         rk += childRk;
 
         if (RankSettings.reportMode) flushResult(target, rk);
         else target.setScore(rk);
         return rk;
+    }
+
+    @Override
+    public String getName() {
+        return "字义";
     }
 }
