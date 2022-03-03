@@ -67,7 +67,7 @@ public class PipinameDataCollect {
         toJsData(c2sMap, PIPI_WUGE_STROKES_SHORT);
     }
 
-    private void checkData() throws IOException {
+    private void selectWugeStrokesLib() throws IOException {
         HashMap<String, Integer> ppC2s = fromJsData(PIPI_WUGE_STROKES_SHORT, new TypeReference<HashMap<String, Integer>>() {
         });
 
@@ -81,6 +81,15 @@ public class PipinameDataCollect {
         HashMap<Character, WugeDataCollect.WuxingBihua> xmx_wuxing = fromJsData("xingmingxue_pdf_wuxing", new TypeReference<HashMap<Character, WugeDataCollect.WuxingBihua>>() {
 
         });
+
+        int count = 1;
+        HashMap<Character, Integer> charRateRank = new HashMap<>();
+        for (String l : fromLinesData("zipin")) {
+            for (char c : l.toCharArray()) {
+                count++;
+                charRateRank.putIfAbsent(c, count);
+            }
+        }
 
 //        ArrayList<String> bihuaAlone = new ArrayList<>();
 //        ArrayList<String> bihuaDiff = new ArrayList<>();
@@ -98,11 +107,20 @@ public class PipinameDataCollect {
         ArrayList<String> diff = new ArrayList<>();
         ppC2s.forEach((k, v) -> {
             Character c = k.charAt(0);
-            if (dict.containsKey(k) && (!v.equals(dict.get(k).getStrokes()) || "凶".equals(dict.get(k).getLuckyornot()))) {
-                diff.add(k);
-            } else if (xmx_bihua.containsKey(c) && !v.equals(xmx_bihua.get(c))) {
-                diff.add(k);
-            } else if (xmx_wuxing.containsKey(c) && !v.equals(xmx_wuxing.get(c).bh)) {
+//            if (dict.containsKey(k) && (!v.equals(dict.get(k).getStrokes()) || "凶".equals(dict.get(k).getLuckyornot()))) {
+//                diff.add(k);
+//            } else if (xmx_bihua.containsKey(c) && !v.equals(xmx_bihua.get(c))) {
+//                diff.add(k);
+//            } else if (xmx_wuxing.containsKey(c) && !v.equals(xmx_wuxing.get(c).bh)) {
+//                diff.add(k);
+//            }
+            if (!charRateRank.containsKey(c) || charRateRank.get(c) > 5000) {
+                if (dict.containsKey(k) && v.equals(dict.get(k).getStrokes()) && !"凶".equals(dict.get(k).getLuckyornot())) {
+                    return;
+                }
+                if (xmx_bihua.containsKey(c) && v.equals(xmx_bihua.get(c))) return;
+                if (xmx_wuxing.containsKey(c) && v.equals(xmx_wuxing.get(c).bh)) return;
+
                 diff.add(k);
             }
         });
@@ -235,8 +253,8 @@ public class PipinameDataCollect {
 
     public static void main(String[] args) throws IOException {
         //new PipinameDataCollect().saveWugeStrokeFromPipiname();
-        //new PipinameDataCollect().checkData();
-        new PipinameDataCollect().genCandidates();
+        new PipinameDataCollect().selectWugeStrokesLib();
+        //new PipinameDataCollect().genCandidates();
         //new PipinameDataCollect().cleanSelectedCharacters();
     }
 }

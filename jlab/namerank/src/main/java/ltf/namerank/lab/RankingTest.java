@@ -203,11 +203,11 @@ public class RankingTest {
                     .addChars(getWordsHome() + "/badchars.txt");
 
             filter = new ChainedFilter()
-                    .add(new LengthFilter())
-                    //.add(new CharacterWuxingFilter())
-                    //.add(new WugeFilter())
+                    //.add(new LengthFilter())
                     .add(blacklistCharsFilter)
-                    //.add(new YinYunFilter())
+                    .add(new CharacterWuxingFilter())
+                    //.add(new WugeFilter())
+                    .add(new YinYunFilter())
             //.add(new SameMeaningFilter())
             ;
 
@@ -224,7 +224,7 @@ public class RankingTest {
 
     private void doRanking() throws IOException {
 
-        RankSettings.reportMode = true;
+        //RankSettings.reportMode = true;
 
         if (RankSettings.reportMode && exists(PICKED_LIST)) file2Lines(PICKED_LIST, picked);
 
