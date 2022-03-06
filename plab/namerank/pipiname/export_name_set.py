@@ -84,5 +84,5 @@ def check_and_add_names(names, string_list, out):
             f.write(sentence)
             out.write("\n")
 
-with open("res_text.txt", "w+", encoding='utf-8') as f:
+with open("shici.txt", "w+", encoding='utf-8') as f:
     get_source(f)
